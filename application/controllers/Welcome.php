@@ -32,10 +32,11 @@ class Welcome extends CI_Controller {
 	 
 	public function index()
 	{
-		$data['pagina'] = 'public.php';
-		$data['section'] = 'public';
-		$data['servicios'] = $this->MServices->obtener();
-		$this->load->view('base_public', $data);
+		//~ $data['pagina'] = 'public.php';
+		//~ $data['section'] = 'public';
+		//~ $data['servicios'] = $this->MServices->obtener();
+		//~ $this->load->view('base_public', $data);
+		$this->load->view('login_form');
 	}
 	
 	public function admin()
