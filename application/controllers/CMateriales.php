@@ -5,8 +5,6 @@ class CMateriales extends CI_Controller {
 
 	public function __construct() {
         parent::__construct();
-
-
        
 		// Load database
         $this->load->model('MMateriales');
@@ -17,6 +15,7 @@ class CMateriales extends CI_Controller {
 	{
 		$this->load->view('base');
 		$data['listar'] = $this->MMateriales->obtener();
+		$data['listar_unidades'] = $this->MMateriales->obtener_unidades();
 		$this->load->view('materiales/lista', $data);
 		$this->load->view('footer');
 	}
@@ -24,7 +23,8 @@ class CMateriales extends CI_Controller {
 	public function register()
 	{
 		$this->load->view('base');
-		$this->load->view('materiales/registrar');
+		$data['listar_unidades'] = $this->MMateriales->obtener_unidades();
+		$this->load->view('materiales/registrar', $data);
 		$this->load->view('footer');
 	}
 	
@@ -35,6 +35,7 @@ class CMateriales extends CI_Controller {
             'referencia' => $_POST['referencia'],
             'costo_dolar' => $_POST['costo_dolar'],
             'costo_bolivar' => $_POST['costo_bolivar'],
+            'unidad_medida' => $_POST['unidad_medida'],
             'modificado' => date('Y-m-d')
         );
         
@@ -49,6 +50,7 @@ class CMateriales extends CI_Controller {
 		$this->load->view('base');
         $data['id'] = $this->uri->segment(3);
         $data['editar'] = $this->MMateriales->obtenerMateriales($data['id']);
+        $data['listar_unidades'] = $this->MMateriales->obtener_unidades();
         $this->load->view('materiales/editar', $data);
 		$this->load->view('footer');
     }
@@ -61,6 +63,7 @@ class CMateriales extends CI_Controller {
             'referencia' => $_POST['referencia'],
             'costo_dolar' => $_POST['costo_dolar'],
             'costo_bolivar' => $_POST['costo_bolivar'],
+            'unidad_medida' => $_POST['unidad_medida'],
             'modificado' => date('Y-m-d')
         );
         

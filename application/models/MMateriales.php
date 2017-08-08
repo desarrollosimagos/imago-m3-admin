@@ -22,6 +22,16 @@ class MMateriales extends CI_Model {
             return $query->result();
     }
 
+    //Public method to obtain the materiales
+    public function obtener_unidades() {
+        $query = $this->db->get('measurement_units');
+
+        if ($query->num_rows() > 0)
+            return $query->result();
+        else
+            return $query->result();
+    }
+
     // Public method to insert the data
     public function insert($datos) {
         $result = $this->db->where('nombre =', $datos['nombre']);

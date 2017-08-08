@@ -50,6 +50,17 @@
 							</div>
 						</div>
 						<div class="form-group">
+							<label class="col-sm-2 control-label" >Unidades de medida *</label>
+							<div class="col-sm-6">
+								<select class="form-control m-b" name="unidad_medida" id="unidad_medida">
+									<option value="0" selected="">Seleccione</option>
+									<?php foreach ($listar_unidades as $unidad) { ?>
+										<option value="<?php echo $unidad->id ?>"><?php echo $unidad->name." - ".$unidad->symbol; ?></option>
+									<?php } ?>
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
 							<div class="col-sm-4 col-sm-offset-2">
 								<button class="btn btn-white" id="volver" type="button">Volver</button>
 								<button class="btn btn-primary" id="registrar" type="submit">Guardar</button>
@@ -91,7 +102,7 @@ $(document).ready(function(){
 		$.get('https://s3.amazonaws.com/dolartoday/data.json', function (response) {  // Se produce un error si usamos $.post en vez de $.get
 			//~ alert(response['USD']['transferencia']);
 			var dolar_bolivar = parseFloat($("#costo_dolar").val()) * response['USD']['transferencia'];
-			$("#costo_bolivar").val(dolar_bolivar);
+			$("#costo_bolivar").val(dolar_bolivar.toFixed(2));
 		}, 'json');
 	});
 
@@ -115,7 +126,11 @@ $(document).ready(function(){
 			swal("Disculpe,", "para continuar debe ingresar el costo en bolívares");
 			$('#costo_bolivar').parent('div').addClass('has-error');
 			
-        }  else {
+        } else if ($('#unidad_medida').val().trim() == "0") {
+			swal("Disculpe,", "para continuar debe seleccionar la unidad de medida");
+			$('#unidad_medida').parent('div').addClass('has-error');
+			
+        } else {
 
             //~ $.post('<?php echo base_url(); ?>CMateriales/add', $('#form_materiales').serialize(), function (response) {
 				//~ if (response[0] == '1') {
