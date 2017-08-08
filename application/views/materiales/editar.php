@@ -39,26 +39,38 @@
 						</div>
 						<div class="form-group">
 							<label class="col-sm-2 control-label" >Precio en Dólares *</label>
-							<div class="col-sm-10">
+							<div class="col-sm-6">
 								<input type="text" class="form-control" name="costo_dolar" id="costo_dolar" maxlength="11" value="<?php echo $editar[0]->costo_dolar ?>">
 								<label id="label_precio_dolar" style="color:red;"></label>
 							</div>
 						</div>
 						<div class="form-group">
 							<label class="col-sm-2 control-label" >Precio en Bolívares *</label>
-							<div class="col-sm-10">
+							<div class="col-sm-6">
 								<input type="text" class="form-control" name="costo_bolivar" id="costo_bolivar" maxlength="11" value="<?php echo $editar[0]->costo_bolivar ?>">
 							</div>
 						</div>
 						<div class="form-group">
+							<label class="col-sm-2 control-label" >Unidades de medida *</label>
+							<div class="col-sm-6">
+								<select class="form-control m-b" name="unidad_medida" id="unidad_medida">
+									<option value="0" selected="">Seleccione</option>
+									<?php foreach ($listar_unidades as $unidad) { ?>
+										<option value="<?php echo $unidad->id ?>"><?php echo $unidad->name." - ".$unidad->symbol; ?></option>
+									<?php } ?>
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
 							<label class="col-sm-2 control-label" >Modificado *</label>
-							<div class="col-sm-10">
+							<div class="col-sm-6">
 								<input type="text" class="form-control" name="modificado" id="modificado" readonly="true" value="<?php echo $editar[0]->modificado ?>">
 							</div>
 						</div>
 						<div class="form-group">
 							<div class="col-sm-4 col-sm-offset-2">
 								 <input class="form-control"  type='hidden' id="id" name="id" value="<?php echo $id ?>"/>
+								 <input id="id_unidad_medida" type="hidden" value="<?php echo $editar[0]->unidad_medida ?>"/>
 								<button class="btn btn-white" id="volver" type="button">Volver</button>
 								<button class="btn btn-primary" id="edit" type="submit">Guardar</button>
 							</div>
@@ -82,6 +94,8 @@ $(document).ready(function(){
         url = '<?php echo base_url() ?>materiales/';
         window.location = url;
     });
+    
+    $("#unidad_medida").select2('val', $("#id_unidad_medida").val());
 	
 	$("#costo_dolar,#costo_bolivar").numeric(); //Valida solo permite valores numéricos
 	
@@ -99,7 +113,7 @@ $(document).ready(function(){
 		$.get('https://s3.amazonaws.com/dolartoday/data.json', function (response) {  // Se produce un error si usamos $.post en vez de $.get
 			//~ alert(response['USD']['transferencia']);
 			var dolar_bolivar = parseFloat($("#costo_dolar").val()) * response['USD']['transferencia'];
-			$("#costo_bolivar").val(dolar_bolivar);
+			$("#costo_bolivar").val(dolar_bolivar.toFixed(2));
 		}, 'json');
 	});
 
@@ -123,7 +137,11 @@ $(document).ready(function(){
 			swal("Disculpe,", "para continuar debe ingresar el costo en bolívares");
 			$('#costo_bolivar').parent('div').addClass('has-error');
 			
-        }  else {
+        } else if ($('#unidad_medida').val().trim() == "0") {
+			swal("Disculpe,", "para continuar debe seleccionar la unidad de medida");
+			$('#unidad_medida').parent('div').addClass('has-error');
+			
+        } else {
 
             //~ $.post('<?php echo base_url(); ?>CMateriales/update', $('#form_materiales').serialize(), function (response) {
 				//~ if (response[0] == '1') {

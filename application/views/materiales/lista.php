@@ -35,6 +35,7 @@
                                     <th>Referencia</th>
                                     <th>Costo en Dólares</th>
                                     <th>Costo en Bolívares</th>
+                                    <th>Unidad de medida</th>
                                     <th>Modificado</th>
                                     <th>Editar</th>
                                     <th>Eliminar</th>
@@ -61,6 +62,17 @@
                                         </td>
                                         <td id="checkbox_<?php echo $perfil->id;?>_column">
                                             <?php echo $perfil->costo_bolivar; ?>
+                                        </td>
+                                        <td id="unidad_<?php echo $perfil->unidad_medida?>">
+                                            <?php 
+											foreach ($listar_unidades as $unidad){
+												if($perfil->unidad_medida == $unidad->id){
+													echo $unidad->name." - ".$unidad->symbol;
+												}else{
+													echo "";
+												}
+											}
+											?>
                                         </td>
                                         <td>
                                             <?php echo $perfil->modificado; ?>
@@ -126,6 +138,7 @@ $(document).ready(function(){
             {"sClass": "registro center", "sWidth": "5%"},
             {"sClass": "registro center", "sWidth": "20%"},
             {"sClass": "registro center", "sWidth": "20%"},
+            {"sClass": "registro center", "sWidth": "10%"},
             {"sClass": "registro center", "sWidth": "10%"},
             {"sClass": "registro center", "sWidth": "10%"},
             {"sClass": "registro center", "sWidth": "10%"},
@@ -310,14 +323,17 @@ $(document).ready(function(){
 					
 					if (checkbox.is(':checked')) {
 						num_checked += 1;
-						var id = $(this).find('td').eq(8).find('a').attr('id');
+						var id = $(this).find('td').eq(9).find('a').attr('id');
 						var nombre = $(this).find('td').eq(2).text().trim();
 						var referencia = $(this).find('td').eq(3).text().trim();
 						var costo_dolar = $(this).find('td').eq(4).text().trim();
 						var costo_bolivar = $(this).find('td').eq(5).find('input').val().trim();
+						var unidad_medida = $(this).find('td').eq(6).attr('id');
+						unidad_medida = unidad_medida.split('_');
+						unidad_medida = unidad_medida[1];
 						//~ alert("Id: "+id+", "+"Nombre: "+nombre+", "+"Referencia: "+referencia+", "+"costo_dolar: "+costo_dolar+", "+"costo_bolivar: "+costo_bolivar);
 						// Actualizamos los datos del material
-						$.post('<?php echo base_url(); ?>CMateriales/update', {'id':id, 'nombre':nombre, 'referencia':referencia, 'costo_dolar':costo_dolar, 'costo_bolivar':costo_bolivar}, function (response) {
+						$.post('<?php echo base_url(); ?>CMateriales/update', {'id':id, 'nombre':nombre, 'referencia':referencia, 'costo_dolar':costo_dolar, 'costo_bolivar':costo_bolivar, 'unidad_medida':unidad_medida}, function (response) {
 							//~ alert(response);
 						});
 					}
