@@ -40,12 +40,13 @@
 						<div class="form-group"><label class="col-sm-2 control-label" >Precio en Dólares *</label>
 							<div class="col-sm-6">
 								<input type="text" class="form-control"  name="costo_dolar" maxlength="11" id="costo_dolar">
+								<label id="label_precio_dolar" style="color:red;"></label>
 							</div>
 						</div>
 						<div class="form-group">
 							<label class="col-sm-2 control-label">Precio en Bolívares *</label>
 							<div class="col-sm-6">
-								<input type="text" class="form-control" maxlength="11" name="costo_bolivar" id="costo_bolivar" readonly="true">
+								<input type="text" class="form-control" maxlength="11" name="costo_bolivar" id="costo_bolivar">
 							</div>
 						</div>
 						<div class="form-group">
@@ -75,6 +76,13 @@ $(document).ready(function(){
     });
     
     $("#costo_dolar,#costo_bolivar").numeric(); //Valida solo permite valores numéricos
+    
+    // Indicamos el precio actual del dólar en la etiqueta informativa debajo del campo de Precio en Dólares
+    $.get('https://s3.amazonaws.com/dolartoday/data.json', function (response) {  // Se produce un error si usamos $.post en vez de $.get
+		//~ alert(response['USD']['transferencia']);
+		var precio_dolar = response['USD']['transferencia'];
+		$("#label_precio_dolar").text("**Precio actual del dólar("+precio_dolar+")");
+	}, 'json');
 
 	// Convertimos el valor en dólares a bolívares
 	$("#costo_dolar").change(function (e) {
