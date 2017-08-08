@@ -18,6 +18,7 @@
             <button class="btn btn-outline btn-primary dim" type="button"><i class="fa fa-plus"></i> Agregar</button>
             </a>
             <button class="btn btn-outline btn-primary dim" id="referenciar" type="button"><i class="fa fa-refresh"></i> Referenciar</button>
+            <label id="label_precio_dolar" style="color:red;"></label>
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
                     <h5>Listado de Materiales </h5>
@@ -138,6 +139,7 @@ $(document).ready(function(){
 		//~ alert(response['USD']['transferencia']);
 		var precio_dolar = response['USD']['transferencia'];
 		$("#precio_dolar").val(precio_dolar);
+		$("#label_precio_dolar").text("**Precio actual del dólar("+precio_dolar+")");
 	}, 'json');
              
     // Validacion para borrar
@@ -285,60 +287,58 @@ $(document).ready(function(){
 	// Proceso de actualización de montos de los materiales seleccionados
 	$("#actualizar_montos").on('click', function (e) {
 		
-		var num_checked = 0;  // Contador de checkbox marcados
+		swal({
+			title: "Actualizar materiales",
+			text: "¿Está seguro de actualizar los montos de los materiales?",
+			type: "warning",
+			showCancelButton: true,
+			confirmButtonColor: "#DD6B55",
+			confirmButtonText: "Actualizar",
+			cancelButtonText: "Cancelar",
+			closeOnConfirm: false,
+			closeOnCancel: true
+		  },
+		function(isConfirm){
+			if (isConfirm) {
 		
-		// Recorremos la tabla para verificar que campos están editables y proceder a actualizarles el monto
-		$("#tab_materiales tbody tr").each(function () {
-			var checkbox;
-			checkbox = $(this).find('td').eq(0).find('input');
-			
-			if (checkbox.is(':checked')) {
-				num_checked += 1;
-				var id = $(this).find('td').eq(8).find('a').attr('id');
-				var nombre = $(this).find('td').eq(2).text().trim();
-				var referencia = $(this).find('td').eq(3).text().trim();
-				var costo_dolar = $(this).find('td').eq(4).text().trim();
-				var costo_bolivar = $(this).find('td').eq(5).find('input').val().trim();
-				//~ alert("Id: "+id+", "+"Nombre: "+nombre+", "+"Referencia: "+referencia+", "+"costo_dolar: "+costo_dolar+", "+"costo_bolivar: "+costo_bolivar);
-				// Actualizamos los datos del material
-				swal({
-					title: "Actualizar materiales",
-					text: "¿Está seguro de actualizar los montos de los materiales?",
-					type: "warning",
-					showCancelButton: true,
-					confirmButtonColor: "#DD6B55",
-					confirmButtonText: "Actualizar",
-					cancelButtonText: "Cancelar",
-					closeOnConfirm: false,
-					closeOnCancel: true
-				  },
-				function(isConfirm){
-					if (isConfirm) {
+				var num_checked = 0;  // Contador de checkbox marcados
+				
+				// Recorremos la tabla para verificar que campos están editables y proceder a actualizarles el monto
+				$("#tab_materiales tbody tr").each(function () {
+					var checkbox;
+					checkbox = $(this).find('td').eq(0).find('input');
+					
+					if (checkbox.is(':checked')) {
+						num_checked += 1;
+						var id = $(this).find('td').eq(8).find('a').attr('id');
+						var nombre = $(this).find('td').eq(2).text().trim();
+						var referencia = $(this).find('td').eq(3).text().trim();
+						var costo_dolar = $(this).find('td').eq(4).text().trim();
+						var costo_bolivar = $(this).find('td').eq(5).find('input').val().trim();
+						//~ alert("Id: "+id+", "+"Nombre: "+nombre+", "+"Referencia: "+referencia+", "+"costo_dolar: "+costo_dolar+", "+"costo_bolivar: "+costo_bolivar);
+						// Actualizamos los datos del material
 						$.post('<?php echo base_url(); ?>CMateriales/update', {'id':id, 'nombre':nombre, 'referencia':referencia, 'costo_dolar':costo_dolar, 'costo_bolivar':costo_bolivar}, function (response) {
 							//~ alert(response);
-							if (response[0] == '1') {
-								swal("Disculpe,", "ya existe un material de nombre "+nombre);
-							}else{
-								swal({ 
-									title: "Actualizado",
-									 text: "Actualizado con exito",
-									  type: "success" 
-									},
-								function(){
-								  window.location.href = '<?php echo base_url(); ?>materiales';
-								});
-							}
 						});
 					}
-				});  // Cierre del confirm
+				});
+				
+				//~ alert(num_checked);
+				
+				if (num_checked == 0) {
+					swal("Disculpe,", "no ha marcado ningún elemento de la lista");			
+				}else{
+					swal({ 
+						title: "Actualizado",
+						 text: "Actualizado con exito",
+						  type: "success" 
+						},
+					function(){
+					  window.location.href = '<?php echo base_url(); ?>materiales';
+					});
+				}
 			}
-		});
-		
-		//~ alert(num_checked);
-		
-		if (num_checked == 0) {
-			swal("Disculpe,", "no ha marcado ningún elemento de la lista");			
-		}
+		});  // Cierre del confirm
 	});
 	
 });
