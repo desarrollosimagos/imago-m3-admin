@@ -136,5 +136,10 @@ $route['tiendas'] = 'CTiendas';
 $route['tiendas/register'] = 'CTiendas/register';
 $route['tiendas/edit/(:num)'] = 'CTiendas/edit/$1';
 $route['tiendas/delete/(:num)'] = 'CTiendas/delete/$1';
+/*   Aplicaciones */
+$route['aplicaciones'] = 'CAplicaciones';
+$route['aplicaciones/register'] = 'CAplicaciones/register';
+$route['aplicaciones/edit/(:num)'] = 'CAplicaciones/edit/$1';
+$route['aplicaciones/delete/(:num)'] = 'CAplicaciones/delete/$1';
 /*assets*/
 $route['assets/(:any)'] = 'assets/$1';
