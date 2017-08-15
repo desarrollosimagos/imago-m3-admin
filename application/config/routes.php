@@ -131,5 +131,10 @@ $route['productos'] = 'CProductos';
 $route['productos/register'] = 'CProductos/register';
 $route['productos/edit/(:num)'] = 'CProductos/edit/$1';
 $route['productos/delete/(:num)'] = 'CProductos/delete/$1';
+/*   Tiendas */
+$route['tiendas'] = 'CTiendas';
+$route['tiendas/register'] = 'CTiendas/register';
+$route['tiendas/edit/(:num)'] = 'CTiendas/edit/$1';
+$route['tiendas/delete/(:num)'] = 'CTiendas/delete/$1';
 /*assets*/
 $route['assets/(:any)'] = 'assets/$1';
