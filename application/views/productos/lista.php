@@ -1,12 +1,12 @@
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-10">
-        <h2>Materiales</h2>
+        <h2>Productos</h2>
         <ol class="breadcrumb">
             <li>
                 <a href="<?php echo base_url() ?>home">Inicio</a>
             </li>
             <li class="active">
-                <strong>Materiales</strong>
+                <strong>Productos</strong>
             </li>
         </ol>
     </div>
@@ -14,14 +14,14 @@
 <div class="wrapper wrapper-content animated fadeInRight">
     <div class="row">
         <div class="col-lg-12">
-            <a href="<?php echo base_url() ?>materiales/register">
+            <a href="<?php echo base_url() ?>productos/register">
             <button class="btn btn-outline btn-primary dim" type="button"><i class="fa fa-plus"></i> Agregar</button>
             </a>
             <button class="btn btn-outline btn-primary dim" id="referenciar" type="button"><i class="fa fa-refresh"></i> Referenciar</button>
             <label id="label_precio_dolar" style="color:red;"></label>
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <h5>Listado de Materiales </h5>
+                    <h5>Listado de Productos </h5>
                     <input type="hidden" id="precio_dolar">
                 </div>
                 <div class="ibox-content">
@@ -36,6 +36,7 @@
                                     <th>Costo en Dólares</th>
                                     <th>Costo en Bolívares</th>
                                     <th>Unidad de medida</th>
+                                    <th>Tienda</th>
                                     <th>Modificado</th>
                                     <th>Editar</th>
                                     <th>Eliminar</th>
@@ -74,11 +75,22 @@
 											}
 											?>
                                         </td>
+                                        <td id="tienda_<?php echo $perfil->tienda_id?>">
+                                            <?php 
+											foreach ($listar_tiendas as $tienda){
+												if($perfil->tienda_id == $tienda->id){
+													echo $tienda->nombre;
+												}else{
+													echo "";
+												}
+											}
+											?>
+                                        </td>
                                         <td>
                                             <?php echo $perfil->modificado; ?>
                                         </td>
                                         <td style='text-align: center'>
-                                            <a href="<?php echo base_url() ?>materiales/edit/<?= $perfil->id; ?>" title="Editar" style='color: #1ab394'><i class="fa fa-edit fa-2x"></i></a>
+                                            <a href="<?php echo base_url() ?>productos/edit/<?= $perfil->id; ?>" title="Editar" style='color: #1ab394'><i class="fa fa-edit fa-2x"></i></a>
                                         </td>
                                         <td style='text-align: center'>
                                             
@@ -136,11 +148,12 @@ $(document).ready(function(){
         "aoColumns": [
             {"sWidth": "3%", "bSortable": false, "sClass": "center sorting_false", "bSearchable": false},
             {"sClass": "registro center", "sWidth": "5%"},
+            {"sClass": "registro center", "sWidth": "10%"},
             {"sClass": "registro center", "sWidth": "20%"},
+            {"sClass": "registro center", "sWidth": "10%"},
+            {"sClass": "registro center", "sWidth": "10%"},
+            {"sClass": "registro center", "sWidth": "10%"},
             {"sClass": "registro center", "sWidth": "20%"},
-            {"sClass": "registro center", "sWidth": "10%"},
-            {"sClass": "registro center", "sWidth": "10%"},
-            {"sClass": "registro center", "sWidth": "10%"},
             {"sClass": "registro center", "sWidth": "10%"},
             {"sWidth": "3%", "bSortable": false, "sClass": "center sorting_false", "bSearchable": false},
             {"sWidth": "3%", "bSortable": false, "sClass": "center sorting_false", "bSearchable": false}
@@ -174,7 +187,7 @@ $(document).ready(function(){
         function(isConfirm){
             if (isConfirm) {
              
-                $.post('<?php echo base_url(); ?>materiales/delete/' + id + '', function (response) {
+                $.post('<?php echo base_url(); ?>productos/delete/' + id + '', function (response) {
 
                     if (response[0] == "e") {
                        
@@ -193,7 +206,7 @@ $(document).ready(function(){
                              type: "success" 
                            },
                            function(){
-                             window.location.href = '<?php echo base_url(); ?>materiales';
+                             window.location.href = '<?php echo base_url(); ?>productos';
                          });
                     }
                 });
@@ -323,7 +336,7 @@ $(document).ready(function(){
 					
 					if (checkbox.is(':checked')) {
 						num_checked += 1;
-						var id = $(this).find('td').eq(9).find('a').attr('id');
+						var id = $(this).find('td').eq(10).find('a').attr('id');
 						var nombre = $(this).find('td').eq(2).text().trim();
 						var referencia = $(this).find('td').eq(3).text().trim();
 						var costo_dolar = $(this).find('td').eq(4).text().trim();
@@ -331,9 +344,12 @@ $(document).ready(function(){
 						var unidad_medida = $(this).find('td').eq(6).attr('id');
 						unidad_medida = unidad_medida.split('_');
 						unidad_medida = unidad_medida[1];
+						var tienda_id = $(this).find('td').eq(7).attr('id');
+						tienda_id = tienda_id.split('_');
+						tienda_id = tienda_id[1];
 						//~ alert("Id: "+id+", "+"Nombre: "+nombre+", "+"Referencia: "+referencia+", "+"costo_dolar: "+costo_dolar+", "+"costo_bolivar: "+costo_bolivar);
 						// Actualizamos los datos del material
-						$.post('<?php echo base_url(); ?>CMateriales/update', {'id':id, 'nombre':nombre, 'referencia':referencia, 'costo_dolar':costo_dolar, 'costo_bolivar':costo_bolivar, 'unidad_medida':unidad_medida}, function (response) {
+						$.post('<?php echo base_url(); ?>CProductos/update', {'id':id, 'nombre':nombre, 'referencia':referencia, 'costo_dolar':costo_dolar, 'costo_bolivar':costo_bolivar, 'unidad_medida':unidad_medida, 'tienda_id':tienda_id}, function (response) {
 							//~ alert(response);
 						});
 					}
@@ -350,7 +366,7 @@ $(document).ready(function(){
 						  type: "success" 
 						},
 					function(){
-					  window.location.href = '<?php echo base_url(); ?>materiales';
+					  window.location.href = '<?php echo base_url(); ?>productos';
 					});
 				}
 			}
