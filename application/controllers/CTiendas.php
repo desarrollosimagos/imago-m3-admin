@@ -36,6 +36,8 @@ class CTiendas extends CI_Controller {
             'token_cliente' => $_POST['token_cliente'],
             'secret_api' => $_POST['secret_api'],
             'url_callback' => $_POST['url_callback'],
+            'cliente_api_id' => $_POST['cliente_api_id'],
+            'aplicacion_id' => $_POST['aplicacion_id'],
             'status' => 1
         );
         
@@ -65,6 +67,8 @@ class CTiendas extends CI_Controller {
             'token_cliente' => $_POST['token_cliente'],
             'secret_api' => $_POST['secret_api'],
             'url_callback' => $_POST['url_callback'],
+            'cliente_api_id' => $_POST['cliente_api_id'],
+            'aplicacion_id' => $_POST['aplicacion_id'],
             'status' => 1
         );
         

@@ -67,6 +67,18 @@
 							</div>
 						</div>
 						<div class="form-group">
+							<label class="col-sm-2 control-label">API Cliente</label>
+							<div class="col-sm-6">
+								<input type="text" class="form-control" maxlength="200" name="cliente_api_id" id="cliente_api_id" value="<?php echo $editar[0]->cliente_api_id ?>">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">Aplicación</label>
+							<div class="col-sm-6">
+								<input type="text" class="form-control" maxlength="200" name="aplicacion_id" id="aplicacion_id" value="<?php echo $editar[0]->aplicacion_id ?>">
+							</div>
+						</div>
+						<div class="form-group">
 							<div class="col-sm-4 col-sm-offset-2">
 								 <input class="form-control" type='hidden' id="id" name="id" value="<?php echo $id ?>"/>
 								<button class="btn btn-white" id="volver" type="button">Volver</button>
@@ -98,6 +110,8 @@ $(document).ready(function(){
     $("#edit").click(function (e) {
 
         e.preventDefault();  // Para evitar que se envíe por defecto
+        
+        var regex = /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/|www\.)[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/;
 
         if ($('#nombre').val().trim() === "") {
 			swal("Disculpe,", "para continuar debe ingresar nombre");
@@ -107,7 +121,19 @@ $(document).ready(function(){
 			swal("Disculpe,", "para continuar debe ingresar la url");
 			$('#url').parent('div').addClass('has-error');
 			
-        } else {
+        } else if (!(regex.test($('#url').val().trim()))){
+			
+			swal("Disculpe,", "la url no es válida");
+			$('#url').parent('div').addClass('has-error');
+			$('#url').focus();
+			
+		} else if ($('#url_callback').val().trim() != "" && !(regex.test($('#url_callback').val().trim()))){
+			
+			swal("Disculpe,", "la url no es válida");
+			$('#url_callback').parent('div').addClass('has-error');
+			$('#url_callback').focus();
+			
+		} else {
 
             //~ $.post('<?php echo base_url(); ?>CTiendas/update', $('#form_tiendas').serialize(), function (response) {
 				//~ if (response[0] == '1') {
