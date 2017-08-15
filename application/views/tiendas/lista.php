@@ -17,7 +17,7 @@
             <a href="<?php echo base_url() ?>tiendas/register">
             <button class="btn btn-outline btn-primary dim" type="button"><i class="fa fa-plus"></i> Agregar</button>
             </a>
-            <button class="btn btn-outline btn-primary dim" id="referenciar" type="button"><i class="fa fa-refresh"></i> Referenciar</button>
+            <!--<button class="btn btn-outline btn-primary dim" id="referenciar" type="button"><i class="fa fa-refresh"></i> Referenciar</button>-->
             <label id="label_precio_dolar" style="color:red;"></label>
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
@@ -37,6 +37,8 @@
                                     <th>Token Cliente</th>
                                     <th>Secret API</th>
                                     <th>URL Callback</th>
+                                    <th>API Cliente</th>
+                                    <th>Aplicación</th>
                                     <th>Editar</th>
                                     <th>Eliminar</th>
                                 </tr>
@@ -69,6 +71,12 @@
                                         <td>
                                             <?php echo $tienda->url_callback; ?>
                                         </td>
+                                        <td>
+                                            <?php echo $tienda->cliente_api_id; ?>
+                                        </td>
+                                        <td>
+                                            <?php echo $tienda->aplicacion_id; ?>
+                                        </td>
                                         <td style='text-align: center'>
                                             <a href="<?php echo base_url() ?>tiendas/edit/<?= $tienda->id; ?>" title="Editar" style='color: #1ab394'><i class="fa fa-edit fa-2x"></i></a>
                                         </td>
@@ -81,9 +89,9 @@
                                 <?php } ?>
                             </tbody>
                         </table>
-                        <div class="text-right">
+                        <!--<div class="text-right">
 							<button class="btn btn-outline btn-primary dim" id="actualizar_montos" type="button"><i class="fa fa-floppy-o"></i> Actualizar</button>
-						</div>
+						</div>-->
                     </div>
                 </div>
             </div>
@@ -134,6 +142,8 @@ $(document).ready(function(){
             {"sClass": "registro center", "sWidth": "10%"},
             {"sClass": "registro center", "sWidth": "20%"},
             {"sClass": "registro center", "sWidth": "10%"},
+            {"sClass": "none", "sWidth": "10%"},
+            {"sClass": "none", "sWidth": "10%"},
             {"sWidth": "3%", "bSortable": false, "sClass": "center sorting_false", "bSearchable": false},
             {"sWidth": "3%", "bSortable": false, "sClass": "center sorting_false", "bSearchable": false}
         ]
