@@ -26,7 +26,7 @@
                 </div>
                 <div class="ibox-content">
                     <div class="table-responsive">
-                        <table id="tab_materiales" class="table table-striped table-bordered table-hover dataTables-example" >
+                        <table id="tab_materiales" class="table table-striped table-bordered dt-responsive table-hover dataTables-example" >
                             <thead>
                                 <tr>
                                     <th><input type="checkbox" id="check_all"></th>
@@ -38,6 +38,9 @@
                                     <th>Unidad de medida</th>
                                     <th>Tienda</th>
                                     <th>Modificado</th>
+                                    <th>Se compra</th>
+                                    <th>Se vende</th>
+                                    <th>Se fabrica</th>
                                     <th>Editar</th>
                                     <th>Eliminar</th>
                                 </tr>
@@ -88,6 +91,15 @@
                                         </td>
                                         <td>
                                             <?php echo $perfil->modificado; ?>
+                                        </td>
+                                        <td>
+                                            <?php echo $perfil->c_compra; ?>
+                                        </td>
+                                        <td>
+                                            <?php echo $perfil->c_vende; ?>
+                                        </td>
+                                        <td>
+                                            <?php echo $perfil->c_fabrica; ?>
                                         </td>
                                         <td style='text-align: center'>
                                             <a href="<?php echo base_url() ?>productos/edit/<?= $perfil->id; ?>" title="Editar" style='color: #1ab394'><i class="fa fa-edit fa-2x"></i></a>
@@ -155,6 +167,9 @@ $(document).ready(function(){
             {"sClass": "registro center", "sWidth": "10%"},
             {"sClass": "registro center", "sWidth": "20%"},
             {"sClass": "registro center", "sWidth": "10%"},
+            {"sClass": "none", "sWidth": "10%"},
+            {"sClass": "none", "sWidth": "10%"},
+            {"sClass": "none", "sWidth": "10%"},
             {"sWidth": "3%", "bSortable": false, "sClass": "center sorting_false", "bSearchable": false},
             {"sWidth": "3%", "bSortable": false, "sClass": "center sorting_false", "bSearchable": false}
         ]
@@ -336,7 +351,7 @@ $(document).ready(function(){
 					
 					if (checkbox.is(':checked')) {
 						num_checked += 1;
-						var id = $(this).find('td').eq(10).find('a').attr('id');
+						var id = $(this).find('td').eq(13).find('a').attr('id');
 						var nombre = $(this).find('td').eq(2).text().trim();
 						var referencia = $(this).find('td').eq(3).text().trim();
 						var costo_dolar = $(this).find('td').eq(4).text().trim();
@@ -347,9 +362,12 @@ $(document).ready(function(){
 						var tienda_id = $(this).find('td').eq(7).attr('id');
 						tienda_id = tienda_id.split('_');
 						tienda_id = tienda_id[1];
+						var c_compra = $(this).find('td').eq(9).text().trim();
+						var c_vende = $(this).find('td').eq(10).text().trim();
+						var c_fabrica = $(this).find('td').eq(11).text().trim();
 						//~ alert("Id: "+id+", "+"Nombre: "+nombre+", "+"Referencia: "+referencia+", "+"costo_dolar: "+costo_dolar+", "+"costo_bolivar: "+costo_bolivar);
 						// Actualizamos los datos del material
-						$.post('<?php echo base_url(); ?>CProductos/update', {'id':id, 'nombre':nombre, 'referencia':referencia, 'costo_dolar':costo_dolar, 'costo_bolivar':costo_bolivar, 'unidad_medida':unidad_medida, 'tienda_id':tienda_id}, function (response) {
+						$.post('<?php echo base_url(); ?>CProductos/update_list', {'id':id, 'nombre':nombre, 'referencia':referencia, 'costo_dolar':costo_dolar, 'costo_bolivar':costo_bolivar, 'unidad_medida':unidad_medida, 'tienda_id':tienda_id, 'c_compra':c_compra, 'c_vende':c_vende, 'c_fabrica':c_fabrica}, function (response) {
 							//~ alert(response);
 						});
 					}

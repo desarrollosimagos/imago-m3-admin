@@ -65,7 +65,7 @@ class CProductos extends CI_Controller {
 		
 		$this->load->view('base');
         $data['id'] = $this->uri->segment(3);
-        $data['editar'] = $this->MProductos->obtenerMateriales($data['id']);
+        $data['editar'] = $this->MProductos->obtenerProductos($data['id']);
         $data['listar_unidades'] = $this->MProductos->obtener_unidades();
         $data['listar_tiendas'] = $this->MProductos->obtener_tiendas();
         $this->load->view('productos/editar', $data);
@@ -95,6 +95,25 @@ class CProductos extends CI_Controller {
             'c_compra' => $c_compra,
             'c_vende' => $c_vende,
             'c_fabrica' => $c_fabrica,
+            'modificado' => date('Y-m-d')
+        );
+        
+        $result = $this->MProductos->update($datos);	
+	}
+	
+	// Método para actualizar desde la lista
+    public function update_list() {
+		$datos = array(
+            'id' => $_POST['id'],
+            'nombre' => $_POST['nombre'],
+            'referencia' => $_POST['referencia'],
+            'costo_dolar' => $_POST['costo_dolar'],
+            'costo_bolivar' => $_POST['costo_bolivar'],
+            'unidad_medida' => $_POST['unidad_medida'],
+            'tienda_id' => $_POST['tienda_id'],
+            'c_compra' => $_POST['c_compra'],
+            'c_vende' => $_POST['c_vende'],
+            'c_fabrica' => $_POST['c_fabrica'],
             'modificado' => date('Y-m-d')
         );
         
