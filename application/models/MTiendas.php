@@ -22,6 +22,16 @@ class MTiendas extends CI_Model {
             return $query->result();
     }
 
+    //Public method to obtain the applications
+    public function obtener_aplicaciones() {
+        $query = $this->db->get('aplicacion');
+
+        if ($query->num_rows() > 0)
+            return $query->result();
+        else
+            return $query->result();
+    }
+    
     // Public method to insert the data
     public function insert($datos) {
         $result = $this->db->where('nombre =', $datos['nombre']);

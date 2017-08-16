@@ -1,17 +1,17 @@
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-10">
-        <h2>Productos </h2>
+        <h2>Tiendas </h2>
         <ol class="breadcrumb">
             <li>
                 <a href="index.html">Inicio</a>
             </li>
             
             <li>
-                <a href="<?php echo base_url() ?>productos">Productos</a>
+                <a href="<?php echo base_url() ?>tiendas">Tiendas</a>
             </li>
            
             <li class="active">
-                <strong>Editar Producto</strong>
+                <strong>Editar Tienda</strong>
             </li>
         </ol>
     </div>
@@ -21,7 +21,7 @@
         <div class="col-lg-12">
 			<div class="ibox float-e-margins">
 				<div class="ibox-title">
-					<h5>Editar Producto <small></small></h5>
+					<h5>Editar Tienda <small></small></h5>
 				</div>
 				<div class="ibox-content">
 					<form id="form_tiendas" method="post" accept-charset="utf-8" class="form-horizontal">
@@ -73,14 +73,26 @@
 							</div>
 						</div>
 						<div class="form-group">
+							<label class="col-sm-2 control-label">App</label>
+							<div class="col-sm-6">
+								<input type="text" class="form-control" maxlength="200" name="app_id" id="app_id" value="<?php echo $editar[0]->app_id ?>">
+							</div>
+						</div>
+						<div class="form-group">
 							<label class="col-sm-2 control-label">Aplicación</label>
 							<div class="col-sm-6">
-								<input type="text" class="form-control" maxlength="200" name="aplicacion_id" id="aplicacion_id" value="<?php echo $editar[0]->aplicacion_id ?>">
+								<select class="form-control m-b" name="aplicacion_id" id="aplicacion_id">
+									<option value="0" selected="">Seleccione</option>
+									<?php foreach ($listar_aplicaciones as $aplicacion) { ?>
+										<option value="<?php echo $aplicacion->id ?>"><?php echo $aplicacion->nombre; ?></option>
+									<?php } ?>
+								</select>
 							</div>
 						</div>
 						<div class="form-group">
 							<div class="col-sm-4 col-sm-offset-2">
 								 <input class="form-control" type='hidden' id="id" name="id" value="<?php echo $id ?>"/>
+								 <input id="id_aplicacion" type="hidden" value="<?php echo $editar[0]->aplicacion_id ?>"/>
 								<button class="btn btn-white" id="volver" type="button">Volver</button>
 								<button class="btn btn-primary" id="edit" type="submit">Guardar</button>
 							</div>
@@ -104,6 +116,9 @@ $(document).ready(function(){
         url = '<?php echo base_url() ?>tiendas/';
         window.location = url;
     });
+    
+    // Auto-selección de combos con las opciones correspondientes
+    $("#aplicacion_id").select2('val', $("#id_aplicacion").val());
 	
 	$("#costo_dolar,#costo_bolivar").numeric(); //Valida solo permite valores numéricos
 

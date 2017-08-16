@@ -15,14 +15,16 @@ class CTiendas extends CI_Controller {
 	{
 		$this->load->view('base');
 		$data['listar'] = $this->MTiendas->obtener();
+		$data['listar_aplicaciones'] = $this->MTiendas->obtener_aplicaciones();
 		$this->load->view('tiendas/lista', $data);
 		$this->load->view('footer');
 	}
 	
 	public function register()
 	{
+		$data['listar_aplicaciones'] = $this->MTiendas->obtener_aplicaciones();
 		$this->load->view('base');
-		$this->load->view('tiendas/registrar');
+		$this->load->view('tiendas/registrar', $data);
 		$this->load->view('footer');
 	}
 	
@@ -37,6 +39,7 @@ class CTiendas extends CI_Controller {
             'secret_api' => $_POST['secret_api'],
             'url_callback' => $_POST['url_callback'],
             'cliente_api_id' => $_POST['cliente_api_id'],
+            'app_id' => $_POST['app_id'],
             'aplicacion_id' => $_POST['aplicacion_id'],
             'status' => 1
         );
@@ -52,6 +55,7 @@ class CTiendas extends CI_Controller {
 		$this->load->view('base');
         $data['id'] = $this->uri->segment(3);
         $data['editar'] = $this->MTiendas->obtenerTiendas($data['id']);
+        $data['listar_aplicaciones'] = $this->MTiendas->obtener_aplicaciones();
         $this->load->view('tiendas/editar', $data);
 		$this->load->view('footer');
     }
@@ -68,8 +72,10 @@ class CTiendas extends CI_Controller {
             'secret_api' => $_POST['secret_api'],
             'url_callback' => $_POST['url_callback'],
             'cliente_api_id' => $_POST['cliente_api_id'],
+            'app_id' => $_POST['app_id'],
             'aplicacion_id' => $_POST['aplicacion_id'],
-            'status' => 1
+            'status' => 1,
+            'd_update' => date('Y-m-d')." ".date("H:i:s")
         );
         
         $result = $this->MTiendas->update($datos);

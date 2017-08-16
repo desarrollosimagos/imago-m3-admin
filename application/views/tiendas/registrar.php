@@ -73,9 +73,20 @@
 							</div>
 						</div>
 						<div class="form-group">
+							<label class="col-sm-2 control-label">App</label>
+							<div class="col-sm-6">
+								<input type="text" class="form-control" maxlength="200" name="app_id" id="app_id">
+							</div>
+						</div>
+						<div class="form-group">
 							<label class="col-sm-2 control-label">Aplicación</label>
 							<div class="col-sm-6">
-								<input type="text" class="form-control" maxlength="200" name="aplicacion_id" id="aplicacion_id">
+								<select class="form-control m-b" name="aplicacion_id" id="aplicacion_id">
+									<option value="0" selected="">Seleccione</option>
+									<?php foreach ($listar_aplicaciones as $aplicacion) { ?>
+										<option value="<?php echo $aplicacion->id ?>"><?php echo $aplicacion->nombre; ?></option>
+									<?php } ?>
+								</select>
 							</div>
 						</div>
 						<div class="form-group">
