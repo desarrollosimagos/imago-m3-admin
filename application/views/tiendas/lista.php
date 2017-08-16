@@ -1,12 +1,12 @@
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-10">
-        <h2>Productos</h2>
+        <h2>Tiendas</h2>
         <ol class="breadcrumb">
             <li>
                 <a href="<?php echo base_url() ?>home">Inicio</a>
             </li>
             <li class="active">
-                <strong>Productos</strong>
+                <strong>Tiendas</strong>
             </li>
         </ol>
     </div>
@@ -21,7 +21,7 @@
             <label id="label_precio_dolar" style="color:red;"></label>
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <h5>Listado de Productos </h5>
+                    <h5>Listado de Tiendas </h5>
                     <input type="hidden" id="precio_dolar">
                 </div>
                 <div class="ibox-content">
@@ -38,6 +38,7 @@
                                     <th>Secret API</th>
                                     <th>URL Callback</th>
                                     <th>API Cliente</th>
+                                    <th>App</th>
                                     <th>Aplicación</th>
                                     <th>Editar</th>
                                     <th>Eliminar</th>
@@ -75,7 +76,18 @@
                                             <?php echo $tienda->cliente_api_id; ?>
                                         </td>
                                         <td>
-                                            <?php echo $tienda->aplicacion_id; ?>
+                                            <?php echo $tienda->app_id; ?>
+                                        </td>
+                                        <td>
+                                            <?php 
+											foreach ($listar_aplicaciones as $aplicacion){
+												if($tienda->aplicacion_id == $aplicacion->id){
+													echo $aplicacion->nombre;
+												}else{
+													echo "";
+												}
+											}
+											?>
                                         </td>
                                         <td style='text-align: center'>
                                             <a href="<?php echo base_url() ?>tiendas/edit/<?= $tienda->id; ?>" title="Editar" style='color: #1ab394'><i class="fa fa-edit fa-2x"></i></a>
@@ -142,6 +154,7 @@ $(document).ready(function(){
             {"sClass": "registro center", "sWidth": "10%"},
             {"sClass": "registro center", "sWidth": "20%"},
             {"sClass": "registro center", "sWidth": "10%"},
+            {"sClass": "none", "sWidth": "10%"},
             {"sClass": "none", "sWidth": "10%"},
             {"sClass": "none", "sWidth": "10%"},
             {"sWidth": "3%", "bSortable": false, "sClass": "center sorting_false", "bSearchable": false},
