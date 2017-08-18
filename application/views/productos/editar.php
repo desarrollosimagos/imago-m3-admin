@@ -99,24 +99,25 @@
 						</div>
 						<br>
 						<!-- Tabla de tiendas -->
-							<div class="col-md-4">
-								<label class="control-label" >Tienda</label>
-								<select class="form-control" name="tienda_id" id="tienda_id">
-									<option value="0" selected="">Seleccione</option>
-									<?php foreach ($listar_tiendas as $tienda) { ?>
-										<option value="<?php echo $tienda->id ?>"><?php echo $tienda->nombre; ?></option>
-									<?php } ?>
-								</select>
-							</div>
-							<div class="col-md-4">
-								<label class="control-label" >Referencia</label>
-								<input type="text" class="form-control input-sm" name="referencia_tienda" id="referencia_tienda">
-							</div>
-							<div class="col-md-4">
-								<label style="font-weight:bold"></label>
-								<br>
-								<button type="button" class="btn btn-w-m btn-primary" id="i_new_line"><i class="fa fa-plus"></i>&nbsp;Agregar Tienda</button>
-							</div>
+						<hr>
+						<div class="col-md-4">
+							<label class="control-label" >Tienda</label>
+							<select class="form-control" name="tienda_id" id="tienda_id">
+								<option value="0" selected="">Seleccione</option>
+								<?php foreach ($listar_tiendas as $tienda) { ?>
+									<option value="<?php echo $tienda->id ?>"><?php echo $tienda->nombre; ?></option>
+								<?php } ?>
+							</select>
+						</div>
+						<div class="col-md-4">
+							<label class="control-label" >Referencia</label>
+							<input type="text" class="form-control input-sm" name="referencia_tienda" id="referencia_tienda">
+						</div>
+						<div class="col-md-4">
+							<label style="font-weight:bold"></label>
+							<br>
+							<button type="button" class="btn btn-w-m btn-primary" id="i_new_line"><i class="fa fa-plus"></i>&nbsp;Agregar Tienda</button>
+						</div>
 						<div class="table-responsive col-md-12">
 							<table style="width: 100%" class="tab_tiendas table dataTable table-striped table-bordered dt-responsive jambo_table bulk_action" id="tab_tiendas">
 								<thead>
