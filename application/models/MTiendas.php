@@ -74,7 +74,7 @@ class MTiendas extends CI_Model {
     // Public method to delete a record
      public function delete($id) {
         $result = $this->db->where('tienda_id =', $id);
-        $result = $this->db->get('productos');
+        $result = $this->db->get('productos_tienda');
 
         if ($result->num_rows() > 0) {
             echo 'existe';
