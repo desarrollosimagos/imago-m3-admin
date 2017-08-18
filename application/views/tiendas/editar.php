@@ -148,6 +148,12 @@ $(document).ready(function(){
 			$('#url_callback').parent('div').addClass('has-error');
 			$('#url_callback').focus();
 			
+		} else if ($('#aplicacion_id').val().trim() == "0" ){
+			
+			swal("Disculpe,", "para continuar debe seleccionar la aplicación");
+			$('#aplicacion_id').parent('div').addClass('has-error');
+			$('#aplicacion_id').focus();
+			
 		} else {
 
             //~ $.post('<?php echo base_url(); ?>CTiendas/update', $('#form_tiendas').serialize(), function (response) {
