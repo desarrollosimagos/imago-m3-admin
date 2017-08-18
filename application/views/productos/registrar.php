@@ -60,7 +60,7 @@
 								</select>
 							</div>
 						</div>
-						<div class="form-group">
+						<!--<div class="form-group">
 							<label class="col-sm-2 control-label" >Tienda *</label>
 							<div class="col-sm-6">
 								<select class="form-control m-b" name="tienda_id" id="tienda_id">
@@ -70,20 +70,16 @@
 									<?php } ?>
 								</select>
 							</div>
-						</div>
+						</div>-->
 						<div class="form-group">
 							<label class="col-sm-2 control-label" >Se compra:</label>
 							<div class="col-sm-1">
 								<input type="checkbox" class="form-control" name="c_compra" id="c_compra">
 							</div>
-						</div>
-						<div class="form-group">
 							<label class="col-sm-2 control-label" >Se vende:</label>
 							<div class="col-sm-1">
 								<input type="checkbox" class="form-control" name="c_vende" id="c_vende">
 							</div>
-						</div>
-						<div class="form-group">
 							<label class="col-sm-2 control-label" >Se fabrica:</label>
 							<div class="col-sm-1">
 								<input type="checkbox" class="form-control" name="c_fabrica" id="c_fabrica">
@@ -159,11 +155,11 @@ $(document).ready(function(){
 			swal("Disculpe,", "para continuar debe seleccionar la unidad de medida");
 			$('#unidad_medida').parent('div').addClass('has-error');
 			
-        } else if ($('#tienda_id').val().trim() == "0") {
+        } /*else if ($('#tienda_id').val().trim() == "0") {
 			swal("Disculpe,", "para continuar debe seleccionar la tienda");
 			$('#tienda_id').parent('div').addClass('has-error');
 			
-        } else {
+        }*/ else {
 
             //~ $.post('<?php echo base_url(); ?>CProductos/add', $('#form_productos').serialize(), function (response) {
 				//~ if (response[0] == '1') {

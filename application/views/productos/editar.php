@@ -1,3 +1,8 @@
+<style>
+	th {
+		text-align:center !important;
+	}
+</style>
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-10">
         <h2>Productos </h2>
@@ -61,7 +66,7 @@
 								</select>
 							</div>
 						</div>
-						<div class="form-group">
+						<!--<div class="form-group">
 							<label class="col-sm-2 control-label" >Tienda *</label>
 							<div class="col-sm-6">
 								<select class="form-control m-b" name="tienda_id" id="tienda_id">
@@ -71,20 +76,16 @@
 									<?php } ?>
 								</select>
 							</div>
-						</div>
+						</div>-->
 						<div class="form-group">
 							<label class="col-sm-2 control-label" >Se compra:</label>
 							<div class="col-sm-1">
 								<input type="checkbox" class="form-control" name="c_compra" id="c_compra" <?php if($editar[0]->c_compra == 1){ echo "checked='checked'"; }?>>
 							</div>
-						</div>
-						<div class="form-group">
 							<label class="col-sm-2 control-label" >Se vende:</label>
 							<div class="col-sm-1">
 								<input type="checkbox" class="form-control" name="c_vende" id="c_vende" <?php if($editar[0]->c_vende == 1){ echo "checked='checked'"; }?>>
 							</div>
-						</div>
-						<div class="form-group">
 							<label class="col-sm-2 control-label" >Se fabrica:</label>
 							<div class="col-sm-1">
 								<input type="checkbox" class="form-control" name="c_fabrica" id="c_fabrica" <?php if($editar[0]->c_fabrica == 1){ echo "checked='checked'"; }?>>
@@ -96,11 +97,64 @@
 								<input type="text" class="form-control" name="modificado" id="modificado" readonly="true" value="<?php echo $editar[0]->modificado ?>">
 							</div>
 						</div>
+						<br>
+						<!-- Tabla de tiendas -->
+							<div class="col-md-4">
+								<label class="control-label" >Tienda</label>
+								<select class="form-control" name="tienda_id" id="tienda_id">
+									<option value="0" selected="">Seleccione</option>
+									<?php foreach ($listar_tiendas as $tienda) { ?>
+										<option value="<?php echo $tienda->id ?>"><?php echo $tienda->nombre; ?></option>
+									<?php } ?>
+								</select>
+							</div>
+							<div class="col-md-4">
+								<label class="control-label" >Referencia</label>
+								<input type="text" class="form-control input-sm" name="referencia_tienda" id="referencia_tienda">
+							</div>
+							<div class="col-md-4">
+								<label style="font-weight:bold"></label>
+								<br>
+								<button type="button" class="btn btn-w-m btn-primary" id="i_new_line"><i class="fa fa-plus"></i>&nbsp;Agregar Tienda</button>
+							</div>
+						<div class="table-responsive col-md-12">
+							<table style="width: 100%" class="tab_tiendas table dataTable table-striped table-bordered dt-responsive jambo_table bulk_action" id="tab_tiendas">
+								<thead>
+									<tr>
+										<th>Tienda</th>
+										<!--<th>Precio</th>
+										<th>Impuesto</th>
+										<th>Importe</th>
+										<th>Editar</th>-->
+										<th>Referencia</th>
+										<th>Eliminar</th>
+									</tr>
+								</thead>
+								<tbody>
+									<?php foreach ($tiendas_asociadas as $tienda) { ?>
+										<tr id="<?php echo $tienda->tienda_id; ?>">
+											<td style='text-align: center' id="<?php echo $tienda->id; ?>">
+											<?php foreach ($listar_tiendas as $tienda2) {
+												if ($tienda->tienda_id == $tienda2->id){
+													echo $tienda2->nombre."<br>";
+												}
+											}?></td>
+											<td style='text-align: center'><?php echo $tienda->referencia; ?></td>
+											<td style='text-align: center'><a  style="color: #1ab394" class='quitar' id="<?php echo $tienda->id; ?>"><i class='fa fa-trash fa-2x'></i></a></td>
+										</tr>
+									<?php } ?>
+								</tbody>
+							</table>
+						</div>
+						<!-- Tabla de tiendas -->
+						<br>
+						<br>
 						<div class="form-group">
 							<div class="col-sm-4 col-sm-offset-2">
-								 <input class="form-control"  type='hidden' id="id" name="id" value="<?php echo $id ?>"/>
-								 <input id="id_unidad_medida" type="hidden" value="<?php echo $editar[0]->unidad_medida ?>"/>
-								 <input id="id_tienda" type="hidden" value="<?php echo $editar[0]->tienda_id ?>"/>
+								<!--Campo para almacenar los códigos de los registros a desasociar-->
+                                <input type="hidden" id="codigos_des1" name="codigos_des1" placeholder="Códigos">
+								<input class="form-control"  type='hidden' id="id" name="id" value="<?php echo $id ?>"/>
+								<input id="id_unidad_medida" type="hidden" value="<?php echo $editar[0]->unidad_medida ?>"/>
 								<button class="btn btn-white" id="volver" type="button">Volver</button>
 								<button class="btn btn-primary" id="edit" type="submit">Guardar</button>
 							</div>
@@ -111,6 +165,7 @@
         </div>
     </div>
 </div>
+
 <script>
 $(document).ready(function(){
 
@@ -127,7 +182,7 @@ $(document).ready(function(){
     
     // Auto-selección de combos con las opciones correspondientes
     $("#unidad_medida").select2('val', $("#id_unidad_medida").val());
-    $("#tienda_id").select2('val', $("#id_tienda").val());
+    //~ $("#tienda_id").select2('val', $("#id_tienda").val());
 	
 	$("#costo_dolar,#costo_bolivar").numeric(); //Valida solo permite valores numéricos
 	
@@ -148,7 +203,28 @@ $(document).ready(function(){
 			$("#costo_bolivar").val(dolar_bolivar.toFixed(2));
 		}, 'json');
 	});
-
+	
+	$('#tab_tiendas').DataTable({
+		"bLengthChange": false,
+		"iDisplayLength": 10,
+		"iDisplayStart": 0,
+		destroy: true,
+		paging: false,
+		searching: false,
+		"order": [[0, "asc"]],
+		"pagingType": "full_numbers",
+		"language": {"url": "<?= assets_url() ?>js/es.txt"},
+		"aoColumns": [
+			{"sWidth": "60%"},
+			{"sWidth": "30%"},
+			//~ {"sWidth": "8%"},
+			//~ {"sWidth": "8%"},
+			//~ {"sWidth": "8%"},
+			//~ {"sWidth": "4%", "bSortable": false, "sClass": "center sorting_false", "bSearchable": false},
+			{"sWidth": "10%", "bSortable": false, "sClass": "center sorting_false", "bSearchable": false}
+		]
+	});
+	
     $("#edit").click(function (e) {
 
         e.preventDefault();  // Para evitar que se envíe por defecto
@@ -174,26 +250,11 @@ $(document).ready(function(){
 			$('#unidad_medida').parent('div').addClass('has-error');
 			$('#unidad_medida').focus();
 			
-        } else if ($('#tienda_id').val().trim() == "0") {
+        } /*else if ($('#tienda_id').val().trim() == "0") {
 			swal("Disculpe,", "para continuar debe seleccionar la tienda");
 			$('#tienda_id').parent('div').addClass('has-error');
 			
-        } else {
-
-            //~ $.post('<?php echo base_url(); ?>CProductos/update', $('#form_productos').serialize(), function (response) {
-				//~ if (response[0] == '1') {
-                    //~ swal("Disculpe,", "este nombre se encuentra registrado");
-                //~ }else{
-					//~ swal({ 
-						//~ title: "Actualizar",
-						 //~ text: "Guardado con exito",
-						  //~ type: "success" 
-						//~ },
-					//~ function(){
-					  //~ window.location.href = '<?php echo base_url(); ?>productos';
-					//~ });
-				//~ }
-            //~ });
+        }*/ else {
             
             // Formateamos los precios para usar coma en vez de punto
             //~ $("#costo_dolar").val(String($("#costo_dolar").val()).replace('.',','));
@@ -202,40 +263,108 @@ $(document).ready(function(){
             //~ alert($("#costo_dolar").val());
             //~ alert($("#costo_bolivar").val());
             
-            var formData = new FormData(document.getElementById("form_productos"));  // Forma de capturar todos los datos del formulario
-			
-			$.ajax({
-				//~ method: "POST",
-				type: "post",
-				dataType: "html",
-				url: '<?php echo base_url(); ?>CProductos/update',
-				data: formData,
-				cache: false,
-				contentType: false,
-				processData: false
-			})
-			.done(function(data) {
-				if(data.error){
-					console.log(data.error);
-				} else {
-					if (data[0] == '1') {
-						swal("Disculpe,", "este producto se encuentra registrado");
-					}else{
-						swal({ 
+            $.post('<?php echo base_url(); ?>CProductos/update', $("#form_productos").serialize(), function (response) {
+				if (response[0] == '1') {
+					swal("Disculpe,", "este producto se encuentra registrado");
+				}else{
+					// Asociamos las tiendas al producto
+					var data = [];
+					$("#tab_tiendas tbody tr").each(function () {
+						var id_tienda, tienda_text, referencia_t;
+						id_tienda = $(this).attr('id');  // id tienda
+						tienda_text = $(this).find('td').eq(0).attr('id'); //text tienda
+						referencia_t = $(this).find('td').eq(1).text();
+
+						campos = { "id_tienda" : id_tienda, "tienda" : tienda_text, "referencia" : referencia_t }
+						data.push(campos);
+
+					});
+					
+					// Borramos la asociación con las tiendas quitadas de la lista
+					if ($("#codigos_des1").val() != '') {
+						$.post('<?php echo base_url(); ?>CProductos/unassociate_stores', {'id_producto':$("#id").val(), 'codigos_des1':$("#codigos_des1").val()}, function (response2) {
+						
+						});
+					}
+					
+					// Registramos la asociación con las tiendas de la lista
+					$.post('<?php echo base_url(); ?>CProductos/associate_stores', {'id_producto':$("#id").val(), 'tiendas':data}, function (response2) {
+						swal({
 							title: "Registro",
 							 text: "Actualizado con exito",
 							  type: "success" 
 							},
-						function(){
-						  window.location.href = '<?php echo base_url(); ?>productos';
+						function(){						
+							// Reiniciamos
+							window.location.href = '<?php echo base_url(); ?>productos';
 						});
-					}
-				}				
-			}).fail(function() {
-				console.log("error ajax");
+					});
+				}
 			});
         }
     });
+    
+    $("#i_new_line").click(function (e) {
+
+        e.preventDefault();  // Para evitar que se envíe por defecto
+
+        if ($('#tienda_id').val().trim() == "0") {
+			swal("Disculpe,", "para continuar debe seleccionar una tienda");
+			$('#tienda_id').parent('div').addClass('has-error');
+			
+        } else if ($('#referencia_tienda').val().trim() == "") {
+			swal("Disculpe,", "para continuar debe ingresar la referencia de la tienda");
+			$('#referencia_tienda').parent('div').addClass('has-error');
+			
+        } else {
+			
+			var table = $('#tab_tiendas').DataTable();
+			var tienda = $("#tienda_id").find('option').filter(':selected').text();
+			var tienda_id = $("#tienda_id").val();
+            var referencia_tienda = $("#referencia_tienda").val();
+			var botonQuitar = "<a  style='color: #1ab394' class='quitar'><i class='fa fa-trash fa-2x'></i></a>";
+			
+			// Añadimos la tienda a la tabla (primero verificamos si aún no está añadida)
+			var num_apariciones = 0;
+			$("#tab_tiendas tbody tr").each(function () {
+				var id_tienda;
+				id_tienda = $(this).attr('id');  // id tienda
+				if(id_tienda == tienda_id){
+					num_apariciones += 1;
+				}
+			});
+			if(num_apariciones == 0){
+				var i = table.row.add([tienda, referencia_tienda, botonQuitar]).draw();
+				table.rows(i).nodes().to$().attr("id", tienda_id);
+			}else{
+				swal("Disculpe,", "la tienda ya se encuentra en la lista");
+			}
+		}
+	});
+	
+	//Método para eliminar un registro de la tabla
+	$("table#tab_tiendas").on('click', 'a.quitar', function () {
+		
+		var cod_reg = '';
+
+		if ($(this).attr('id') !== undefined) {
+
+			cod_reg = $(this).attr('id');
+
+
+			if ($("#codigos_des1").val() === '') {
+				$("#codigos_des1").val(cod_reg);
+			} else {
+				$("#codigos_des1").val($("#codigos_des1").val() + ',' + cod_reg);
+			}
+
+		}
+
+		var aPos = $("table#tab_tiendas").dataTable().fnGetPosition(this.parentNode.parentNode);
+		$("table#tab_tiendas").dataTable().fnDeleteRow(aPos);
+
+	});
+	
 });
 
 </script>

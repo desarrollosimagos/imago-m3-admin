@@ -41,6 +41,16 @@ class MProductos extends CI_Model {
         else
             return $query->result();
     }
+    
+    // Metodo publico, para obtener las order_service por id
+    public function obtenerTiendas($id) {
+        $this->db->where('producto_id', $id);
+        $query = $this->db->get('productos_tienda');
+        if ($query->num_rows() > 0)
+            return $query->result();
+        else
+            return $query->result();
+    }
 
     // Public method to insert the data
     public function insert($datos) {
@@ -52,6 +62,19 @@ class MProductos extends CI_Model {
             $result = $this->db->insert("productos", $datos);
             $id = $this->db->insert_id();
             return $id;
+        }
+    }
+    
+    // Método público, forma de insertar los datos de la asociación entre productos y tiendas
+    public function insertTiendas($datos) {
+        $result = $this->db->where('producto_id =', $datos['producto_id']);
+        $result = $this->db->where('tienda_id =', $datos['tienda_id']);
+        $result = $this->db->get('productos_tienda');
+        if ($result->num_rows() > 0) {
+            echo 'existe';
+        } else {
+            $result = $this->db->insert("productos_tienda", $datos);
+            return $result;
         }
     }
 
@@ -82,7 +105,7 @@ class MProductos extends CI_Model {
 
 
     // Public method to delete a record
-     public function delete($id) {
+    public function delete($id) {
         //~ $result = $this->db->where('service_id =', $id);
         //~ $result = $this->db->get('franchises_productos');
 //~ 
@@ -95,6 +118,11 @@ class MProductos extends CI_Model {
        
     }
     
+    // Public method to delete a record
+    public function delete_producto_tienda($id) {
+		$result = $this->db->delete('productos_tienda', array('id' => $id));
+		return $result;
+    }    
 
 }
 ?>

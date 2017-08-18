@@ -36,7 +36,7 @@
                                     <th>Costo en Dólares</th>
                                     <th>Costo en Bolívares</th>
                                     <th>Unidad de medida</th>
-                                    <th>Tienda</th>
+                                    <!--<th>Tienda</th>-->
                                     <th>Modificado</th>
                                     <th>Se compra</th>
                                     <th>Se vende</th>
@@ -78,7 +78,7 @@
 											}
 											?>
                                         </td>
-                                        <td id="tienda_<?php echo $perfil->tienda_id?>">
+                                        <!--<td id="tienda_<?php echo $perfil->tienda_id?>">
                                             <?php 
 											foreach ($listar_tiendas as $tienda){
 												if($perfil->tienda_id == $tienda->id){
@@ -88,7 +88,7 @@
 												}
 											}
 											?>
-                                        </td>
+                                        </td>-->
                                         <td>
                                             <?php echo $perfil->modificado; ?>
                                         </td>
@@ -166,7 +166,6 @@ $(document).ready(function(){
             {"sClass": "registro center", "sWidth": "10%"},
             {"sClass": "registro center", "sWidth": "10%"},
             {"sClass": "registro center", "sWidth": "20%"},
-            {"sClass": "registro center", "sWidth": "10%"},
             {"sClass": "none", "sWidth": "10%"},
             {"sClass": "none", "sWidth": "10%"},
             {"sClass": "none", "sWidth": "10%"},
@@ -249,9 +248,9 @@ $(document).ready(function(){
 				//~ alert(valor_bs);
 				if(valor_bs == ""){
 					valor_bs = $(this).find('td').eq(5).find('input').val()
-					$(this).find('td').eq(5).html("<input type='text' value='"+valor_bs.trim()+"'>");
+					$(this).find('td').eq(5).html("<input type='text' value='"+valor_bs.trim()+"' size='8px'>");
 				}else{
-					$(this).find('td').eq(5).html("<input type='text' value='"+valor_bs.trim()+"'>");
+					$(this).find('td').eq(5).html("<input type='text' value='"+valor_bs.trim()+"' size='8px'>");
 				}
 			});
         }else{
@@ -288,7 +287,7 @@ $(document).ready(function(){
             check.prop("checked", "checked");  // Marcamos nuevamente el checkbox
             // Volvemos editable la columna correspondiente
 			var valor_bs = column.text();
-            column.html("<input type='text' value='"+valor_bs.trim()+"'>");
+            column.html("<input type='text' value='"+valor_bs.trim()+"' size='8px'>");
         }else{
 			accion = 'desmarcar';
 			//~ alert(accion);
@@ -351,7 +350,7 @@ $(document).ready(function(){
 					
 					if (checkbox.is(':checked')) {
 						num_checked += 1;
-						var id = $(this).find('td').eq(13).find('a').attr('id');
+						var id = $(this).find('td').eq(12).find('a').attr('id');
 						var nombre = $(this).find('td').eq(2).text().trim();
 						var referencia = $(this).find('td').eq(3).text().trim();
 						var costo_dolar = $(this).find('td').eq(4).text().trim();
@@ -359,15 +358,15 @@ $(document).ready(function(){
 						var unidad_medida = $(this).find('td').eq(6).attr('id');
 						unidad_medida = unidad_medida.split('_');
 						unidad_medida = unidad_medida[1];
-						var tienda_id = $(this).find('td').eq(7).attr('id');
-						tienda_id = tienda_id.split('_');
-						tienda_id = tienda_id[1];
-						var c_compra = $(this).find('td').eq(9).text().trim();
-						var c_vende = $(this).find('td').eq(10).text().trim();
-						var c_fabrica = $(this).find('td').eq(11).text().trim();
+						//~ var tienda_id = $(this).find('td').eq(7).attr('id');
+						//~ tienda_id = tienda_id.split('_');
+						//~ tienda_id = tienda_id[1];
+						var c_compra = $(this).find('td').eq(8).text().trim();
+						var c_vende = $(this).find('td').eq(9).text().trim();
+						var c_fabrica = $(this).find('td').eq(10).text().trim();
 						//~ alert("Id: "+id+", "+"Nombre: "+nombre+", "+"Referencia: "+referencia+", "+"costo_dolar: "+costo_dolar+", "+"costo_bolivar: "+costo_bolivar);
 						// Actualizamos los datos del material
-						$.post('<?php echo base_url(); ?>CProductos/update_list', {'id':id, 'nombre':nombre, 'referencia':referencia, 'costo_dolar':costo_dolar, 'costo_bolivar':costo_bolivar, 'unidad_medida':unidad_medida, 'tienda_id':tienda_id, 'c_compra':c_compra, 'c_vende':c_vende, 'c_fabrica':c_fabrica}, function (response) {
+						$.post('<?php echo base_url(); ?>CProductos/update_list', {'id':id, 'nombre':nombre, 'referencia':referencia, 'costo_dolar':costo_dolar, 'costo_bolivar':costo_bolivar, 'unidad_medida':unidad_medida, 'c_compra':c_compra, 'c_vende':c_vende, 'c_fabrica':c_fabrica}, function (response) {
 							//~ alert(response);
 						});
 					}

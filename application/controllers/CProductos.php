@@ -48,7 +48,7 @@ class CProductos extends CI_Controller {
             'costo_dolar' => $_POST['costo_dolar'],
             'costo_bolivar' => $_POST['costo_bolivar'],
             'unidad_medida' => $_POST['unidad_medida'],
-            'tienda_id' => $_POST['tienda_id'],
+            //~ 'tienda_id' => $_POST['tienda_id'],
             'c_compra' => $c_compra,
             'c_vende' => $c_vende,
             'c_fabrica' => $c_fabrica,
@@ -59,6 +59,41 @@ class CProductos extends CI_Controller {
         
         echo $result;  // No comentar, esta impresión es necesaria para que se ejecute el método insert()
     }
+    
+    // Método para asociar tiendas a un producto
+    public function associate_stores() {
+		$id_producto = $this->input->post('id_producto');
+		$tiendas = $this->input->post('tiendas');
+		
+		// Si el arreglo trae registros se procede a hacer los registros correspondientes
+		if(count($tiendas) > 0){
+			foreach ($tiendas as $tienda) {
+				// Insertamos en productos_tienda si existe el indice id_tienda (la tabla no viene vacía)
+				if(isset($tienda['id_tienda'])){
+					$datos = array(
+						'producto_id' => $id_producto,
+						'tienda_id' => $tienda['id_tienda'],
+						'referencia' => $tienda['referencia'],
+						'd_create' => date('Y-m-d')." ".date("H:i:s")
+					);
+
+					$insert = $this->MProductos->insertTiendas($datos);
+					//~ print_r($tienda);
+				}
+			}
+		}
+	}
+    
+    // Método para desasociar tiendas a un producto
+    public function unassociate_stores() {
+		$producto_id = $this->input->post('id_producto');
+		$tiendas_ids = $this->input->post('codigos_des1');
+		$tiendas_ids = explode(',',$tiendas_ids);
+        foreach ($tiendas_ids as $tienda_id) {
+			// Borramos la asociación tienda-producto
+			$delete = $this->MProductos->delete_producto_tienda($tienda_id);
+		}
+	}
 	
 	// Método para editar
     public function edit() {
@@ -68,6 +103,7 @@ class CProductos extends CI_Controller {
         $data['editar'] = $this->MProductos->obtenerProductos($data['id']);
         $data['listar_unidades'] = $this->MProductos->obtener_unidades();
         $data['listar_tiendas'] = $this->MProductos->obtener_tiendas();
+        $data['tiendas_asociadas'] = $this->MProductos->obtenerTiendas($data['id']);
         $this->load->view('productos/editar', $data);
 		$this->load->view('footer');
     }
@@ -91,7 +127,7 @@ class CProductos extends CI_Controller {
             'costo_dolar' => $_POST['costo_dolar'],
             'costo_bolivar' => $_POST['costo_bolivar'],
             'unidad_medida' => $_POST['unidad_medida'],
-            'tienda_id' => $_POST['tienda_id'],
+            //~ 'tienda_id' => $_POST['tienda_id'],
             'c_compra' => $c_compra,
             'c_vende' => $c_vende,
             'c_fabrica' => $c_fabrica,
@@ -110,7 +146,7 @@ class CProductos extends CI_Controller {
             'costo_dolar' => $_POST['costo_dolar'],
             'costo_bolivar' => $_POST['costo_bolivar'],
             'unidad_medida' => $_POST['unidad_medida'],
-            'tienda_id' => $_POST['tienda_id'],
+            //~ 'tienda_id' => $_POST['tienda_id'],
             'c_compra' => $_POST['c_compra'],
             'c_vende' => $_POST['c_vende'],
             'c_fabrica' => $_POST['c_fabrica'],
