@@ -100,7 +100,10 @@
 						<br>
 						<!-- Tabla de tiendas -->
 						<hr>
-						<div class="col-md-4">
+						<div class="ibox-title">
+							<h5>Asociar Tiendas <small></small></h5>
+						</div>
+						<div class="col-md-2">
 							<label class="control-label" >Tienda</label>
 							<select class="form-control" name="tienda_id" id="tienda_id">
 								<option value="0" selected="">Seleccione</option>
@@ -109,11 +112,19 @@
 								<?php } ?>
 							</select>
 						</div>
-						<div class="col-md-4">
+						<div class="col-md-2">
 							<label class="control-label" >Referencia</label>
 							<input type="text" class="form-control input-sm" name="referencia_tienda" id="referencia_tienda">
 						</div>
-						<div class="col-md-4">
+						<div class="col-md-2">
+							<label class="control-label" >Precio</label>
+							<input type="text" class="form-control input-sm" name="precio" id="precio" value="<?php echo $editar[0]->costo_bolivar ?>">
+						</div>
+						<div class="col-md-2">
+							<label class="control-label" >Cantidad</label>
+							<input type="text" class="form-control input-sm" name="cantidad" id="cantidad" value="1">
+						</div>
+						<div class="col-md-2">
 							<label style="font-weight:bold"></label>
 							<br>
 							<button type="button" class="btn btn-w-m btn-primary" id="i_new_line"><i class="fa fa-plus"></i>&nbsp;Agregar Tienda</button>
@@ -124,10 +135,10 @@
 									<tr>
 										<th>Tienda</th>
 										<!--<th>Precio</th>
-										<th>Impuesto</th>
-										<th>Importe</th>
-										<th>Editar</th>-->
+										<th>Impuesto</th>-->
 										<th>Referencia</th>
+										<th>Precio</th>
+										<th>Cantidad</th>
 										<th>Eliminar</th>
 									</tr>
 								</thead>
@@ -141,6 +152,8 @@
 												}
 											}?></td>
 											<td style='text-align: center'><?php echo $tienda->referencia; ?></td>
+											<td style='text-align: center'><?php echo $tienda->precio; ?></td>
+											<td style='text-align: center'><?php echo $tienda->cantidad; ?></td>
 											<td style='text-align: center'><a  style="color: #1ab394" class='quitar' id="<?php echo $tienda->id; ?>"><i class='fa fa-trash fa-2x'></i></a></td>
 										</tr>
 									<?php } ?>
@@ -216,10 +229,10 @@ $(document).ready(function(){
 		"pagingType": "full_numbers",
 		"language": {"url": "<?= assets_url() ?>js/es.txt"},
 		"aoColumns": [
-			{"sWidth": "60%"},
 			{"sWidth": "30%"},
-			//~ {"sWidth": "8%"},
-			//~ {"sWidth": "8%"},
+			{"sWidth": "20%"},
+			{"sWidth": "20%"},
+			{"sWidth": "20%"},
 			//~ {"sWidth": "8%"},
 			//~ {"sWidth": "4%", "bSortable": false, "sClass": "center sorting_false", "bSearchable": false},
 			{"sWidth": "10%", "bSortable": false, "sClass": "center sorting_false", "bSearchable": false}
@@ -275,8 +288,10 @@ $(document).ready(function(){
 						id_tienda = $(this).attr('id');  // id tienda
 						tienda_text = $(this).find('td').eq(0).attr('id'); //text tienda
 						referencia_t = $(this).find('td').eq(1).text();
+						precio = $(this).find('td').eq(2).text();
+						cantidad = $(this).find('td').eq(3).text();
 
-						campos = { "id_tienda" : id_tienda, "tienda" : tienda_text, "referencia" : referencia_t }
+						campos = { "id_tienda" : id_tienda, "tienda" : tienda_text, "referencia" : referencia_t, "precio" : precio, "cantidad" : cantidad }
 						data.push(campos);
 
 					});
@@ -323,6 +338,14 @@ $(document).ready(function(){
 			var tienda = $("#tienda_id").find('option').filter(':selected').text();
 			var tienda_id = $("#tienda_id").val();
             var referencia_tienda = $("#referencia_tienda").val();
+            var precio = $("#precio").val();
+            if($("#precio").val().trim() == "" || $("#precio").val().trim() == 0){
+				precio = $('#costo_bolivar').val().trim();
+			}
+            var cantidad = $("#cantidad").val();
+            if($("#cantidad").val().trim() == "" || $("#cantidad").val().trim() == 0){
+				cantidad = 1;
+			}
 			var botonQuitar = "<a  style='color: #1ab394' class='quitar'><i class='fa fa-trash fa-2x'></i></a>";
 			
 			// Añadimos la tienda a la tabla (primero verificamos si aún no está añadida)
@@ -335,7 +358,7 @@ $(document).ready(function(){
 				}
 			});
 			if(num_apariciones == 0){
-				var i = table.row.add([tienda, referencia_tienda, botonQuitar]).draw();
+				var i = table.row.add([tienda, referencia_tienda, precio, cantidad, botonQuitar]).draw();
 				table.rows(i).nodes().to$().attr("id", tienda_id);
 			}else{
 				swal("Disculpe,", "la tienda ya se encuentra en la lista");

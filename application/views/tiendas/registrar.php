@@ -21,7 +21,7 @@
         <div class="col-lg-12">
 			<div class="ibox float-e-margins">
 				<div class="ibox-title">
-					<h5>Registrar Producto <small></small></h5>
+					<h5>Registrar Tienda <small></small></h5>
 					
 				</div>
 				<div class="ibox-content">
@@ -37,7 +37,7 @@
 								<input type="text" class="form-control"  name="descripcion" maxlength="150" id="descripcion">
 							</div>
 						</div>
-						<div class="form-group"><label class="col-sm-2 control-label" >URL *</label>
+						<div class="form-group"><label class="col-sm-2 control-label" >URL</label>
 							<div class="col-sm-6">
 								<input type="text" class="form-control"  name="url" maxlength="150" id="url">
 							</div>
@@ -127,17 +127,11 @@ $(document).ready(function(){
 			swal("Disculpe,", "para continuar debe ingresar nombre");
 			$('#nombre').parent('div').addClass('has-error');
 			
-        } else if ($('#url').val().trim() === "") {
-			swal("Disculpe,", "para continuar debe ingresar la url");
-			$('#url').parent('div').addClass('has-error');
-			
-        } else if (!(regex.test($('#url').val().trim()))){
-			
+        } else if ($('#url').val().trim() != "" && !(regex.test($('#url').val().trim()))) {
 			swal("Disculpe,", "la url no es válida");
 			$('#url').parent('div').addClass('has-error');
-			$('#url').focus();
 			
-		} else if ($('#url_callback').val().trim() != "" && !(regex.test($('#url_callback').val().trim()))){
+        } else if ($('#url_callback').val().trim() != "" && !(regex.test($('#url_callback').val().trim()))){
 			
 			swal("Disculpe,", "la url no es válida");
 			$('#url_callback').parent('div').addClass('has-error');

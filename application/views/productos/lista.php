@@ -26,7 +26,7 @@
                 </div>
                 <div class="ibox-content">
                     <div class="table-responsive">
-                        <table id="tab_materiales" class="table table-striped table-bordered dt-responsive table-hover dataTables-example" >
+                        <table id="tab_productos" class="table table-striped table-bordered dt-responsive table-hover dataTables-example" >
                             <thead>
                                 <tr>
                                     <th><input type="checkbox" id="check_all"></th>
@@ -127,7 +127,7 @@
  <!-- Page-Level Scripts -->
 <script>
 $(document).ready(function(){
-	$('#tab_materiales').DataTable({
+	$('#tab_productos').DataTable({
         "paging": true,
         "lengthChange": false,
         "autoWidth": false,
@@ -183,7 +183,7 @@ $(document).ready(function(){
 	}, 'json');
              
     // Validacion para borrar
-    $("table#tab_materiales").on('click', 'a.borrar', function (e) {
+    $("table#tab_productos").on('click', 'a.borrar', function (e) {
         e.preventDefault();
         var id = this.getAttribute('id');
 
@@ -229,7 +229,7 @@ $(document).ready(function(){
     });
     
     // Función para marcar/desmarcar los inputs y volver editable o no las celdas de Costo en Bolívares
-	$("table#tab_materiales").on('change', 'input#check_all', function (e) {
+	$("table#tab_productos").on('change', 'input#check_all', function (e) {
 		e.preventDefault();
 		
 		var check = $(this);
@@ -242,7 +242,7 @@ $(document).ready(function(){
             //~ alert(accion);
             check.prop("checked", "checked");  // Marcamos nuevamente el checkbox
             // Recorremos la tabla marcando todos los checkbox
-            $("#tab_materiales tbody tr").each(function () {
+            $("#tab_productos tbody tr").each(function () {
 				$(this).find('td').find('input').prop("checked", "checked");
 				var valor_bs = $(this).find('td').eq(5).text();
 				//~ alert(valor_bs);
@@ -258,7 +258,7 @@ $(document).ready(function(){
 			//~ alert(accion);
 			check.prop("checked", "");  // Desmarcamos nuevamente el checkbox
 			// Recorremos la tabla desmarcando todos los checkbox
-            $("#tab_materiales tbody tr").each(function () {
+            $("#tab_productos tbody tr").each(function () {
 				$(this).find('td').find('input').prop("checked", "");				
 				var valor_bs = $(this).find('td').eq(5).find('input').val();
 				//~ alert(valor_bs);
@@ -268,7 +268,7 @@ $(document).ready(function(){
 	});
 	
 	// Función para marcar/desmarcar un input seleccionado y volver editable o no la celda de Costo en Bolívares correspondiente
-	$("table#tab_materiales").on('change', 'input.check', function (e) {
+	$("table#tab_productos").on('change', 'input.check', function (e) {
 		e.preventDefault();
         var id = this.getAttribute('id');
         var id_column = id+"_column";
@@ -304,7 +304,7 @@ $(document).ready(function(){
 		var precio_dolar = $("#precio_dolar").val();  // Capturamos el precio del dólar previamente cargado en el campo oculto 'precio_dolar'
 		
 		// Recorremos la tabla para verificar que campos están editables y proceder a referenciarles el monto
-		$("#tab_materiales tbody tr").each(function () {
+		$("#tab_productos tbody tr").each(function () {
 			var checkbox;
 			checkbox = $(this).find('td').eq(0).find('input');
 			
@@ -328,8 +328,8 @@ $(document).ready(function(){
 	$("#actualizar_montos").on('click', function (e) {
 		
 		swal({
-			title: "Actualizar materiales",
-			text: "¿Está seguro de actualizar los montos de los materiales?",
+			title: "Actualizar productos",
+			text: "¿Está seguro de actualizar los montos de los productos?",
 			type: "warning",
 			showCancelButton: true,
 			confirmButtonColor: "#DD6B55",
@@ -344,7 +344,7 @@ $(document).ready(function(){
 				var num_checked = 0;  // Contador de checkbox marcados
 				
 				// Recorremos la tabla para verificar que campos están editables y proceder a actualizarles el monto
-				$("#tab_materiales tbody tr").each(function () {
+				$("#tab_productos tbody tr").each(function () {
 					var checkbox;
 					checkbox = $(this).find('td').eq(0).find('input');
 					
