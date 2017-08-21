@@ -122,7 +122,13 @@ class MProductos extends CI_Model {
     public function delete_producto_tienda($id) {
 		$result = $this->db->delete('productos_tienda', array('id' => $id));
 		return $result;
-    }    
+    }
+    
+    // Public method to delete a record
+    public function delete_pt_associated($id) {
+		$result = $this->db->delete('productos_tienda', array('producto_id' => $id));
+        return $result;
+	} 
 
 }
 ?>

@@ -74,6 +74,8 @@ class CProductos extends CI_Controller {
 						'producto_id' => $id_producto,
 						'tienda_id' => $tienda['id_tienda'],
 						'referencia' => $tienda['referencia'],
+						'precio' => $tienda['precio'],
+						'cantidad' => $tienda['cantidad'],
 						'd_create' => date('Y-m-d')." ".date("H:i:s")
 					);
 
@@ -159,10 +161,9 @@ class CProductos extends CI_Controller {
 	// Método para eliminar
 	function delete($id) {
 		
-        $result = $this->MProductos->delete($id);
-        if ($result) {
-          /*  $this->libreria->generateActivity('Eliminado País', $this->session->userdata['logged_in']['id']);*/
-        }
+        $result1 = $this->MProductos->delete_pt_associated($id);  // Primero borramos los registros asociados en la tabla 'productos_tienda'
+        
+        $result2 = $this->MProductos->delete($id);  // Borramos el producto
     }
 	
 	public function ajax_service()
