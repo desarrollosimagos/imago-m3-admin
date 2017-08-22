@@ -103,6 +103,13 @@ class MProductos extends CI_Model {
         }
     }
 
+    // Public method to update a record of the table 'productos_tienda'
+    public function update_pt($id, $datos) {
+		$result = $this->db->where('producto_id', $id);
+		$result = $this->db->update('productos_tienda', $datos);
+		return $result;
+    }
+
 
     // Public method to delete a record
     public function delete($id) {

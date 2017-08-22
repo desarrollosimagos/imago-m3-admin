@@ -141,6 +141,7 @@ class CProductos extends CI_Controller {
 	
 	// Método para actualizar desde la lista
     public function update_list() {
+		// Actualización de datos en la tabla de 'productos'
 		$datos = array(
             'id' => $_POST['id'],
             'nombre' => $_POST['nombre'],
@@ -156,6 +157,13 @@ class CProductos extends CI_Controller {
         );
         
         $result = $this->MProductos->update($datos);
+        
+        // Actualización de datos en la tabla de 'productos_tienda'
+        $datos2 = array(
+			'precio' => $_POST['costo_bolivar']
+        );
+        
+        $result2 = $this->MProductos->update_pt($_POST['id'], $datos2);
     }
     
 	// Método para eliminar
