@@ -48,7 +48,7 @@ class CAplicaciones extends CI_Controller {
 		
 		$this->load->view('base');
         $data['id'] = $this->uri->segment(3);
-        $data['editar'] = $this->MAplicaciones->obtenerTiendas($data['id']);
+        $data['editar'] = $this->MAplicaciones->obtenerAplicacion($data['id']);
         $this->load->view('aplicaciones/editar', $data);
 		$this->load->view('footer');
     }

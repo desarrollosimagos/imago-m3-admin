@@ -14,8 +14,12 @@ class MTiendas extends CI_Model {
 
     //Public method to obtain the tienda
     public function obtener() {
-        $query = $this->db->get('tienda');
-
+        //~ $query = $this->db->get('tienda');
+        $this->db->select('t.id, t.nombre, t.descripcion, t.url, t.tokens, t.token_cliente, t.secret_api, t.url_callback, t.cliente_api_id, t.app_id, t.aplicacion_id, a.nombre nombre_aplicacion, a.ruta');
+		$this->db->from('tienda t');
+		$this->db->join('aplicacion a', 'a.id = t.aplicacion_id');
+        //~ $this->db->where('franchise_id', $id_franchise);
+		$query = $this->db->get();
         if ($query->num_rows() > 0)
             return $query->result();
         else
@@ -49,6 +53,16 @@ class MTiendas extends CI_Model {
     public function obtenerTiendas($id) {
         $this->db->where('id', $id);
         $query = $this->db->get('tienda');
+        if ($query->num_rows() > 0)
+            return $query->result();
+        else
+            return $query->result();
+    }
+    
+    // Public method to obtain the productos by id
+    public function obtenerProductosTienda($id) {
+        $this->db->where('tienda_id', $id);
+        $query = $this->db->get('productos_tienda');
         if ($query->num_rows() > 0)
             return $query->result();
         else
