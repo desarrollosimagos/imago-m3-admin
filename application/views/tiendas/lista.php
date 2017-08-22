@@ -42,6 +42,7 @@
                                     <th>Aplicación</th>
                                     <th>Editar</th>
                                     <th>Eliminar</th>
+                                    <th>Actualizar</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -93,14 +94,17 @@
                                             <a href="<?php echo base_url() ?>tiendas/edit/<?= $tienda->id; ?>" title="Editar" style='color: #1ab394'><i class="fa fa-edit fa-2x"></i></a>
                                         </td>
                                         <td style='text-align: center'>
-                                            
                                             <a class='borrar' id='<?php echo $tienda->id; ?>' style='color: #1ab394' title='Eliminar'><i class="fa fa-trash-o fa-2x"></i></a>
+                                        </td>
+                                        <td style='text-align: center'>
+                                            <a class='actualizar' href="<?php echo base_url().$tienda->ruta."?id=".$tienda->id; ?>"style='color: #1ab394' title='Actualizar precios'><i class="fa fa-refresh fa-2x"></i></a>
                                         </td>
                                     </tr>
                                     <?php $i++ ?>
                                 <?php } ?>
                             </tbody>
                         </table>
+                        <input type="hidden" id="update_prices" value="<?php echo base_url(); ?>"/>
                         <!--<div class="text-right">
 							<button class="btn btn-outline btn-primary dim" id="actualizar_montos" type="button"><i class="fa fa-floppy-o"></i> Actualizar</button>
 						</div>-->
@@ -148,15 +152,16 @@ $(document).ready(function(){
         "aoColumns": [
             {"sClass": "registro center", "sWidth": "5%"},
             {"sClass": "registro center", "sWidth": "10%"},
-            {"sClass": "registro center", "sWidth": "20%"},
-            {"sClass": "registro center", "sWidth": "10%"},
-            {"sClass": "registro center", "sWidth": "10%"},
-            {"sClass": "registro center", "sWidth": "10%"},
-            {"sClass": "registro center", "sWidth": "20%"},
+            {"sClass": "none", "sWidth": "10%"},
             {"sClass": "registro center", "sWidth": "10%"},
             {"sClass": "none", "sWidth": "10%"},
             {"sClass": "none", "sWidth": "10%"},
             {"sClass": "none", "sWidth": "10%"},
+            {"sClass": "none", "sWidth": "10%"},
+            {"sClass": "none", "sWidth": "10%"},
+            {"sClass": "none", "sWidth": "10%"},
+            {"sClass": "none", "sWidth": "10%"},
+            {"sWidth": "3%", "bSortable": false, "sClass": "center sorting_false", "bSearchable": false},
             {"sWidth": "3%", "bSortable": false, "sClass": "center sorting_false", "bSearchable": false},
             {"sWidth": "3%", "bSortable": false, "sClass": "center sorting_false", "bSearchable": false}
         ]
@@ -207,6 +212,15 @@ $(document).ready(function(){
             } 
         });
     });
+    
+    // Validacion para borrar
+    //~ $("#update_prices").on('click', function (e) {
+        //~ e.preventDefault();
+	//~ 
+		//~ $.post('<?php echo base_url(); ?>mercado/update', function (response) {
+			//~ 
+		//~ });
+	//~ });
 	
 });
         

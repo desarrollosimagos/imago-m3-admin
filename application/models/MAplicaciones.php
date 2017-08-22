@@ -36,7 +36,7 @@ class MAplicaciones extends CI_Model {
     }
 
     // Public method to obtain the aplicacion by id
-    public function obtenerTiendas($id) {
+    public function obtenerAplicacion($id) {
         $this->db->where('id', $id);
         $query = $this->db->get('aplicacion');
         if ($query->num_rows() > 0)

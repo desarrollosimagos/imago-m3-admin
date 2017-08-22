@@ -143,3 +143,7 @@ $route['aplicaciones/edit/(:num)'] = 'CAplicaciones/edit/$1';
 $route['aplicaciones/delete/(:num)'] = 'CAplicaciones/delete/$1';
 /*assets*/
 $route['assets/(:any)'] = 'assets/$1';
+// API Mercado Libre
+$route['mercado/update'] = 'CApis/mlibre';
+$route['olx/update'] = 'CApis/mlibre';
+$route['prestashop/update'] = 'CApis/mlibre';
