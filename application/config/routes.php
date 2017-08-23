@@ -131,11 +131,11 @@ $route['productos'] = 'CProductos';
 $route['productos/register'] = 'CProductos/register';
 $route['productos/edit/(:num)'] = 'CProductos/edit/$1';
 $route['productos/delete/(:num)'] = 'CProductos/delete/$1';
-/*   Tiendas */
-$route['tiendas'] = 'CTiendas';
-$route['tiendas/register'] = 'CTiendas/register';
-$route['tiendas/edit/(:num)'] = 'CTiendas/edit/$1';
-$route['tiendas/delete/(:num)'] = 'CTiendas/delete/$1';
+/*   Tiendas virtuales */
+$route['tiendasv'] = 'CTiendasVirtuales';
+$route['tiendasv/register'] = 'CTiendasVirtuales/register';
+$route['tiendasv/edit/(:num)'] = 'CTiendasVirtuales/edit/$1';
+$route['tiendasv/delete/(:num)'] = 'CTiendasVirtuales/delete/$1';
 /*   Aplicaciones */
 $route['aplicaciones'] = 'CAplicaciones';
 $route['aplicaciones/register'] = 'CAplicaciones/register';
@@ -143,7 +143,7 @@ $route['aplicaciones/edit/(:num)'] = 'CAplicaciones/edit/$1';
 $route['aplicaciones/delete/(:num)'] = 'CAplicaciones/delete/$1';
 /*assets*/
 $route['assets/(:any)'] = 'assets/$1';
-// API Mercado Libre
+// APIs de tiendas virtuales
 $route['mercado/update'] = 'CApis/mlibre';
 $route['olx/update'] = 'CApis/mlibre';
 $route['prestashop/update'] = 'CApis/mlibre';

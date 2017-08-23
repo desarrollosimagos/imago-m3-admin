@@ -34,7 +34,7 @@ class MProductos extends CI_Model {
 
     //Public method to obtain the shops
     public function obtener_tiendas() {
-        $query = $this->db->get('tienda');
+        $query = $this->db->get('tienda_virtual');
 
         if ($query->num_rows() > 0)
             return $query->result();
@@ -45,7 +45,7 @@ class MProductos extends CI_Model {
     // Método publico, para obtener las order_service por id
     public function obtenerTiendas($id) {
         $this->db->where('producto_id', $id);
-        $query = $this->db->get('productos_tienda');
+        $query = $this->db->get('productos_tiendav');
         if ($query->num_rows() > 0)
             return $query->result();
         else
@@ -68,12 +68,12 @@ class MProductos extends CI_Model {
     // Método público, forma de insertar los datos de la asociación entre productos y tiendas
     public function insertTiendas($datos) {
         $result = $this->db->where('producto_id =', $datos['producto_id']);
-        $result = $this->db->where('tienda_id =', $datos['tienda_id']);
-        $result = $this->db->get('productos_tienda');
+        $result = $this->db->where('tiendav_id =', $datos['tiendav_id']);
+        $result = $this->db->get('productos_tiendav');
         if ($result->num_rows() > 0) {
             echo 'existe';
         } else {
-            $result = $this->db->insert("productos_tienda", $datos);
+            $result = $this->db->insert("productos_tiendav", $datos);
             return $result;
         }
     }
@@ -106,7 +106,7 @@ class MProductos extends CI_Model {
     // Public method to update a record of the table 'productos_tienda'
     public function update_pt($id, $datos) {
 		$result = $this->db->where('producto_id', $id);
-		$result = $this->db->update('productos_tienda', $datos);
+		$result = $this->db->update('productos_tiendav', $datos);
 		return $result;
     }
 
@@ -127,13 +127,13 @@ class MProductos extends CI_Model {
     
     // Public method to delete a record
     public function delete_producto_tienda($id) {
-		$result = $this->db->delete('productos_tienda', array('id' => $id));
+		$result = $this->db->delete('productos_tiendav', array('id' => $id));
 		return $result;
     }
     
     // Public method to delete a record
     public function delete_pt_associated($id) {
-		$result = $this->db->delete('productos_tienda', array('producto_id' => $id));
+		$result = $this->db->delete('productos_tiendav', array('producto_id' => $id));
         return $result;
 	} 
 

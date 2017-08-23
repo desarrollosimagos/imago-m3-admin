@@ -7,7 +7,7 @@ Class CApis extends CI_Controller {
         @parent::__construct();
 
 // Load database
-        $this->load->model('MTiendas');
+        $this->load->model('MTiendasVirtuales');
         $this->load->model('MProductos');
         $this->load->model('MAplicaciones');
         //~ $this->load->model('auditoria/ModelsAuditoria');
@@ -17,7 +17,7 @@ Class CApis extends CI_Controller {
 	public function mlibre(){
 		// Consultamos los datos de la tienda
 		$id = $this->input->get('id');
-		$datosb_tienda = $this->MTiendas->obtenerTiendas($id);  // Datos básicos de la tienda
+		$datosb_tienda = $this->MTiendasVirtuales->obtenerTiendas($id);  // Datos básicos de la tienda
 		
 		//~ print_r($datosb_tienda);
 		
@@ -27,7 +27,7 @@ Class CApis extends CI_Controller {
 		
 		//~ print_r($datos_aplicacion);
 		
-		$productos = $this->MTiendas->obtenerProductosTienda($id);  // Lista de productos asociados
+		$productos = $this->MTiendasVirtuales->obtenerProductosTienda($id);  // Lista de productos asociados
 		
 		//~ print_r($productos);
 		// Si hay productos asociados
@@ -83,7 +83,7 @@ Class CApis extends CI_Controller {
 							'expires_in' => $user['body']->expires_in
 						);
 						
-						$result = $this->MTiendas->update($datos);
+						$result = $this->MTiendasVirtuales->update($datos);
 						
 						//~ // We can check if the access token in invalid checking the time
 						if($_SESSION['expires_in'] + time() + 1 < time()) {
@@ -144,7 +144,7 @@ Class CApis extends CI_Controller {
 	
 	public function olx($id){
 		$id = $this->input->get('id');
-		$productos = $this->MTiendas->obtenerProductosTienda($id);
+		$productos = $this->MTiendasVirtuales->obtenerProductosTienda($id);
 		
 		print_r($productos);
 		
@@ -153,7 +153,7 @@ Class CApis extends CI_Controller {
 	
 	public function prestashop($id){
 		$id = $this->input->get('id');
-		$productos = $this->MTiendas->obtenerProductosTienda($id);
+		$productos = $this->MTiendasVirtuales->obtenerProductosTienda($id);
 		
 		print_r($productos);
 		
