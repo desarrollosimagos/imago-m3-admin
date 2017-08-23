@@ -14,7 +14,7 @@
 <div class="wrapper wrapper-content animated fadeInRight">
     <div class="row">
         <div class="col-lg-12">
-            <a href="<?php echo base_url() ?>tiendas/register">
+            <a href="<?php echo base_url() ?>tiendasv/register">
             <button class="btn btn-outline btn-primary dim" type="button"><i class="fa fa-plus"></i> Agregar</button>
             </a>
             <!--<button class="btn btn-outline btn-primary dim" id="referenciar" type="button"><i class="fa fa-refresh"></i> Referenciar</button>-->
@@ -91,7 +91,7 @@
 											?>
                                         </td>
                                         <td style='text-align: center'>
-                                            <a href="<?php echo base_url() ?>tiendas/edit/<?= $tienda->id; ?>" title="Editar" style='color: #1ab394'><i class="fa fa-edit fa-2x"></i></a>
+                                            <a href="<?php echo base_url() ?>tiendasv/edit/<?= $tienda->id; ?>" title="Editar" style='color: #1ab394'><i class="fa fa-edit fa-2x"></i></a>
                                         </td>
                                         <td style='text-align: center'>
                                             <a class='borrar' id='<?php echo $tienda->id; ?>' style='color: #1ab394' title='Eliminar'><i class="fa fa-trash-o fa-2x"></i></a>
@@ -186,7 +186,7 @@ $(document).ready(function(){
         function(isConfirm){
             if (isConfirm) {
              
-                $.post('<?php echo base_url(); ?>tiendas/delete/' + id + '', function (response) {
+                $.post('<?php echo base_url(); ?>tiendasv/delete/' + id + '', function (response) {
 
                     if (response[0] == "e") {
                        
@@ -205,7 +205,7 @@ $(document).ready(function(){
                              type: "success" 
                            },
                            function(){
-                             window.location.href = '<?php echo base_url(); ?>tiendas';
+                             window.location.href = '<?php echo base_url(); ?>tiendasv';
                          });
                     }
                 });

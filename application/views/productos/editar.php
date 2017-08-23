@@ -69,7 +69,7 @@
 						<!--<div class="form-group">
 							<label class="col-sm-2 control-label" >Tienda *</label>
 							<div class="col-sm-6">
-								<select class="form-control m-b" name="tienda_id" id="tienda_id">
+								<select class="form-control m-b" name="tiendav_id" id="tiendav_id">
 									<option value="0" selected="">Seleccione</option>
 									<?php foreach ($listar_tiendas as $tienda) { ?>
 										<option value="<?php echo $tienda->id ?>"><?php echo $tienda->nombre; ?></option>
@@ -105,7 +105,7 @@
 						</div>
 						<div class="col-md-2">
 							<label class="control-label" >Tienda</label>
-							<select class="form-control" name="tienda_id" id="tienda_id">
+							<select class="form-control" name="tiendav_id" id="tiendav_id">
 								<option value="0" selected="">Seleccione</option>
 								<?php foreach ($listar_tiendas as $tienda) { ?>
 									<option value="<?php echo $tienda->id ?>"><?php echo $tienda->nombre; ?></option>
@@ -144,10 +144,10 @@
 								</thead>
 								<tbody>
 									<?php foreach ($tiendas_asociadas as $tienda) { ?>
-										<tr id="<?php echo $tienda->tienda_id; ?>">
+										<tr id="<?php echo $tienda->tiendav_id; ?>">
 											<td style='text-align: center' id="<?php echo $tienda->id; ?>">
 											<?php foreach ($listar_tiendas as $tienda2) {
-												if ($tienda->tienda_id == $tienda2->id){
+												if ($tienda->tiendav_id == $tienda2->id){
 													echo $tienda2->nombre."<br>";
 												}
 											}?></td>
@@ -196,7 +196,7 @@ $(document).ready(function(){
     
     // Auto-selección de combos con las opciones correspondientes
     $("#unidad_medida").select2('val', $("#id_unidad_medida").val());
-    //~ $("#tienda_id").select2('val', $("#id_tienda").val());
+    //~ $("#tiendav_id").select2('val', $("#id_tienda").val());
 	
 	$("#costo_dolar,#costo_bolivar").numeric(); //Valida solo permite valores numéricos
 	
@@ -264,9 +264,9 @@ $(document).ready(function(){
 			$('#unidad_medida').parent('div').addClass('has-error');
 			$('#unidad_medida').focus();
 			
-        } /*else if ($('#tienda_id').val().trim() == "0") {
+        } /*else if ($('#tiendav_id').val().trim() == "0") {
 			swal("Disculpe,", "para continuar debe seleccionar la tienda");
-			$('#tienda_id').parent('div').addClass('has-error');
+			$('#tiendav_id').parent('div').addClass('has-error');
 			
         }*/ else {
             
@@ -324,9 +324,9 @@ $(document).ready(function(){
 
         e.preventDefault();  // Para evitar que se envíe por defecto
 
-        if ($('#tienda_id').val().trim() == "0") {
+        if ($('#tiendav_id').val().trim() == "0") {
 			swal("Disculpe,", "para continuar debe seleccionar una tienda");
-			$('#tienda_id').parent('div').addClass('has-error');
+			$('#tiendav_id').parent('div').addClass('has-error');
 			
         } else if ($('#referencia_tienda').val().trim() == "") {
 			swal("Disculpe,", "para continuar debe ingresar la referencia de la tienda");
@@ -335,8 +335,8 @@ $(document).ready(function(){
         } else {
 			
 			var table = $('#tab_tiendas').DataTable();
-			var tienda = $("#tienda_id").find('option').filter(':selected').text();
-			var tienda_id = $("#tienda_id").val();
+			var tienda = $("#tiendav_id").find('option').filter(':selected').text();
+			var tiendav_id = $("#tiendav_id").val();
             var referencia_tienda = $("#referencia_tienda").val();
             var precio = $("#precio").val();
             if($("#precio").val().trim() == "" || $("#precio").val().trim() == 0){
@@ -353,13 +353,13 @@ $(document).ready(function(){
 			$("#tab_tiendas tbody tr").each(function () {
 				var id_tienda;
 				id_tienda = $(this).attr('id');  // id tienda
-				if(id_tienda == tienda_id){
+				if(id_tienda == tiendav_id){
 					num_apariciones += 1;
 				}
 			});
 			if(num_apariciones == 0){
 				var i = table.row.add([tienda, referencia_tienda, precio, cantidad, botonQuitar]).draw();
-				table.rows(i).nodes().to$().attr("id", tienda_id);
+				table.rows(i).nodes().to$().attr("id", tiendav_id);
 			}else{
 				swal("Disculpe,", "la tienda ya se encuentra en la lista");
 			}

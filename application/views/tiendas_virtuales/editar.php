@@ -7,7 +7,7 @@
             </li>
             
             <li>
-                <a href="<?php echo base_url() ?>tiendas">Tiendas</a>
+                <a href="<?php echo base_url() ?>tiendasv">Tiendas</a>
             </li>
            
             <li class="active">
@@ -113,7 +113,7 @@ $(document).ready(function(){
     });
 
     $('#volver').click(function () {
-        url = '<?php echo base_url() ?>tiendas/';
+        url = '<?php echo base_url() ?>tiendasv/';
         window.location = url;
     });
     
@@ -150,7 +150,7 @@ $(document).ready(function(){
 			
 		} else {
 
-            //~ $.post('<?php echo base_url(); ?>CTiendas/update', $('#form_tiendas').serialize(), function (response) {
+            //~ $.post('<?php echo base_url(); ?>CTiendasVirtuales/update', $('#form_tiendas').serialize(), function (response) {
 				//~ if (response[0] == '1') {
                     //~ swal("Disculpe,", "este nombre se encuentra registrado");
                 //~ }else{
@@ -178,7 +178,7 @@ $(document).ready(function(){
 				//~ method: "POST",
 				type: "post",
 				dataType: "html",
-				url: '<?php echo base_url(); ?>CTiendas/update',
+				url: '<?php echo base_url(); ?>CTiendasVirtuales/update',
 				data: formData,
 				cache: false,
 				contentType: false,
@@ -197,7 +197,7 @@ $(document).ready(function(){
 							  type: "success" 
 							},
 						function(){
-						  window.location.href = '<?php echo base_url(); ?>tiendas';
+						  window.location.href = '<?php echo base_url(); ?>tiendasv';
 						});
 					}
 				}				

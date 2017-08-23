@@ -48,7 +48,7 @@ class CProductos extends CI_Controller {
             'costo_dolar' => $_POST['costo_dolar'],
             'costo_bolivar' => $_POST['costo_bolivar'],
             'unidad_medida' => $_POST['unidad_medida'],
-            //~ 'tienda_id' => $_POST['tienda_id'],
+            //~ 'tiendav_id' => $_POST['tiendav_id'],
             'c_compra' => $c_compra,
             'c_vende' => $c_vende,
             'c_fabrica' => $c_fabrica,
@@ -72,7 +72,7 @@ class CProductos extends CI_Controller {
 				if(isset($tienda['id_tienda'])){
 					$datos = array(
 						'producto_id' => $id_producto,
-						'tienda_id' => $tienda['id_tienda'],
+						'tiendav_id' => $tienda['id_tienda'],
 						'referencia' => $tienda['referencia'],
 						'precio' => $tienda['precio'],
 						'cantidad' => $tienda['cantidad'],
@@ -91,9 +91,9 @@ class CProductos extends CI_Controller {
 		$producto_id = $this->input->post('id_producto');
 		$tiendas_ids = $this->input->post('codigos_des1');
 		$tiendas_ids = explode(',',$tiendas_ids);
-        foreach ($tiendas_ids as $tienda_id) {
+        foreach ($tiendas_ids as $tiendav_id) {
 			// Borramos la asociación tienda-producto
-			$delete = $this->MProductos->delete_producto_tienda($tienda_id);
+			$delete = $this->MProductos->delete_producto_tienda($tiendav_id);
 		}
 	}
 	
@@ -129,7 +129,7 @@ class CProductos extends CI_Controller {
             'costo_dolar' => $_POST['costo_dolar'],
             'costo_bolivar' => $_POST['costo_bolivar'],
             'unidad_medida' => $_POST['unidad_medida'],
-            //~ 'tienda_id' => $_POST['tienda_id'],
+            //~ 'tiendav_id' => $_POST['tiendav_id'],
             'c_compra' => $c_compra,
             'c_vende' => $c_vende,
             'c_fabrica' => $c_fabrica,
@@ -149,7 +149,7 @@ class CProductos extends CI_Controller {
             'costo_dolar' => $_POST['costo_dolar'],
             'costo_bolivar' => $_POST['costo_bolivar'],
             'unidad_medida' => $_POST['unidad_medida'],
-            //~ 'tienda_id' => $_POST['tienda_id'],
+            //~ 'tiendav_id' => $_POST['tiendav_id'],
             'c_compra' => $_POST['c_compra'],
             'c_vende' => $_POST['c_vende'],
             'c_fabrica' => $_POST['c_fabrica'],
