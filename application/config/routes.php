@@ -136,6 +136,11 @@ $route['tiendasv'] = 'CTiendasVirtuales';
 $route['tiendasv/register'] = 'CTiendasVirtuales/register';
 $route['tiendasv/edit/(:num)'] = 'CTiendasVirtuales/edit/$1';
 $route['tiendasv/delete/(:num)'] = 'CTiendasVirtuales/delete/$1';
+/*   Tiendas*/
+$route['tiendas'] = 'CTiendas';
+$route['tiendas/register'] = 'CTiendas/register';
+$route['tiendas/edit/(:num)'] = 'CTiendas/edit/$1';
+$route['tiendas/delete/(:num)'] = 'CTiendas/delete/$1';
 /*   Aplicaciones */
 $route['aplicaciones'] = 'CAplicaciones';
 $route['aplicaciones/register'] = 'CAplicaciones/register';

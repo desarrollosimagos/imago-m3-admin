@@ -27,7 +27,7 @@ class Welcome extends CI_Controller {
         $this->load->model('MClient');
         $this->load->model('MServices');
         $this->load->model('MProduct');
-        $this->load->model('MFranchises');
+        //~ $this->load->model('MFranchises');
     }
 	 
 	public function index()

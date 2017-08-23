@@ -1,17 +1,17 @@
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-10">
-        <h2>Tiendas </h2>
+        <h2>Tiendas Virtuales</h2>
         <ol class="breadcrumb">
             <li>
                 <a href="index.html">Inicio</a>
             </li>
             
             <li>
-                <a href="<?php echo base_url() ?>tiendasv">Tiendas</a>
+                <a href="<?php echo base_url() ?>tiendasv">Tiendas Virtuales</a>
             </li>
            
             <li class="active">
-                <strong>Editar Tienda</strong>
+                <strong>Editar Tienda Virtual</strong>
             </li>
         </ol>
     </div>
@@ -21,7 +21,7 @@
         <div class="col-lg-12">
 			<div class="ibox float-e-margins">
 				<div class="ibox-title">
-					<h5>Editar Tienda <small></small></h5>
+					<h5>Editar Tienda Virtual<small></small></h5>
 				</div>
 				<div class="ibox-content">
 					<form id="form_tiendas" method="post" accept-charset="utf-8" class="form-horizontal">

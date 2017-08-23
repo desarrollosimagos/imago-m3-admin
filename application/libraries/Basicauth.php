@@ -33,34 +33,34 @@ Class Basicauth
 					$query_actions2 = $this->CI->db->get_where('actions', array('id'=>$permissions->action_id));
 					$permisos[] = $query_actions2->result();
 				}
-				// Buscamos los datos de la franquicia con sus servicios, los menús y submenús asociados al usuario
-				$franquicias = array();
-				$servicios = array();
+				// Buscamos los datos de la tienda con sus servicios, los menús y submenús asociados al usuario
+				$tiendas = array();
+				//~ $servicios = array();
 				$menus = array();
 				$submenus = array();
 				// Primero verificamos que el usuario no sea administrador
 				//if($query->row()->admin == 0){
 					//~ echo "Pasó 3";
-					// Buscamos si hay franquicias asociadas al usuario
-					$query_user_franquicia = $this->CI->db->get_where('users_franchises', array('user_id'=>$query->row()->id));
-					if($query_user_franquicia->num_rows() > 0){
-						// Listamos las franquicias asociadas
+					// Buscamos si hay tiendas asociadas al usuario
+					$query_user_tienda = $this->CI->db->get_where('users_tiendas', array('user_id'=>$query->row()->id));
+					if($query_user_tienda->num_rows() > 0){
+						// Listamos las tiendas asociadas
 						$ids_serv = array();  // Variable para almacenar los ids de los servicios y filtrar los repetidos
-						foreach($query_user_franquicia->result() as $franchises){
-							$query_franquicia = $this->CI->db->get_where('franchises', array('id'=>$franchises->franchise_id));
-							$franquicias[] = $query_franquicia->result();
-							// Buscamos los datos de los servicios asociados a la(s) franquicia(s)
-							$query_franquicia_services = $this->CI->db->get_where('franchises_services', array('franchise_id'=>$query_franquicia->row()->id));
-							if($query_franquicia_services->num_rows() > 0){
-								// Listamos los servicios asociados
-								foreach($query_franquicia_services->result() as $services){
-									$query_servicio = $this->CI->db->get_where('services', array('id'=>$services->service_id));
-									if(!in_array($query_servicio->row()->id, $ids_serv)){
-										$servicios[] = $query_servicio->result();
-									}
-									$ids_serv[] = $query_servicio->row()->id;  // Vamos almacenando los ids de los servicios ya cargados
-								}
-							}
+						foreach($query_user_tienda->result() as $tiendas){
+							$query_tienda = $this->CI->db->get_where('tiendas', array('id'=>$tiendas->franchise_id));
+							$tiendas[] = $query_tienda->result();
+							//~ // Buscamos los datos de los servicios asociados a la(s) tienda(s)
+							//~ $query_tienda_services = $this->CI->db->get_where('tiendas_services', array('franchise_id'=>$query_tienda->row()->id));
+							//~ if($query_tienda_services->num_rows() > 0){
+								//~ // Listamos los servicios asociados
+								//~ foreach($query_tienda_services->result() as $services){
+									//~ $query_servicio = $this->CI->db->get_where('services', array('id'=>$services->service_id));
+									//~ if(!in_array($query_servicio->row()->id, $ids_serv)){
+										//~ $servicios[] = $query_servicio->result();
+									//~ }
+									//~ $ids_serv[] = $query_servicio->row()->id;  // Vamos almacenando los ids de los servicios ya cargados
+								//~ }
+							//~ }
 						}
 					}
 					// Carga de menús y submenús para usuarios no administradores
@@ -125,8 +125,8 @@ Class Basicauth
 					'profile_name' => $query_profile->row()->name,
 					'acciones' => $acciones,
 					'permisos' => $permisos,
-					'franquicias' => $franquicias,
-					'servicios' => $servicios,
+					'tiendas' => $tiendas,
+					//~ 'servicios' => $servicios,
 					'submenus' => $submenus,
 					'menus' => $menus
 				);
