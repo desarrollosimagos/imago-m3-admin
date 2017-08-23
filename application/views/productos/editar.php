@@ -140,6 +140,7 @@
 										<th>Precio</th>
 										<th>Cantidad</th>
 										<th>Eliminar</th>
+										<th>Actualizar</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -152,9 +153,14 @@
 												}
 											}?></td>
 											<td style='text-align: center'><?php echo $tienda->referencia; ?></td>
-											<td style='text-align: center'><?php echo $tienda->precio; ?></td>
+											<td style='text-align: center' id="price_<?php echo $tienda->id;?>_column">
+											<?php echo $tienda->precio; ?>
+											</td>
 											<td style='text-align: center'><?php echo $tienda->cantidad; ?></td>
 											<td style='text-align: center'><a  style="color: #1ab394" class='quitar' id="<?php echo $tienda->id; ?>"><i class='fa fa-trash fa-2x'></i></a></td>
+											<td>
+												<input type="checkbox" id="price_<?php echo $tienda->id;?>" class="check">
+											</td>
 										</tr>
 									<?php } ?>
 								</tbody>
@@ -229,12 +235,13 @@ $(document).ready(function(){
 		"pagingType": "full_numbers",
 		"language": {"url": "<?= assets_url() ?>js/es.txt"},
 		"aoColumns": [
-			{"sWidth": "30%"},
+			{"sWidth": "20%"},
 			{"sWidth": "20%"},
 			{"sWidth": "20%"},
 			{"sWidth": "20%"},
 			//~ {"sWidth": "8%"},
 			//~ {"sWidth": "4%", "bSortable": false, "sClass": "center sorting_false", "bSearchable": false},
+			{"sWidth": "10%", "bSortable": false, "sClass": "center sorting_false", "bSearchable": false},
 			{"sWidth": "10%", "bSortable": false, "sClass": "center sorting_false", "bSearchable": false}
 		]
 	});
@@ -288,7 +295,15 @@ $(document).ready(function(){
 						id_tienda = $(this).attr('id');  // id tienda
 						tienda_text = $(this).find('td').eq(0).attr('id'); //text tienda
 						referencia_t = $(this).find('td').eq(1).text();
-						precio = $(this).find('td').eq(2).text();
+						if($(this).find('td').eq(2).find('input').val() == undefined){
+							precio = $(this).find('td').eq(2).text().trim();
+							if(precio == ""){precio = 0;}
+						}else if($(this).find('td').eq(2).find('input').val() == ""){
+							precio = 0;
+						}else{
+							precio = $(this).find('td').eq(2).find('input').val().trim();
+						}
+						//~ alert(precio);
 						cantidad = $(this).find('td').eq(3).text();
 
 						campos = { "id_tienda" : id_tienda, "tienda" : tienda_text, "referencia" : referencia_t, "precio" : precio, "cantidad" : cantidad }
@@ -387,6 +402,37 @@ $(document).ready(function(){
 		var aPos = $("table#tab_tiendas").dataTable().fnGetPosition(this.parentNode.parentNode);
 		$("table#tab_tiendas").dataTable().fnDeleteRow(aPos);
 
+	});
+	
+	// Función para volver editable o no la celda de precio de la tienda correspondiente
+	$("table#tab_tiendas").on('change', 'input.check', function (e) {
+		e.preventDefault();
+        var id = this.getAttribute('id');
+        var id_column = id+"_column";
+        var column = $("#"+id_column);
+        
+        //~ alert(id_column);
+        
+        var check = $(this);
+		
+		//~ alert(check.prop('checked'));  // Saber si el campo está marcado o no
+		
+		var accion = '';
+		if (check.is(':checked')) {
+            accion = 'marcar';
+            //~ alert(accion);
+            check.prop("checked", "checked");  // Marcamos nuevamente el checkbox
+            // Volvemos editable la columna correspondiente
+			var valor_bs = column.text();
+            column.html("<input type='text' value='"+valor_bs.trim()+"' size='8px'>");
+        }else{
+			accion = 'desmarcar';
+			//~ alert(accion);
+			check.prop("checked", "");  // Desmarcamos nuevamente el checkbox
+			// Volvemos no editable la columna correspondiente
+			var valor_bs = column.find('input').val();
+            column.text(valor_bs);
+		}
 	});
 	
 });

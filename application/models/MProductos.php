@@ -71,7 +71,10 @@ class MProductos extends CI_Model {
         $result = $this->db->where('tiendav_id =', $datos['tiendav_id']);
         $result = $this->db->get('productos_tiendav');
         if ($result->num_rows() > 0) {
-            echo 'existe';
+			$result = $this->db->where('producto_id =', $datos['producto_id']);
+			$result = $this->db->where('tiendav_id =', $datos['tiendav_id']);
+            $result = $this->db->update("productos_tiendav", $datos);
+            return $result;
         } else {
             $result = $this->db->insert("productos_tiendav", $datos);
             return $result;
