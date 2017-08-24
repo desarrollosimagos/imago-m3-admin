@@ -42,7 +42,7 @@ class MProductos extends CI_Model {
             return $query->result();
     }
     
-    // Método publico, para obtener las order_service por id
+    // Método publico, para obtener las tiendas asociadas al producto
     public function obtenerTiendas($id) {
         $this->db->where('producto_id', $id);
         $query = $this->db->get('productos_tiendav');

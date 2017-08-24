@@ -42,6 +42,37 @@ class CTiendas extends CI_Controller {
         
         echo $result;  // No comentar, esta impresión es necesaria para que se ejecute el método insert()
     }
+    
+    // Método para asociar usuarios a una tienda
+    public function associate_users() {
+		$id_tienda = $this->input->post('id_tienda');
+		$usuarios = $this->input->post('usuarios');
+		
+		// Si el arreglo trae registros se procede a hacer los registros correspondientes
+		if(count($usuarios) > 0){
+			foreach ($usuarios as $usuario) {
+				$datos = array(
+					'user_id' => $usuario['id_usuario'],
+					'tienda_id' => $id_tienda,
+					'tipo' => $usuario['tipo'],
+					'd_create' => date('Y-m-d')." ".date("H:i:s")
+				);
+
+				$insert = $this->MTiendas->insertUsuarios($datos);
+			}
+		}
+	}
+    
+    // Método para desasociar usuarios de una tienda
+    public function unassociate_users() {
+		$tienda_id = $this->input->post('id_tienda');
+		$usuarios_ids = $this->input->post('codigos_des1');
+		$usuarios_ids = explode(',',$usuarios_ids);
+        foreach ($usuarios_ids as $usert_id) {
+			// Borramos la asociación tienda-usuario
+			$delete = $this->MTiendas->delete_tienda_usuario($usert_id);
+		}
+	}
 	
 	// Método para editar
     public function edit() {
@@ -50,6 +81,7 @@ class CTiendas extends CI_Controller {
         $data['id'] = $this->uri->segment(3);
         $data['editar'] = $this->MTiendas->obtenerTiendas($data['id']);
         $data['listar_usuarios'] = $this->MTiendas->obtener_usuarios();
+        $data['usuarios_asociados'] = $this->MTiendas->obtenerUsuarios($data['id']);
         $this->load->view('tiendas/editar', $data);
 		$this->load->view('footer');
     }
