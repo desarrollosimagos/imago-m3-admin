@@ -200,8 +200,9 @@ $(document).ready(function(){
 							if ($(this).attr('id') != undefined){
 								id_usuario = $(this).attr('id').split(";");  // id tienda
 								id_usuario = id_usuario[0];
-								tipo = $(this).attr('id').split(";");  // tipo
-								tipo = tipo[1];
+								//~ tipo = $(this).attr('id').split(";");  // tipo
+								//~ tipo = tipo[1];
+								tipo = 2;
 
 								campos = { "id_usuario" : id_usuario, "tipo" : tipo}
 								data.push(campos);
@@ -262,17 +263,17 @@ $(document).ready(function(){
 			swal("Disculpe,", "para continuar debe seleccionar un usuario");
 			$('#usuario_id').parent('div').addClass('has-error');
 			
-        } else if ($('#tipo').val().trim() == "0") {
+        } /*else if ($('#tipo').val().trim() == "0") {
 			swal("Disculpe,", "para continuar debe seleccionar el tipo de usuario");
 			$('#tipo').parent('div').addClass('has-error');
 			
-        } else {
+        }*/ else {
 			
 			var table = $('#tab_usuarios').DataTable();
 			var usuario = $("#usuario_id").find('option').filter(':selected').text();
 			var usuario_id = $("#usuario_id").val();
-			var tipo = $("#tipo").find('option').filter(':selected').text();
-            var tipo_id = $("#tipo").val();
+			//~ var tipo = $("#tipo").find('option').filter(':selected').text();
+            //~ var tipo_id = $("#tipo").val();
 			var botonQuitar = "<a  style='color: #1ab394' class='quitar'><i class='fa fa-trash fa-2x'></i></a>";
 			
 			// Añadimos el usuario a la tabla (primero verificamos si aún no está añadido)
@@ -285,27 +286,27 @@ $(document).ready(function(){
 				if (usuario_tipo != undefined){
 					id_usuario = usuario_tipo.split(";");  // id usuario
 					id_usuario = id_usuario[0];
-					id_tipo = usuario_tipo.split(";");  // id usuario
-					id_tipo = id_tipo[1];
+					//~ id_tipo = usuario_tipo.split(";");  // id usuario
+					//~ id_tipo = id_tipo[1];
 					if(id_usuario == usuario_id){
 						num_apariciones += 1;
 					}
-					if(usuario_tipo == usuario_id+";"+tipo_id){
+					if(usuario_tipo == usuario_id+";2"){
 						num_apariciones2 += 1;
 					}
-					if(id_tipo == '1'){
-						num_apariciones3 += 1;
-					}
+					//~ if(id_tipo == '1'){
+						//~ num_apariciones3 += 1;
+					//~ }
 				}
 			});
 			
 			if(num_apariciones == 1){
 				swal("Disculpe,", "el usuario ya se encuentra en la lista");
-			}else if(num_apariciones3 == 1 && tipo_id == '1'){
+			}/*else if(num_apariciones3 == 1 && tipo_id == '1'){
 				swal("Disculpe,", "ya asignó un administrador para la tienda");
-			}else{
-				var i = table.row.add([usuario, tipo, botonQuitar]).draw();
-				table.rows(i).nodes().to$().attr("id", usuario_id+";"+tipo_id);
+			}*/else{
+				var i = table.row.add([usuario, 'Empleado', botonQuitar]).draw();
+				table.rows(i).nodes().to$().attr("id", usuario_id+";2");
 			}
 		}
 	});
