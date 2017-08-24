@@ -335,6 +335,7 @@ $(document).ready(function(){
         }
     });
     
+    // Función para agregar tiendas a la lista
     $("#i_new_line").click(function (e) {
 
         e.preventDefault();  // Para evitar que se envíe por defecto
