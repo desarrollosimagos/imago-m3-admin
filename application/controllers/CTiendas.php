@@ -48,17 +48,31 @@ class CTiendas extends CI_Controller {
 		$id_tienda = $this->input->post('id_tienda');
 		$usuarios = $this->input->post('usuarios');
 		
+		// Consultamos si hay registros de asociación de usuarios con la tienda actual
+		$num_assoc = $this->MTiendas->obtenerUsuarios($id_tienda);
+		// Si no hay registros de asociación a la tienda, entonces registramos la asociación con el usuario actual como administrador
+		if(count($num_assoc) == 0){
+			$datos1 = array(
+				'user_id' => $this->session->userdata('logged_in')['id'],
+				'tienda_id' => $id_tienda,
+				'tipo' => 1,
+				'd_create' => date('Y-m-d')." ".date("H:i:s")
+			);
+
+			$insert = $this->MTiendas->insertUsuarios($datos1);
+		}
+		
 		// Si el arreglo trae registros se procede a hacer los registros correspondientes
 		if(count($usuarios) > 0){
 			foreach ($usuarios as $usuario) {
-				$datos = array(
+				$datos2 = array(
 					'user_id' => $usuario['id_usuario'],
 					'tienda_id' => $id_tienda,
 					'tipo' => $usuario['tipo'],
 					'd_create' => date('Y-m-d')." ".date("H:i:s")
 				);
 
-				$insert = $this->MTiendas->insertUsuarios($datos);
+				$insert = $this->MTiendas->insertUsuarios($datos2);
 			}
 		}
 	}
