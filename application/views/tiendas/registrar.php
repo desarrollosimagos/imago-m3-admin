@@ -59,7 +59,9 @@
 							<select class="form-control" name="usuario_id" id="usuario_id">
 								<option value="0" selected="">Seleccione</option>
 								<?php foreach ($listar_usuarios as $usuario) { ?>
-									<option value="<?php echo $usuario->id ?>"><?php echo $usuario->username; ?></option>
+									<?php if ($usuario->id != $this->session->userdata('logged_in')['id']) { ?>
+										<option value="<?php echo $usuario->id ?>"><?php echo $usuario->username; ?></option>
+									<?php } ?>		
 								<?php } ?>
 							</select>
 						</div>

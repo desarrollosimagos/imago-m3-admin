@@ -82,9 +82,9 @@ class MTiendas extends CI_Model {
     }
     
     // Public method to obtain the productos by id
-    public function obtenerProductosTienda($id) {
-        $this->db->where('tiendav_id', $id);
-        $query = $this->db->get('productos_tiendav');
+    public function obtenerTiendasUsuario($id) {
+        $this->db->where('user_id', $id);
+        $query = $this->db->get('users_tiendas');
         if ($query->num_rows() > 0)
             return $query->result();
         else

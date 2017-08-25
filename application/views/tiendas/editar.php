@@ -59,23 +59,25 @@
 						<div class="ibox-title">
 							<h5>Asociar Usuarios <small></small></h5>
 						</div>
-						<div class="col-md-2">
+						<div class="col-md-3">
 							<label class="control-label" >Usuario</label>
 							<select class="form-control" name="usuario_id" id="usuario_id">
 								<option value="0" selected="">Seleccione</option>
 								<?php foreach ($listar_usuarios as $usuario) { ?>
-									<option value="<?php echo $usuario->id ?>"><?php echo $usuario->username; ?></option>
+									<?php if ($usuario->id != $this->session->userdata('logged_in')['id']) { ?>
+										<option value="<?php echo $usuario->id ?>"><?php echo $usuario->username; ?></option>
+									<?php } ?>
 								<?php } ?>
 							</select>
 						</div>
-						<div class="col-md-2">
+						<!--<div class="col-md-2">
 							<label class="control-label" >Tipo</label>
 							<select class="form-control" name="tipo" id="tipo">
 								<option value="0" selected="">Seleccione</option>
 								<option value="1">Administrador</option>
 								<option value="2">Empleado</option>
 							</select>
-						</div>
+						</div>-->
 						<div class="col-md-2">
 							<label style="font-weight:bold"></label>
 							<br>
@@ -92,27 +94,29 @@
 								</thead>
 								<tbody>
 									<?php foreach ($usuarios_asociados as $usuario) { ?>
-										<tr id="<?php echo $usuario->user_id.";".$usuario->tipo; ?>">
-											<td style='text-align: center' id="<?php echo $usuario->id; ?>">
-											<?php foreach ($listar_usuarios as $usuario2) {
-												if ($usuario->user_id == $usuario2->id){
-													echo $usuario2->username."<br>";
-												}
-											}?>
-											</td>
-											<td style='text-align: center' id="<?php echo $usuario->tipo; ?>">
-											<?php
-												if ($usuario->tipo == 1){
-													echo "Administrador";
-												}else if($usuario->tipo == 2){
-													echo "Empleado";
-												}else{
-													echo "";
-												}
-											?>
-											</td>
-											<td style='text-align: center'><a  style="color: #1ab394" class='quitar' id="<?php echo $usuario->id; ?>"><i class='fa fa-trash fa-2x'></i></a></td>
-										</tr>
+										<?php if ($usuario->tipo == 2) { ?>
+											<tr id="<?php echo $usuario->user_id.";".$usuario->tipo; ?>">
+												<td style='text-align: center' id="<?php echo $usuario->id; ?>">
+												<?php foreach ($listar_usuarios as $usuario2) {
+													if ($usuario->user_id == $usuario2->id){
+														echo $usuario2->username."<br>";
+													}
+												}?>
+												</td>
+												<td style='text-align: center' id="<?php echo $usuario->tipo; ?>">
+												<?php
+													if ($usuario->tipo == 1){
+														echo "Administrador";
+													}else if($usuario->tipo == 2){
+														echo "Empleado";
+													}else{
+														echo "";
+													}
+												?>
+												</td>
+												<td style='text-align: center'><a  style="color: #1ab394" class='quitar' id="<?php echo $usuario->id; ?>"><i class='fa fa-trash fa-2x'></i></a></td>
+											</tr>
+										<?php } ?>
 									<?php } ?>
 								</tbody>
 							</table>
