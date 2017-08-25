@@ -46,8 +46,10 @@ Class Basicauth
 					if($query_user_tienda->num_rows() > 0){
 						// Listamos las tiendas asociadas
 						$ids_serv = array();  // Variable para almacenar los ids de los servicios y filtrar los repetidos
-						foreach($query_user_tienda->result() as $tiendas){
-							$query_tienda = $this->CI->db->get_where('tiendas', array('id'=>$tiendas->franchise_id));
+						foreach($query_user_tienda->result() as $tienda){
+							print $tienda->tienda_id;
+							$query_tienda = $this->CI->db->get_where('tiendas', array('id'=>$tienda->tienda_id));
+							//~ print_r($query_tienda->result());
 							$tiendas[] = $query_tienda->result();
 							//~ // Buscamos los datos de los servicios asociados a la(s) tienda(s)
 							//~ $query_tienda_services = $this->CI->db->get_where('tiendas_services', array('franchise_id'=>$query_tienda->row()->id));
