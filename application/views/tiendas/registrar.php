@@ -49,9 +49,52 @@
 							</div>
 						</div>
 						<br>
+						<!-- Tabla de tiendas virtuales -->
+						<div class="col-md-12">
+							<hr>
+						</div>
+						<div class="ibox-title col-md-12">
+							<h5>Asociar Tiendas virtuales<small></small></h5>
+						</div>
+						<div class="col-md-4 text-left">
+							<label class="control-label" >Tienda Virtual</label>
+							<select class="form-control" name="tiendav_id" id="tiendav_id">
+								<option value="0" selected="">Seleccione</option>
+								<?php foreach ($listar_tiendasv as $tiendav) { ?>
+									<option value="<?php echo $tiendav->id ?>"><?php echo $tiendav->nombre." - ".$tiendav->url; ?></option>
+								<?php } ?>
+							</select>
+						</div>
+						<div class="col-md-2">
+							<label style="font-weight:bold"></label>
+							<br>
+							<button type="button" class="btn btn-w-m btn-primary" id="i_new_line2"><i class="fa fa-plus"></i>&nbsp;Agregar Tienda Virtual</button>
+						</div>
+						<div class="col-md-6">
+							
+						</div>
+						<div class="table-responsive col-md-12">
+							<table style="width: 100%" class="tab_tiendasv table dataTable table-striped table-bordered dt-responsive jambo_table bulk_action" id="tab_tiendasv">
+								<thead>
+									<tr>
+										<th>Nombre</th>
+										<th>Url</th>
+										<th>Eliminar</th>
+									</tr>
+								</thead>
+								<tbody>
+									
+								</tbody>
+							</table>
+						</div>
+						<br>
+						<!-- Tabla de tiendas virtuales -->
+						<br>
 						<!-- Tabla de usuarios -->
-						<hr>
-						<div class="ibox-title">
+						<div class="col-md-12">
+							<hr>
+						</div>
+						<div class="ibox-title col-md-12">
 							<h5>Asociar Usuarios <small></small></h5>
 						</div>
 						<div class="col-md-3">
@@ -77,6 +120,9 @@
 							<label style="font-weight:bold"></label>
 							<br>
 							<button type="button" class="btn btn-w-m btn-primary" id="i_new_line"><i class="fa fa-plus"></i>&nbsp;Agregar Usuario</button>
+						</div>
+						<div class="col-md-6">
+							
 						</div>
 						<div class="table-responsive col-md-12">
 							<table style="width: 100%" class="tab_usuarios table dataTable table-striped table-bordered dt-responsive jambo_table bulk_action" id="tab_usuarios">
@@ -163,8 +209,26 @@ $(document).ready(function(){
 					console.log(response.error);
 				} else {
 					if (response == 'existe') {
-						swal("Disculpe,", "este usuario se encuentra registrado");
+						swal("Disculpe,", "esta tienda se encuentra registrada");
 					}else{
+						// Asociamos las tiendas virtuales a la tienda
+						var data = [];
+						$("#tab_tiendasv tbody tr").each(function () {
+							var id_tiendav;
+							if ($(this).attr('id') != undefined){
+								id_tiendav = $(this).attr('id');  // id tienda
+
+								campos = { "id_tiendav" : id_tiendav}
+								data.push(campos);
+							}
+
+						});
+						
+						// Registramos la asociación con las tiendas virtuales de la lista
+						$.post('<?php echo base_url(); ?>CTiendas/associate_tiendasv', {'id_tienda':response, 'tiendasv':data}, function (response2) {
+							
+						});
+						
 						// Asociamos los usuarios a la tienda
 						var data = [];
 						$("#tab_usuarios tbody tr").each(function () {
@@ -201,6 +265,80 @@ $(document).ready(function(){
 			});
         }
     });
+    
+    // Configuraciones de la lista de tiendas virtuales
+    $('#tab_tiendasv').DataTable({
+		"bLengthChange": false,
+		"iDisplayLength": 10,
+		"iDisplayStart": 0,
+		destroy: true,
+		paging: false,
+		searching: false,
+		"order": [[0, "asc"]],
+		"pagingType": "full_numbers",
+		"language": {"url": "<?= assets_url() ?>js/es.txt"},
+		"aoColumns": [
+			{"sWidth": "20%"},
+			{"sWidth": "20%"},
+			{"sWidth": "10%", "bSortable": false, "sClass": "center sorting_false", "bSearchable": false}
+		]
+	});
+	
+	// Función para agregar tiendas virtuales a la lista
+    $("#i_new_line2").click(function (e) {
+
+        e.preventDefault();  // Para evitar que se envíe por defecto
+
+        if ($('#tiendav_id').val().trim() == "0") {
+			swal("Disculpe,", "para continuar debe seleccionar una tienda virtual");
+			$('#tiendav_id').parent('div').addClass('has-error');
+			
+        } /*else if ($('#tipo').val().trim() == "0") {
+			swal("Disculpe,", "para continuar debe seleccionar el tipo de usuario");
+			$('#tipo').parent('div').addClass('has-error');
+			
+        }*/ else {
+			
+			var table = $('#tab_tiendasv').DataTable();
+			var tiendav = $("#tiendav_id").find('option').filter(':selected').text();
+			var nom_tienda = tiendav.split(' - ');
+			nom_tienda = nom_tienda[0];
+			var url_tienda = tiendav.split(' - ');
+			url_tienda = url_tienda[1];
+			var tiendav_id = $("#tiendav_id").val();
+			//~ var tipo = $("#tipo").find('option').filter(':selected').text();
+            //~ var tipo_id = $("#tipo").val();
+			var botonQuitar = "<a  style='color: #1ab394' class='quitar'><i class='fa fa-trash fa-2x'></i></a>";
+			
+			// Añadimos la tienda virtual a la tabla (primero verificamos si aún no está añadido)
+			var num_apariciones = 0;
+			$("#tab_tiendasv tbody tr").each(function () {
+				var id_tiendav;
+				id_tiendav = $(this).attr('id');  // id usuario + tipo
+				if (id_tiendav != undefined){
+					if(id_tiendav == tiendav_id){
+						num_apariciones += 1;
+					}
+				}
+			});
+			
+			if (num_apariciones == 1) {
+				swal("Disculpe,", "la tienda virtual ya se encuentra en la lista");
+			} else {
+				var i = table.row.add([nom_tienda, url_tienda, botonQuitar]).draw();
+				table.rows(i).nodes().to$().attr("id", tiendav_id);
+			}
+		}
+	});
+	
+	//Método para eliminar un registro de la tabla
+	$("table#tab_tiendasv").on('click', 'a.quitar', function () {
+
+		var aPos = $("table#tab_tiendasv").dataTable().fnGetPosition(this.parentNode.parentNode);
+		$("table#tab_tiendasv").dataTable().fnDeleteRow(aPos);
+
+	});
+	
     
     // Configuraciones de la lista de usuarios
     $('#tab_usuarios').DataTable({
@@ -279,21 +417,6 @@ $(document).ready(function(){
 	
 	//Método para eliminar un registro de la tabla
 	$("table#tab_usuarios").on('click', 'a.quitar', function () {
-		
-		//~ var cod_reg = '';
-//~ 
-		//~ if ($(this).attr('id') !== undefined) {
-//~ 
-			//~ cod_reg = $(this).attr('id');
-//~ 
-//~ 
-			//~ if ($("#codigos_des1").val() === '') {
-				//~ $("#codigos_des1").val(cod_reg);
-			//~ } else {
-				//~ $("#codigos_des1").val($("#codigos_des1").val() + ',' + cod_reg);
-			//~ }
-//~ 
-		//~ }
 
 		var aPos = $("table#tab_usuarios").dataTable().fnGetPosition(this.parentNode.parentNode);
 		$("table#tab_usuarios").dataTable().fnDeleteRow(aPos);

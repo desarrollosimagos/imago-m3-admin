@@ -54,10 +54,70 @@
 							</div>
 						</div>
 						<br>
+						<!-- Tabla de tiendas virtuales -->
+						<div class="col-md-12">
+							<hr>
+						</div>
+						<div class="ibox-title col-md-12">
+							<h5>Asociar Tiendas Virtuales<small></small></h5>
+						</div>
+						<div class="col-md-4">
+							<label class="control-label" >Tienda Vritual</label>
+							<select class="form-control" name="tiendav_id" id="tiendav_id">
+								<option value="0" selected="">Seleccione</option>
+								<?php foreach ($listar_tiendasv as $tiendav) { ?>
+									<option value="<?php echo $tiendav->id ?>"><?php echo $tiendav->nombre." - ".$tiendav->url; ?></option>
+								<?php } ?>
+							</select>
+						</div>
+						<div class="col-md-2">
+							<label style="font-weight:bold"></label>
+							<br>
+							<button type="button" class="btn btn-w-m btn-primary" id="i_new_line2"><i class="fa fa-plus"></i>&nbsp;Agregar Tienda Virtual</button>
+						</div>
+						<div class="col-md-6">
+							
+						</div>
+						<div class="table-responsive col-md-12">
+							<table style="width: 100%" class="tab_tiendasv table dataTable table-striped table-bordered dt-responsive jambo_table bulk_action" id="tab_tiendasv">
+								<thead>
+									<tr>
+										<th>Nombre</th>
+										<th>Url</th>
+										<th>Eliminar</th>
+									</tr>
+								</thead>
+								<tbody>
+									<?php foreach ($tiendasv_asociadas as $tiendav) { ?>
+										<tr id="<?php echo $tiendav->tiendav_id; ?>">
+											<td style='text-align: center' id="<?php echo $tiendav->id; ?>">
+											<?php foreach ($listar_tiendasv as $tiendav2) {
+												if ($tiendav->tiendav_id == $tiendav2->id){
+													echo $tiendav2->nombre."<br>";
+												}
+											}?>
+											</td>
+											<td style='text-align: center'>
+											<?php foreach ($listar_tiendasv as $tiendav2) {
+												if ($tiendav->tiendav_id == $tiendav2->id){
+													echo $tiendav2->url."<br>";
+												}
+											}?>
+											</td>
+											<td style='text-align: center'><a  style="color: #1ab394" class='quitar' id="<?php echo $tiendav->id; ?>"><i class='fa fa-trash fa-2x'></i></a></td>
+										</tr>
+									<?php } ?>
+								</tbody>
+							</table>
+						</div>
+						<!-- Tabla de tiendas virtuales -->
+						<br>
 						<!-- Tabla de usuarios -->
-						<hr>
-						<div class="ibox-title">
-							<h5>Asociar Usuarios <small></small></h5>
+						<div class="col-md-12">
+							<hr>
+						</div>
+						<div class="ibox-title col-md-12">
+							<h5>Asociar Usuarios <small></small><br></h5>
 						</div>
 						<div class="col-md-3">
 							<label class="control-label" >Usuario</label>
@@ -82,6 +142,9 @@
 							<label style="font-weight:bold"></label>
 							<br>
 							<button type="button" class="btn btn-w-m btn-primary" id="i_new_line"><i class="fa fa-plus"></i>&nbsp;Agregar Usuario</button>
+						</div>
+						<div class="col-md-6">
+							
 						</div>
 						<div class="table-responsive col-md-12">
 							<table style="width: 100%" class="tab_usuarios table dataTable table-striped table-bordered dt-responsive jambo_table bulk_action" id="tab_usuarios">
@@ -127,7 +190,8 @@
 						<div class="form-group">
 							<div class="col-sm-4 col-sm-offset-2">
 								 <input class="form-control" type='hidden' id="id" name="id" value="<?php echo $id ?>"/>
-								 <input type="hidden" id="codigos_des1" name="codigos_des1" placeholder="Códigos">
+								 <input type="hidden" id="codigos_des1" name="codigos_des1">
+								 <input type="hidden" id="codigos_des2" name="codigos_des1">
 								<button class="btn btn-white" id="volver" type="button">Volver</button>
 								<button class="btn btn-primary" id="edit" type="submit">Guardar</button>
 							</div>
@@ -197,6 +261,31 @@ $(document).ready(function(){
 					if (response[0] == '1') {
 						swal("Disculpe,", "esta tienda se encuentra registrada");
 					}else{
+						// Asociamos las tiendas virtuales a la tienda
+						var data = [];
+						$("#tab_tiendasv tbody tr").each(function () {
+							var id_tiendav;
+							if ($(this).attr('id') != undefined){
+								id_tiendav = $(this).attr('id');  // id tienda
+
+								campos = { "id_tiendav" : id_tiendav}
+								data.push(campos);
+							}
+
+						});
+					
+						// Borramos la asociación con las tiendas virtuales quitadas de la lista
+						if ($("#codigos_des2").val() != '') {
+							$.post('<?php echo base_url(); ?>CTiendas/unassociate_tiendasv', {'id_tienda':$("#id").val(), 'codigos_des2':$("#codigos_des2").val()}, function (response2) {
+							
+							});
+						}
+						
+						// Registramos la asociación con las tiendas virtuales de la lista
+						$.post('<?php echo base_url(); ?>CTiendas/associate_tiendasv', {'id_tienda':$("#id").val(), 'tiendasv':data}, function (response2) {
+							
+						});
+						
 						// Asociamos los usuarios a la tienda
 						var data = [];
 						$("#tab_usuarios tbody tr").each(function () {
@@ -240,6 +329,94 @@ $(document).ready(function(){
         }
     });
     
+    // Configuraciones de la lista de tiendas virtuales
+    $('#tab_tiendasv').DataTable({
+		"bLengthChange": false,
+		"iDisplayLength": 10,
+		"iDisplayStart": 0,
+		destroy: true,
+		paging: false,
+		searching: false,
+		"order": [[0, "asc"]],
+		"pagingType": "full_numbers",
+		"language": {"url": "<?= assets_url() ?>js/es.txt"},
+		"aoColumns": [
+			{"sWidth": "20%"},
+			{"sWidth": "20%"},
+			{"sWidth": "10%", "bSortable": false, "sClass": "center sorting_false", "bSearchable": false}
+		]
+	});
+    
+    // Función para agregar tiendas virtuales a la lista
+    $("#i_new_line2").click(function (e) {
+
+        e.preventDefault();  // Para evitar que se envíe por defecto
+
+        if ($('#tiendav_id').val().trim() == "0") {
+			swal("Disculpe,", "para continuar debe seleccionar una tienda virtual");
+			$('#tiendav_id').parent('div').addClass('has-error');
+			
+        } /*else if ($('#tipo').val().trim() == "0") {
+			swal("Disculpe,", "para continuar debe seleccionar el tipo de usuario");
+			$('#tipo').parent('div').addClass('has-error');
+			
+        }*/ else {
+			
+			var table = $('#tab_tiendasv').DataTable();
+			var tiendav = $("#tiendav_id").find('option').filter(':selected').text();
+			var nom_tienda = tiendav.split(' - ');
+			nom_tienda = nom_tienda[0];
+			var url_tienda = tiendav.split(' - ');
+			url_tienda = url_tienda[1];
+			var tiendav_id = $("#tiendav_id").val();
+			//~ var tipo = $("#tipo").find('option').filter(':selected').text();
+            //~ var tipo_id = $("#tipo").val();
+			var botonQuitar = "<a  style='color: #1ab394' class='quitar'><i class='fa fa-trash fa-2x'></i></a>";
+			
+			// Añadimos la tienda virtual a la tabla (primero verificamos si aún no está añadido)
+			var num_apariciones = 0;
+			$("#tab_tiendasv tbody tr").each(function () {
+				var id_tiendav;
+				id_tiendav = $(this).attr('id');  // id usuario + tipo
+				if (id_tiendav != undefined){
+					if(id_tiendav == tiendav_id){
+						num_apariciones += 1;
+					}
+				}
+			});
+			
+			if (num_apariciones == 1) {
+				swal("Disculpe,", "la tienda virtual ya se encuentra en la lista");
+			} else {
+				var i = table.row.add([nom_tienda, url_tienda, botonQuitar]).draw();
+				table.rows(i).nodes().to$().attr("id", tiendav_id);
+			}
+		}
+	});
+	
+	//Método para eliminar un registro de la tabla
+	$("table#tab_tiendasv").on('click', 'a.quitar', function () {
+		
+		var cod_reg = '';
+
+		if ($(this).attr('id') !== undefined) {
+
+			cod_reg = $(this).attr('id');
+
+
+			if ($("#codigos_des2").val() === '') {
+				$("#codigos_des2").val(cod_reg);
+			} else {
+				$("#codigos_des2").val($("#codigos_des2").val() + ',' + cod_reg);
+			}
+
+		}
+
+		var aPos = $("table#tab_tiendasv").dataTable().fnGetPosition(this.parentNode.parentNode);
+		$("table#tab_tiendasv").dataTable().fnDeleteRow(aPos);
+
+	});
+	
     // Configuraciones de la lista de usuarios
     $('#tab_usuarios').DataTable({
 		"bLengthChange": false,
