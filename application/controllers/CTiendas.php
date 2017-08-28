@@ -22,6 +22,7 @@ class CTiendas extends CI_Controller {
 	
 	public function register()
 	{
+		$data['listar_tiendasv'] = $this->MTiendas->obtener_tiendasv();
 		$data['listar_usuarios'] = $this->MTiendas->obtener_usuarios();
 		$this->load->view('base');
 		$this->load->view('tiendas/registrar', $data);
@@ -42,6 +43,36 @@ class CTiendas extends CI_Controller {
         
         echo $result;  // No comentar, esta impresión es necesaria para que se ejecute el método insert()
     }
+    
+    // Método para asociar tiendas virtuales a una tienda
+    public function associate_tiendasv() {
+		$id_tienda = $this->input->post('id_tienda');
+		$tiendasv = $this->input->post('tiendasv');
+				
+		// Si el arreglo trae registros se procede a hacer los registros correspondientes
+		if(count($tiendasv) > 0){
+			foreach ($tiendasv as $tiendav) {
+				$datos2 = array(
+					'tiendav_id' => $tiendav['id_tiendav'],
+					'tienda_id' => $id_tienda,
+					'd_create' => date('Y-m-d')." ".date("H:i:s")
+				);
+
+				$insert = $this->MTiendas->insertTiendasv($datos2);
+			}
+		}
+	}
+    
+    // Método para desasociar tiendas virtuales de una tienda
+    public function unassociate_tiendasv() {
+		$tienda_id = $this->input->post('id_tienda');
+		$tiendasv_ids = $this->input->post('codigos_des2');
+		$tiendasv_ids = explode(',',$tiendasv_ids);
+        foreach ($tiendasv_ids as $tiendavt_id) {
+			// Borramos la asociación tienda-tiendav
+			$delete = $this->MTiendas->delete_tienda_tiendav($tiendavt_id);
+		}
+	}
     
     // Método para asociar usuarios a una tienda
     public function associate_users() {
@@ -94,7 +125,9 @@ class CTiendas extends CI_Controller {
 		$this->load->view('base');
         $data['id'] = $this->uri->segment(3);
         $data['editar'] = $this->MTiendas->obtenerTiendas($data['id']);
+        $data['listar_tiendasv'] = $this->MTiendas->obtener_tiendasv();
         $data['listar_usuarios'] = $this->MTiendas->obtener_usuarios();
+        $data['tiendasv_asociadas'] = $this->MTiendas->obtenerTiendasv($data['id']);
         $data['usuarios_asociados'] = $this->MTiendas->obtenerUsuarios($data['id']);
         $this->load->view('tiendas/editar', $data);
 		$this->load->view('footer');

@@ -23,6 +23,16 @@ class MTiendas extends CI_Model {
     }
 
     //Public method to obtain the applications
+    public function obtener_tiendasv() {
+        $query = $this->db->get('tienda_virtual');
+
+        if ($query->num_rows() > 0)
+            return $query->result();
+        else
+            return $query->result();
+    }
+
+    //Public method to obtain the applications
     public function obtener_usuarios() {
         $query = $this->db->get('users');
 
@@ -42,6 +52,16 @@ class MTiendas extends CI_Model {
             return $query->result();
     }
     
+    // Método publico, para obtener los usuarios asociados a la tienda
+    public function obtenerTiendasv($id) {
+        $this->db->where('tienda_id', $id);
+        $query = $this->db->get('tiendas_tiendasv');
+        if ($query->num_rows() > 0)
+            return $query->result();
+        else
+            return $query->result();
+    }
+    
     // Public method to insert the data
     public function insert($datos) {
         $result = $this->db->where('name =', $datos['name']);
@@ -52,6 +72,22 @@ class MTiendas extends CI_Model {
             $result = $this->db->insert("tiendas", $datos);
             $id = $this->db->insert_id();
             return $id;
+        }
+    }
+    
+    // Método público, forma de insertar los datos de la asociación entre tiendas virtuales y tiendas
+    public function insertTiendasv($datos) {
+        $result = $this->db->where('tienda_id =', $datos['tienda_id']);
+        $result = $this->db->where('tiendav_id =', $datos['tiendav_id']);
+        $result = $this->db->get('tiendas_tiendasv');
+        if ($result->num_rows() > 0) {
+			$result = $this->db->where('tienda_id =', $datos['tienda_id']);
+			$result = $this->db->where('tiendav_id =', $datos['tiendav_id']);
+            $result = $this->db->update("tiendas_tiendasv", $datos);
+            return $result;
+        } else {
+            $result = $this->db->insert("tiendas_tiendasv", $datos);
+            return $result;
         }
     }
     
@@ -124,6 +160,12 @@ class MTiendas extends CI_Model {
     // Public method to delete a record
     public function delete_tienda_usuario($id) {
 		$result = $this->db->delete('users_tiendas', array('id' => $id));
+		return $result;
+    }
+    
+    // Public method to delete a record
+    public function delete_tienda_tiendav($id) {
+		$result = $this->db->delete('tiendas_tiendasv', array('id' => $id));
 		return $result;
     }
     
