@@ -55,7 +55,7 @@
 						</div>
 						<br>
 						<!-- Tabla de tiendas virtuales -->
-						<div class="col-md-12">
+						<!--<div class="col-md-12">
 							<hr>
 						</div>
 						<div class="ibox-title col-md-12">
@@ -109,7 +109,7 @@
 									<?php } ?>
 								</tbody>
 							</table>
-						</div>
+						</div>-->
 						<!-- Tabla de tiendas virtuales -->
 						<br>
 						<!-- Tabla de usuarios -->
@@ -261,30 +261,30 @@ $(document).ready(function(){
 					if (response[0] == '1') {
 						swal("Disculpe,", "esta tienda se encuentra registrada");
 					}else{
-						// Asociamos las tiendas virtuales a la tienda
-						var data = [];
-						$("#tab_tiendasv tbody tr").each(function () {
-							var id_tiendav;
-							if ($(this).attr('id') != undefined){
-								id_tiendav = $(this).attr('id');  // id tienda
-
-								campos = { "id_tiendav" : id_tiendav}
-								data.push(campos);
-							}
-
-						});
-					
-						// Borramos la asociación con las tiendas virtuales quitadas de la lista
-						if ($("#codigos_des2").val() != '') {
-							$.post('<?php echo base_url(); ?>CTiendas/unassociate_tiendasv', {'id_tienda':$("#id").val(), 'codigos_des2':$("#codigos_des2").val()}, function (response2) {
-							
-							});
-						}
-						
-						// Registramos la asociación con las tiendas virtuales de la lista
-						$.post('<?php echo base_url(); ?>CTiendas/associate_tiendasv', {'id_tienda':$("#id").val(), 'tiendasv':data}, function (response2) {
-							
-						});
+						//~ // Asociamos las tiendas virtuales a la tienda
+						//~ var data = [];
+						//~ $("#tab_tiendasv tbody tr").each(function () {
+							//~ var id_tiendav;
+							//~ if ($(this).attr('id') != undefined){
+								//~ id_tiendav = $(this).attr('id');  // id tienda
+//~ 
+								//~ campos = { "id_tiendav" : id_tiendav}
+								//~ data.push(campos);
+							//~ }
+//~ 
+						//~ });
+					//~ 
+						//~ // Borramos la asociación con las tiendas virtuales quitadas de la lista
+						//~ if ($("#codigos_des2").val() != '') {
+							//~ $.post('<?php echo base_url(); ?>CTiendas/unassociate_tiendasv', {'id_tienda':$("#id").val(), 'codigos_des2':$("#codigos_des2").val()}, function (response2) {
+							//~ 
+							//~ });
+						//~ }
+						//~ 
+						//~ // Registramos la asociación con las tiendas virtuales de la lista
+						//~ $.post('<?php echo base_url(); ?>CTiendas/associate_tiendasv', {'id_tienda':$("#id").val(), 'tiendasv':data}, function (response2) {
+							//~ 
+						//~ });
 						
 						// Asociamos los usuarios a la tienda
 						var data = [];
@@ -329,93 +329,93 @@ $(document).ready(function(){
         }
     });
     
-    // Configuraciones de la lista de tiendas virtuales
-    $('#tab_tiendasv').DataTable({
-		"bLengthChange": false,
-		"iDisplayLength": 10,
-		"iDisplayStart": 0,
-		destroy: true,
-		paging: false,
-		searching: false,
-		"order": [[0, "asc"]],
-		"pagingType": "full_numbers",
-		"language": {"url": "<?= assets_url() ?>js/es.txt"},
-		"aoColumns": [
-			{"sWidth": "20%"},
-			{"sWidth": "20%"},
-			{"sWidth": "10%", "bSortable": false, "sClass": "center sorting_false", "bSearchable": false}
-		]
-	});
-    
-    // Función para agregar tiendas virtuales a la lista
-    $("#i_new_line2").click(function (e) {
-
-        e.preventDefault();  // Para evitar que se envíe por defecto
-
-        if ($('#tiendav_id').val().trim() == "0") {
-			swal("Disculpe,", "para continuar debe seleccionar una tienda virtual");
-			$('#tiendav_id').parent('div').addClass('has-error');
-			
-        } /*else if ($('#tipo').val().trim() == "0") {
-			swal("Disculpe,", "para continuar debe seleccionar el tipo de usuario");
-			$('#tipo').parent('div').addClass('has-error');
-			
-        }*/ else {
-			
-			var table = $('#tab_tiendasv').DataTable();
-			var tiendav = $("#tiendav_id").find('option').filter(':selected').text();
-			var nom_tienda = tiendav.split(' - ');
-			nom_tienda = nom_tienda[0];
-			var url_tienda = tiendav.split(' - ');
-			url_tienda = url_tienda[1];
-			var tiendav_id = $("#tiendav_id").val();
+    //~ // Configuraciones de la lista de tiendas virtuales
+    //~ $('#tab_tiendasv').DataTable({
+		//~ "bLengthChange": false,
+		//~ "iDisplayLength": 10,
+		//~ "iDisplayStart": 0,
+		//~ destroy: true,
+		//~ paging: false,
+		//~ searching: false,
+		//~ "order": [[0, "asc"]],
+		//~ "pagingType": "full_numbers",
+		//~ "language": {"url": "<?= assets_url() ?>js/es.txt"},
+		//~ "aoColumns": [
+			//~ {"sWidth": "20%"},
+			//~ {"sWidth": "20%"},
+			//~ {"sWidth": "10%", "bSortable": false, "sClass": "center sorting_false", "bSearchable": false}
+		//~ ]
+	//~ });
+    //~ 
+    //~ // Función para agregar tiendas virtuales a la lista
+    //~ $("#i_new_line2").click(function (e) {
+//~ 
+        //~ e.preventDefault();  // Para evitar que se envíe por defecto
+//~ 
+        //~ if ($('#tiendav_id').val().trim() == "0") {
+			//~ swal("Disculpe,", "para continuar debe seleccionar una tienda virtual");
+			//~ $('#tiendav_id').parent('div').addClass('has-error');
+			//~ 
+        //~ } /*else if ($('#tipo').val().trim() == "0") {
+			//~ swal("Disculpe,", "para continuar debe seleccionar el tipo de usuario");
+			//~ $('#tipo').parent('div').addClass('has-error');
+			//~ 
+        //~ }*/ else {
+			//~ 
+			//~ var table = $('#tab_tiendasv').DataTable();
+			//~ var tiendav = $("#tiendav_id").find('option').filter(':selected').text();
+			//~ var nom_tienda = tiendav.split(' - ');
+			//~ nom_tienda = nom_tienda[0];
+			//~ var url_tienda = tiendav.split(' - ');
+			//~ url_tienda = url_tienda[1];
+			//~ var tiendav_id = $("#tiendav_id").val();
 			//~ var tipo = $("#tipo").find('option').filter(':selected').text();
             //~ var tipo_id = $("#tipo").val();
-			var botonQuitar = "<a  style='color: #1ab394' class='quitar'><i class='fa fa-trash fa-2x'></i></a>";
-			
-			// Añadimos la tienda virtual a la tabla (primero verificamos si aún no está añadido)
-			var num_apariciones = 0;
-			$("#tab_tiendasv tbody tr").each(function () {
-				var id_tiendav;
-				id_tiendav = $(this).attr('id');  // id usuario + tipo
-				if (id_tiendav != undefined){
-					if(id_tiendav == tiendav_id){
-						num_apariciones += 1;
-					}
-				}
-			});
-			
-			if (num_apariciones == 1) {
-				swal("Disculpe,", "la tienda virtual ya se encuentra en la lista");
-			} else {
-				var i = table.row.add([nom_tienda, url_tienda, botonQuitar]).draw();
-				table.rows(i).nodes().to$().attr("id", tiendav_id);
-			}
-		}
-	});
-	
-	//Método para eliminar un registro de la tabla
-	$("table#tab_tiendasv").on('click', 'a.quitar', function () {
-		
-		var cod_reg = '';
-
-		if ($(this).attr('id') !== undefined) {
-
-			cod_reg = $(this).attr('id');
-
-
-			if ($("#codigos_des2").val() === '') {
-				$("#codigos_des2").val(cod_reg);
-			} else {
-				$("#codigos_des2").val($("#codigos_des2").val() + ',' + cod_reg);
-			}
-
-		}
-
-		var aPos = $("table#tab_tiendasv").dataTable().fnGetPosition(this.parentNode.parentNode);
-		$("table#tab_tiendasv").dataTable().fnDeleteRow(aPos);
-
-	});
+			//~ var botonQuitar = "<a  style='color: #1ab394' class='quitar'><i class='fa fa-trash fa-2x'></i></a>";
+			//~ 
+			//~ // Añadimos la tienda virtual a la tabla (primero verificamos si aún no está añadido)
+			//~ var num_apariciones = 0;
+			//~ $("#tab_tiendasv tbody tr").each(function () {
+				//~ var id_tiendav;
+				//~ id_tiendav = $(this).attr('id');  // id usuario + tipo
+				//~ if (id_tiendav != undefined){
+					//~ if(id_tiendav == tiendav_id){
+						//~ num_apariciones += 1;
+					//~ }
+				//~ }
+			//~ });
+			//~ 
+			//~ if (num_apariciones == 1) {
+				//~ swal("Disculpe,", "la tienda virtual ya se encuentra en la lista");
+			//~ } else {
+				//~ var i = table.row.add([nom_tienda, url_tienda, botonQuitar]).draw();
+				//~ table.rows(i).nodes().to$().attr("id", tiendav_id);
+			//~ }
+		//~ }
+	//~ });
+	//~ 
+	//~ //Método para eliminar un registro de la tabla
+	//~ $("table#tab_tiendasv").on('click', 'a.quitar', function () {
+		//~ 
+		//~ var cod_reg = '';
+//~ 
+		//~ if ($(this).attr('id') !== undefined) {
+//~ 
+			//~ cod_reg = $(this).attr('id');
+//~ 
+//~ 
+			//~ if ($("#codigos_des2").val() === '') {
+				//~ $("#codigos_des2").val(cod_reg);
+			//~ } else {
+				//~ $("#codigos_des2").val($("#codigos_des2").val() + ',' + cod_reg);
+			//~ }
+//~ 
+		//~ }
+//~ 
+		//~ var aPos = $("table#tab_tiendasv").dataTable().fnGetPosition(this.parentNode.parentNode);
+		//~ $("table#tab_tiendasv").dataTable().fnDeleteRow(aPos);
+//~ 
+	//~ });
 	
     // Configuraciones de la lista de usuarios
     $('#tab_usuarios').DataTable({
