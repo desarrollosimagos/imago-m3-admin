@@ -15,11 +15,21 @@ class MTiendasVirtuales extends CI_Model {
     //Public method to obtain the tienda
     public function obtener() {
         //~ $query = $this->db->get('tienda');
-        $this->db->select('t.id, t.nombre, t.descripcion, t.url, t.tokens, t.token_cliente, t.secret_api, t.url_callback, t.cliente_api_id, t.app_id, t.aplicacion_id, a.nombre nombre_aplicacion, a.ruta');
+        $this->db->select('t.id, t.nombre, t.descripcion, t.url, t.tienda_id, t.tokens, t.token_cliente, t.secret_api, t.url_callback, t.cliente_api_id, t.app_id, t.aplicacion_id, a.nombre nombre_aplicacion, a.ruta');
 		$this->db->from('tienda_virtual t');
 		$this->db->join('aplicacion a', 'a.id = t.aplicacion_id');
         //~ $this->db->where('franchise_id', $id_franchise);
 		$query = $this->db->get();
+        if ($query->num_rows() > 0)
+            return $query->result();
+        else
+            return $query->result();
+    }
+
+    //Public method to obtain the applications
+    public function obtener_tiendas() {
+        $query = $this->db->get('tiendas');
+
         if ($query->num_rows() > 0)
             return $query->result();
         else

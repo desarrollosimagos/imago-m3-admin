@@ -43,6 +43,17 @@
 							</div>
 						</div>
 						<div class="form-group">
+							<label class="col-sm-2 control-label">Tienda</label>
+							<div class="col-sm-6">
+								<select class="form-control m-b" name="tienda_id" id="tienda_id">
+									<option value="0" selected="">Seleccione</option>
+									<?php foreach ($listar_tiendas as $tienda) { ?>
+										<option value="<?php echo $tienda->id ?>"><?php echo $tienda->name; ?></option>
+									<?php } ?>
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
 							<label class="col-sm-2 control-label">Tokens</label>
 							<div class="col-sm-6">
 								<input type="text" class="form-control" maxlength="200" name="tokens" id="tokens">
@@ -136,6 +147,12 @@ $(document).ready(function(){
 			swal("Disculpe,", "la url no es válida");
 			$('#url_callback').parent('div').addClass('has-error');
 			$('#url_callback').focus();
+			
+		} else if ($('#tienda_id').val().trim() == "0" ){
+			
+			swal("Disculpe,", "para continuar debe seleccionar la tienda asociada");
+			$('#tienda_id').parent('div').addClass('has-error');
+			$('#tienda_id').focus();
 			
 		} else if ($('#aplicacion_id').val().trim() == "0" ){
 			

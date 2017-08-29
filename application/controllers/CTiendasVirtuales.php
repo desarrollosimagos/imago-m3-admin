@@ -15,6 +15,7 @@ class CTiendasVirtuales extends CI_Controller {
 	{
 		$this->load->view('base');
 		$data['listar'] = $this->MTiendasVirtuales->obtener();
+		$data['listar_tiendas'] = $this->MTiendasVirtuales->obtener_tiendas();
 		$data['listar_aplicaciones'] = $this->MTiendasVirtuales->obtener_aplicaciones();
 		$this->load->view('tiendas_virtuales/lista', $data);
 		$this->load->view('footer');
@@ -22,6 +23,7 @@ class CTiendasVirtuales extends CI_Controller {
 	
 	public function register()
 	{
+		$data['listar_tiendas'] = $this->MTiendasVirtuales->obtener_tiendas();
 		$data['listar_aplicaciones'] = $this->MTiendasVirtuales->obtener_aplicaciones();
 		$this->load->view('base');
 		$this->load->view('tiendas_virtuales/registrar', $data);
@@ -34,6 +36,7 @@ class CTiendasVirtuales extends CI_Controller {
             'nombre' => $_POST['nombre'],
             'descripcion' => $_POST['descripcion'],
             'url' => $_POST['url'],
+            'tienda_id' => $_POST['tienda_id'],
             'tokens' => $_POST['tokens'],
             'token_cliente' => $_POST['token_cliente'],
             'secret_api' => $_POST['secret_api'],
@@ -55,6 +58,7 @@ class CTiendasVirtuales extends CI_Controller {
 		$this->load->view('base');
         $data['id'] = $this->uri->segment(3);
         $data['editar'] = $this->MTiendasVirtuales->obtenerTiendas($data['id']);
+        $data['listar_tiendas'] = $this->MTiendasVirtuales->obtener_tiendas();
         $data['listar_aplicaciones'] = $this->MTiendasVirtuales->obtener_aplicaciones();
         $this->load->view('tiendas_virtuales/editar', $data);
 		$this->load->view('footer');
@@ -67,6 +71,7 @@ class CTiendasVirtuales extends CI_Controller {
             'nombre' => $_POST['nombre'],
             'descripcion' => $_POST['descripcion'],
             'url' => $_POST['url'],
+            'tienda_id' => $_POST['tienda_id'],
             'tokens' => $_POST['tokens'],
             'token_cliente' => $_POST['token_cliente'],
             'secret_api' => $_POST['secret_api'],
