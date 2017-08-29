@@ -43,6 +43,17 @@
 							</div>
 						</div>
 						<div class="form-group">
+							<label class="col-sm-2 control-label">Tienda</label>
+							<div class="col-sm-6">
+								<select class="form-control m-b" name="tienda_id" id="tienda_id">
+									<option value="0" selected="">Seleccione</option>
+									<?php foreach ($listar_tiendas as $tienda) { ?>
+										<option value="<?php echo $tienda->id ?>"><?php echo $tienda->name; ?></option>
+									<?php } ?>
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
 							<label class="col-sm-2 control-label">Tokens</label>
 							<div class="col-sm-6">
 								<input type="text" class="form-control" maxlength="200" name="tokens" id="tokens" value="<?php echo $editar[0]->tokens ?>">
@@ -92,6 +103,7 @@
 						<div class="form-group">
 							<div class="col-sm-4 col-sm-offset-2">
 								 <input class="form-control" type='hidden' id="id" name="id" value="<?php echo $id ?>"/>
+								 <input id="id_tienda" type="hidden" value="<?php echo $editar[0]->tienda_id ?>"/>
 								 <input id="id_aplicacion" type="hidden" value="<?php echo $editar[0]->aplicacion_id ?>"/>
 								<button class="btn btn-white" id="volver" type="button">Volver</button>
 								<button class="btn btn-primary" id="edit" type="submit">Guardar</button>
@@ -119,6 +131,7 @@ $(document).ready(function(){
     
     // Auto-selección de combos con las opciones correspondientes
     $("#aplicacion_id").select2('val', $("#id_aplicacion").val());
+    $("#tienda_id").select2('val', $("#id_tienda").val());
 	
 	$("#costo_dolar,#costo_bolivar").numeric(); //Valida solo permite valores numéricos
 
@@ -141,6 +154,12 @@ $(document).ready(function(){
 			swal("Disculpe,", "la url no es válida");
 			$('#url_callback').parent('div').addClass('has-error');
 			$('#url_callback').focus();
+			
+		} else if ($('#tienda_id').val().trim() == "0" ){
+			
+			swal("Disculpe,", "para continuar debe seleccionar la tienda asociada");
+			$('#tienda_id').parent('div').addClass('has-error');
+			$('#tienda_id').focus();
 			
 		} else if ($('#aplicacion_id').val().trim() == "0" ){
 			

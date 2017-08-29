@@ -33,6 +33,7 @@
                                     <th>Nombre</th>
                                     <th>Descripción</th>
                                     <th>URL</th>
+                                    <th>Tienda</th>
                                     <th>Tokens</th>
                                     <th>Token Cliente</th>
                                     <th>Secret API</th>
@@ -60,6 +61,17 @@
                                         </td>
                                         <td>
                                             <?php echo $tienda->url; ?>
+                                        </td>
+                                        <td>
+                                            <?php 
+											foreach ($listar_tiendas as $tiendaf){
+												if($tienda->tienda_id == $tiendaf->id){
+													echo $tiendaf->name;
+												}else{
+													echo "";
+												}
+											}
+											?>
                                         </td>
                                         <td>
                                             <?php echo $tienda->tokens; ?>
@@ -154,6 +166,7 @@ $(document).ready(function(){
             {"sClass": "registro center", "sWidth": "10%"},
             {"sClass": "none", "sWidth": "10%"},
             {"sClass": "registro center", "sWidth": "10%"},
+            {"sClass": "none", "sWidth": "10%"},
             {"sClass": "none", "sWidth": "10%"},
             {"sClass": "none", "sWidth": "10%"},
             {"sClass": "none", "sWidth": "10%"},
