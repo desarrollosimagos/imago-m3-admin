@@ -10,7 +10,7 @@ class CUser extends CI_Controller {
         $this->load->model('MUser');
 		$this->load->model('MPerfil');
         $this->load->model('MAcciones');
-        $this->load->model('MFranchises');
+        //~ $this->load->model('MFranchises');
 		
     }
 	
@@ -309,4 +309,12 @@ class CUser extends CI_Controller {
 		
         echo json_encode($result2);
     }
+    
+    public function search_username(){
+		$usuario = $this->input->post('usuario');  // nombre del usuario
+		
+		$result = $this->MUser->obtenerUserName($usuario);
+		
+		echo json_encode($result);
+	}
 }

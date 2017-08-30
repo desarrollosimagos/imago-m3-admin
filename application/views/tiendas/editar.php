@@ -121,6 +121,10 @@
 						</div>
 						<div class="col-md-3">
 							<label class="control-label" >Usuario</label>
+							<input type="text" id="usuario" class="form-control">
+						</div>
+						<!--<div class="col-md-3">
+							<label class="control-label" >Usuario</label>
 							<select class="form-control" name="usuario_id" id="usuario_id">
 								<option value="0" selected="">Seleccione</option>
 								<?php foreach ($listar_usuarios as $usuario) { ?>
@@ -130,7 +134,7 @@
 								<?php } ?>
 							</select>
 						</div>
-						<!--<div class="col-md-2">
+						<div class="col-md-2">
 							<label class="control-label" >Tipo</label>
 							<select class="form-control" name="tipo" id="tipo">
 								<option value="0" selected="">Seleccione</option>
@@ -141,7 +145,8 @@
 						<div class="col-md-2">
 							<label style="font-weight:bold"></label>
 							<br>
-							<button type="button" class="btn btn-w-m btn-primary" id="i_new_line"><i class="fa fa-plus"></i>&nbsp;Agregar Usuario</button>
+							<!--<button type="button" class="btn btn-w-m btn-primary" id="i_new_line"><i class="fa fa-plus"></i>&nbsp;Agregar Usuario</button>-->
+							<button type="button" class="btn btn-w-m btn-primary" id="invitar"><i class="fa fa-send"></i>&nbsp;Enviar Invitación</button>
 						</div>
 						<div class="col-md-6">
 							
@@ -157,7 +162,7 @@
 								</thead>
 								<tbody>
 									<?php foreach ($usuarios_asociados as $usuario) { ?>
-										<?php if ($usuario->tipo == 2) { ?>
+										<?php if ($usuario->tipo == 2 && $usuario->status == 1) { ?>
 											<tr id="<?php echo $usuario->user_id.";".$usuario->tipo; ?>">
 												<td style='text-align: center' id="<?php echo $usuario->id; ?>">
 												<?php foreach ($listar_usuarios as $usuario2) {
@@ -216,7 +221,7 @@ $(document).ready(function(){
         window.location = url;
     });
 	
-	$("#costo_dolar,#costo_bolivar").numeric(); //Valida solo permite valores numéricos
+	//~ $("#costo_dolar,#costo_bolivar").numeric(); //Valida solo permite valores numéricos
 
     $("#edit").click(function (e) {
 
@@ -287,18 +292,25 @@ $(document).ready(function(){
 						//~ });
 						
 						// Asociamos los usuarios a la tienda
-						var data = [];
+						var data = [];  // Usuarios regiastrados en el sistema
+						var data2 = [];  // Usuarios no regiastrados en el sistema
 						$("#tab_usuarios tbody tr").each(function () {
-							var id_usuario, tipo;
+							var id_usuario, tipo, usuario_text;
 							if ($(this).attr('id') != undefined){
-								id_usuario = $(this).attr('id').split(";");  // id tienda
-								id_usuario = id_usuario[0];
-								//~ tipo = $(this).attr('id').split(";");  // tipo
-								//~ tipo = tipo[1];
+								id_usuario = $(this).attr('id');  // id usuario
+								usuario_text = $(this).find('td').eq(0).text();  // name usuario
 								tipo = 2;
 
-								campos = { "id_usuario" : id_usuario, "tipo" : tipo}
+								campos = { "id_usuario" : id_usuario, "username":usuario_text, "tipo" : tipo}
 								data.push(campos);
+							}else{
+								// Si el correo a invitar no está registrado, éste recibe una invitación de registro en el sistema
+								id_usuario = 0;  // Nuevo usuario
+								usuario_text = $(this).find('td').eq(0).text();
+								tipo = 2;
+
+								campos = { "id_usuario" : id_usuario, "username":usuario_text, "tipo" : tipo}
+								data2.push(campos);
 							}
 
 						});
@@ -310,16 +322,23 @@ $(document).ready(function(){
 							});
 						}
 						
-						// Registramos la asociación con los usuarios de la lista
+						// Registramos la asociación con los usuarios de la lista que están registrados en el sistema
 						$.post('<?php echo base_url(); ?>CTiendas/associate_users', {'id_tienda':$("#id").val(), 'usuarios':data}, function (response2) {
-							swal({ 
-								title: "Registro",
-								 text: "Actualizado con exito",
-								  type: "success" 
-								},
-							function(){
-							  window.location.href = '<?php echo base_url(); ?>tiendas';
-							});
+							
+						});
+						
+						// Registramos la asociación con los usuarios de la lista que no están registrados en el sistema
+						$.post('<?php echo base_url(); ?>CTiendas/associate_users', {'id_tienda':$("#id").val(), 'usuarios':data2}, function (response2) {
+							
+						});
+						
+						swal({ 
+							title: "Registro",
+							 text: "Actualizado con exito",
+							  type: "success" 
+							},
+						function(){
+						  window.location.href = '<?php echo base_url(); ?>tiendas';
 						});
 					}
 				}				
@@ -435,62 +454,49 @@ $(document).ready(function(){
 		]
 	});
     
-    // Función para agregar usuarios a la lista
-    $("#i_new_line").click(function (e) {
-
-        e.preventDefault();  // Para evitar que se envíe por defecto
-
-        if ($('#usuario_id').val().trim() == "0") {
-			swal("Disculpe,", "para continuar debe seleccionar un usuario");
-			$('#usuario_id').parent('div').addClass('has-error');
-			
-        } /*else if ($('#tipo').val().trim() == "0") {
-			swal("Disculpe,", "para continuar debe seleccionar el tipo de usuario");
-			$('#tipo').parent('div').addClass('has-error');
-			
-        }*/ else {
-			
-			var table = $('#tab_usuarios').DataTable();
-			var usuario = $("#usuario_id").find('option').filter(':selected').text();
-			var usuario_id = $("#usuario_id").val();
-			//~ var tipo = $("#tipo").find('option').filter(':selected').text();
-            //~ var tipo_id = $("#tipo").val();
-			var botonQuitar = "<a  style='color: #1ab394' class='quitar'><i class='fa fa-trash fa-2x'></i></a>";
-			
-			// Añadimos el usuario a la tabla (primero verificamos si aún no está añadido)
-			var num_apariciones = 0;
-			var num_apariciones2 = 0;
-			var num_apariciones3 = 0;
-			$("#tab_usuarios tbody tr").each(function () {
-				var id_usuario, id_tipo, usuario_tipo;
-				usuario_tipo = $(this).attr('id');  // id usuario + tipo
-				if (usuario_tipo != undefined){
-					id_usuario = usuario_tipo.split(";");  // id usuario
-					id_usuario = id_usuario[0];
-					//~ id_tipo = usuario_tipo.split(";");  // id usuario
-					//~ id_tipo = id_tipo[1];
-					if(id_usuario == usuario_id){
-						num_apariciones += 1;
-					}
-					if(usuario_tipo == usuario_id+";2"){
-						num_apariciones2 += 1;
-					}
-					//~ if(id_tipo == '1'){
-						//~ num_apariciones3 += 1;
+    //~ // Función para agregar usuarios a la lista
+    //~ $("#i_new_line").click(function (e) {
+//~ 
+        //~ e.preventDefault();  // Para evitar que se envíe por defecto
+//~ 
+        //~ if ($('#usuario_id').val().trim() == "0") {
+			//~ swal("Disculpe,", "para continuar debe seleccionar un usuario");
+			//~ $('#usuario_id').parent('div').addClass('has-error');
+			//~ 
+        //~ } else {
+			//~ 
+			//~ var table = $('#tab_usuarios').DataTable();
+			//~ var usuario = $("#usuario_id").find('option').filter(':selected').text();
+			//~ var usuario_id = $("#usuario_id").val();
+			//~ var botonQuitar = "<a  style='color: #1ab394' class='quitar'><i class='fa fa-trash fa-2x'></i></a>";
+			//~ 
+			//~ // Añadimos el usuario a la tabla (primero verificamos si aún no está añadido)
+			//~ var num_apariciones = 0;
+			//~ var num_apariciones2 = 0;
+			//~ var num_apariciones3 = 0;
+			//~ $("#tab_usuarios tbody tr").each(function () {
+				//~ var id_usuario, id_tipo, usuario_tipo;
+				//~ usuario_tipo = $(this).attr('id');  // id usuario + tipo
+				//~ if (usuario_tipo != undefined){
+					//~ id_usuario = usuario_tipo.split(";");  // id usuario
+					//~ id_usuario = id_usuario[0];
+					//~ if(id_usuario == usuario_id){
+						//~ num_apariciones += 1;
 					//~ }
-				}
-			});
-			
-			if(num_apariciones == 1){
-				swal("Disculpe,", "el usuario ya se encuentra en la lista");
-			}/*else if(num_apariciones3 == 1 && tipo_id == '1'){
-				swal("Disculpe,", "ya asignó un administrador para la tienda");
-			}*/else{
-				var i = table.row.add([usuario, 'Empleado', botonQuitar]).draw();
-				table.rows(i).nodes().to$().attr("id", usuario_id+";2");
-			}
-		}
-	});
+					//~ if(usuario_tipo == usuario_id+";2"){
+						//~ num_apariciones2 += 1;
+					//~ }
+				//~ }
+			//~ });
+			//~ 
+			//~ if(num_apariciones == 1){
+				//~ swal("Disculpe,", "el usuario ya se encuentra en la lista");
+			//~ }else{
+				//~ var i = table.row.add([usuario, 'Empleado', botonQuitar]).draw();
+				//~ table.rows(i).nodes().to$().attr("id", usuario_id+";2");
+			//~ }
+		//~ }
+	//~ });
 	
 	//Método para eliminar un registro de la tabla
 	$("table#tab_usuarios").on('click', 'a.quitar', function () {
@@ -513,6 +519,104 @@ $(document).ready(function(){
 		var aPos = $("table#tab_usuarios").dataTable().fnGetPosition(this.parentNode.parentNode);
 		$("table#tab_usuarios").dataTable().fnDeleteRow(aPos);
 
+	});
+	
+	// Función para invitar usuarios a la tienda
+	$("#invitar").click(function (e) {
+
+        e.preventDefault();  // Para evitar que se envíe por defecto
+        // Expresion regular para validar el correo
+		var regex = /[\w-\.]{2,}@([\w-]{2,}\.)*([\w-]{2,}\.)[\w-]{2,4}/;
+		
+		if ($('#usuario').val().trim() === "") {
+			
+		   swal("Disculpe,", "para continuar debe ingresar un nombre de usuario");
+	       $('#usuario').parent('div').addClass('has-error');
+	       $('#usuario').focus();
+	       
+        }else if (!(regex.test($('#usuario').val().trim()))) {  
+			        
+		   swal("Disculpe,", "el usuario debe ser una dirección de correo electrónico válida");
+	       $('#usuario').parent('div').addClass('has-error');
+	       $('#usuario').focus();
+	       
+        }else{
+
+			// Buscamos si existe el usuario
+			$.post('<?php echo base_url(); ?>CUser/search_username', {'usuario':$('#usuario').val().trim()}, function (response) {
+				//~ alert(response.length);
+				if(response.length == 1){
+					// Listamos la invitación
+					var table = $('#tab_usuarios').DataTable();
+					var usuario_id;
+					$.each(response, function (i) {
+						usuario_id = response[i]['id'];
+					});
+					var usuario = $("#usuario").val().trim();
+					var botonQuitar = "<a  style='color: #1ab394' class='quitar'><i class='fa fa-trash fa-2x'></i></a>";
+					
+					// Añadimos el usuario a la tabla (primero verificamos si aún no está añadido)
+					var num_apariciones = 0;
+					$("#tab_usuarios tbody tr").each(function () {
+						var usuario_text = $(this).find('td').eq(0).text().trim();
+						if(usuario == usuario_text){
+							num_apariciones += 1;
+						}
+					});
+					
+					if (num_apariciones == 1) {
+						swal("Disculpe,", "el usuario ya se encuentra en la lista");
+					} else {
+						var i = table.row.add([usuario, 'Empleado', botonQuitar]).draw();
+						table.rows(i).nodes().to$().attr("id", usuario_id);
+						$("#usuario").val("");
+					}
+				}else{
+					swal({
+						title: "Invitar usuario",
+						text: "El usuario no está registrado ¿Está seguro de realizar la invitación?",
+						type: "warning",
+						showCancelButton: true,
+						confirmButtonColor: "#DD6B55",
+						confirmButtonText: "Invitar",
+						cancelButtonText: "Cancelar",
+						closeOnConfirm: true,
+						closeOnCancel: true
+					},
+					function(isConfirm){
+						if (isConfirm) {
+							// Listamos la invitación
+							var table = $('#tab_usuarios').DataTable();
+							var usuario_id;
+							$.each(response, function (i) {
+								usuario_id = response[i]['id'];
+							});
+							var usuario = $("#usuario").val().trim();
+							var botonQuitar = "<a  style='color: #1ab394' class='quitar'><i class='fa fa-trash fa-2x'></i></a>";
+							
+							// Añadimos el usuario a la tabla (primero verificamos si aún no está añadido)
+							var num_apariciones = 0;
+							$("#tab_usuarios tbody tr").each(function () {
+								var usuario_text = $(this).find('td').eq(0).text();
+								if(usuario == usuario_text){
+									num_apariciones += 1;
+								}
+							});
+							
+							if (num_apariciones == 1) {
+								//~ swal("Disculpe,", "el usuario ya se encuentra en la lista");
+								alert("Disculpe, el usuario ya se encuentra en la lista");
+							} else {
+								var i = table.row.add([usuario, 'Empleado', botonQuitar]).draw();
+								$("#usuario").val("");
+								//~ table.rows(i).nodes().to$().attr("id", usuario_id);
+							}
+						} 
+					});
+				}
+			}, 'json');		
+		}
+		
 	});
 	
 });

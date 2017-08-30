@@ -105,7 +105,7 @@ $route['clients/register'] = 'CClient/register';
 $route['clients/edit/(:num)'] = 'CClient/edit/$1';
 $route['clients/delete/(:num)'] = 'CClient/delete/$1';
 $route['clients/ajax_client'] = 'CClient/ajax_client';
-$route['confirm_mail'] = 'CClient/validar_mail';
+$route['confirm_mail'] = 'CTiendas/validar_mail';
 /*   Assignment */
 $route['assignment'] = 'CAssignment';
 $route['assignment/register'] = 'CAssignment/register';
