@@ -8,6 +8,7 @@ class CTiendas extends CI_Controller {
        
 		// Load database
         $this->load->model('MTiendas');
+        $this->load->model('MMails');
 		
     }
 	
@@ -79,6 +80,9 @@ class CTiendas extends CI_Controller {
 		$id_tienda = $this->input->post('id_tienda');
 		$usuarios = $this->input->post('usuarios');
 		
+		// Datos de la tienda para el envío del correo de invitación
+		$data_tienda = $this->MTiendas->obtenerTiendas($id_tienda);
+		
 		// Consultamos si hay registros de asociación de usuarios con la tienda actual
 		$num_assoc = $this->MTiendas->obtenerUsuarios($id_tienda);
 		// Si no hay registros de asociación a la tienda, entonces registramos la asociación con el usuario actual como administrador
@@ -87,6 +91,7 @@ class CTiendas extends CI_Controller {
 				'user_id' => $this->session->userdata('logged_in')['id'],
 				'tienda_id' => $id_tienda,
 				'tipo' => 1,
+				'status' => 1,
 				'd_create' => date('Y-m-d')." ".date("H:i:s")
 			);
 
@@ -96,14 +101,32 @@ class CTiendas extends CI_Controller {
 		// Si el arreglo trae registros se procede a hacer los registros correspondientes
 		if(count($usuarios) > 0){
 			foreach ($usuarios as $usuario) {
-				$datos2 = array(
-					'user_id' => $usuario['id_usuario'],
-					'tienda_id' => $id_tienda,
-					'tipo' => $usuario['tipo'],
-					'd_create' => date('Y-m-d')." ".date("H:i:s")
-				);
+				// Si es un usuario registrado en sistema se procede a asociarlo a la tienda 
+				if($usuario['id_usuario'] != 0){
+					// Primero verificamos si el usuario está activo en la tienda
+					$data_usuario = $this->MTiendas->obtenerTiendasUsuario2($usuario['id_usuario'], $id_tienda);
+					// Si el usuario no está asociado se lo asocia con status 0 y se le envía la invitación
+					if(count($data_usuario) == 0){
+						$datos2 = array(
+							'user_id' => $usuario['id_usuario'],
+							'tienda_id' => $id_tienda,
+							'tipo' => $usuario['tipo'],
+							'status' => 0,
+							'd_create' => date('Y-m-d')." ".date("H:i:s")
+						);
 
-				$insert = $this->MTiendas->insertUsuarios($datos2);
+						$insert = $this->MTiendas->insertUsuarios($datos2);
+						
+						$this->MMails->enviarMail($usuario['id_usuario'], $usuario['username'], $id_tienda, $data_tienda[0]->name);  // Envío de la invitación por correo
+					}else{
+						// Si es usuario está asociado pero en status 0 se le reenvia la invitación
+						if($data_usuario[0]->status == 0){
+							$this->MMails->enviarMail($usuario['id_usuario'], $usuario['username'], $id_tienda, $data_tienda[0]->name);  // Envío de la invitación por correo
+						}
+					}					
+				}else{
+					$this->MMails->enviarMail($usuario['id_usuario'], $usuario['username'], $id_tienda, $data_tienda[0]->name);  // Envío de la invitación por correo
+				}
 			}
 		}
 	}
@@ -127,7 +150,7 @@ class CTiendas extends CI_Controller {
         $data['editar'] = $this->MTiendas->obtenerTiendas($data['id']);
         $data['listar_tiendasv'] = $this->MTiendas->obtener_tiendasv();
         $data['listar_usuarios'] = $this->MTiendas->obtener_usuarios();
-        $data['tiendasv_asociadas'] = $this->MTiendas->obtenerTiendasv($data['id']);
+        //~ $data['tiendasv_asociadas'] = $this->MTiendas->obtenerTiendasv($data['id']);
         $data['usuarios_asociados'] = $this->MTiendas->obtenerUsuarios($data['id']);
         $this->load->view('tiendas/editar', $data);
 		$this->load->view('footer');
@@ -155,6 +178,41 @@ class CTiendas extends CI_Controller {
         if ($result) {
           /*  $this->libreria->generateActivity('Eliminado País', $this->session->userdata['logged_in']['id']);*/
         }
+    }
+	
+	// Método para enviar invitación por correo
+	public function invitar()
+    {
+		$id_user = $this->input->post('id');
+		$username = $this->input->post('usuario');
+        $this->MMails->enviarMail($id_user, $username);
+    }
+    
+    // Método para validar el correo de un usuario y proceder a activarlo
+    public function validar_mail() {
+		$id_user = $this->input->get('id');
+		$id_tienda = $this->input->get('id_t');
+		if($id_user != 0){
+			// Datos de la tienda para el envío del correo de confirmación
+			$data_tienda = $this->MTiendas->obtenerTiendas($id_tienda);
+			
+			$datos_update = array('user_id'=>$id_user, 'tienda_id'=>$id_tienda, 'status'=>1);
+			// Activamos el usuario
+			$result = $this->MTiendas->update_status($datos_update);
+			
+			if($result){
+				// Armamos los datos del usuario
+				$datos_reg = array(
+					'username'=>$this->session->userdata('logged_in')['username'],
+					'tiendaname'=>$data_tienda[0]->name
+				);
+				// Enviamos los datos registrados al correo del cliente y lo redireccionamos al inicio de sesión
+				$this->MMails->enviarMailConfirm($datos_reg);
+				redirect(base_url());
+			}
+		}else{
+			redirect(base_url());
+		}
     }
 	
 	public function ajax_service()

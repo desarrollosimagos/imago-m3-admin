@@ -126,6 +126,17 @@ class MTiendas extends CI_Model {
         else
             return $query->result();
     }
+    
+    // Public method to obtain the productos by id
+    public function obtenerTiendasUsuario2($id_user, $id_tienda) {
+        $this->db->where('user_id', $id_user);
+        $this->db->where('tienda_id', $id_tienda);
+        $query = $this->db->get('users_tiendas');
+        if ($query->num_rows() > 0)
+            return $query->result();
+        else
+            return $query->result();
+    }
 
     // Public method to update a record  
     public function update($datos) {
@@ -141,7 +152,14 @@ class MTiendas extends CI_Model {
             return $result;
         }
     }
-
+    
+    // Public method to update a record 
+    public function update_status($datos) {
+        $result = $this->db->where('user_id', $datos['user_id']);
+        $result = $this->db->where('tienda_id', $datos['tienda_id']);
+        $result = $this->db->update('users_tiendas', $datos);
+        return $result;
+    }
 
     // Public method to delete a record
      public function delete($id) {

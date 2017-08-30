@@ -54,13 +54,22 @@ class MMails extends CI_Model {
     }
 
     // Public method to send a email
-    public function enviarMail($id_client, $username) {
+    public function enviarMail($id_user, $username, $id_tienda, $tiendaname) {
         // Varios destinatarios
 		//~ $para = 'jasolorzano18@hotmail.com' . ', '; // atención a la coma
 		$para = $username;
 
 		// título
-		$título = 'Lubricar Delibery: Por favor confirme su correo';
+		$título = 'Imago M3: Por favor confirme su correo';
+		
+		// Ajuste de los mensajes según el caso de envío
+		if($id_user == 0){
+			$mensaje_bienvenida = 'Bienvenido '.$username.', usted ha sido invitado a formar parte de Imago M3';
+			$mensaje_solicitud = 'Por favor ingrese al sistema haciendo click en el siguiente enlace:';
+		}else{
+			$mensaje_bienvenida = 'Bienvenido '.$username.', usted ha sido invitado a colaborar en la tienda '.$tiendaname;
+			$mensaje_solicitud = 'Por favor confirme su correo haciendo click en el siguiente enlace:';
+		}
 
 		// mensaje
 		$mensaje = '
@@ -155,8 +164,8 @@ class MMails extends CI_Model {
 							</tr>
 							<tr>
 							  <td style="font-family:sans-serif;font-size:14px;vertical-align:top;">
-								<p style="font-family:sans-serif;font-size:14px;font-weight:normal;margin:0;Margin-bottom:15px;">Hola,</p>
-								<h2 style="font-size:15px;line-height:28px;margin:0 0 12px 0">Por favor confirme su correo haciendo click en el siguiente enlace:</h2>
+								<p style="font-family:sans-serif;font-size:14px;font-weight:normal;margin:0;Margin-bottom:15px;">'.$mensaje_bienvenida.'</p>
+								<h2 style="font-size:15px;line-height:28px;margin:0 0 12px 0">'.$mensaje_solicitud.'</h2>
 								<table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary" style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;box-sizing:border-box;width:100%;">
 								  <tbody>
 									<tr>
@@ -164,7 +173,7 @@ class MMails extends CI_Model {
 										<table border="0" cellpadding="0" cellspacing="0" style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;width:100%;width:auto;">
 										  <tbody>
 											<tr>
-											  <td style="font-family:sans-serif;font-size:14px;vertical-align:top;background-color:#ffffff;border-radius:5px;text-align:center;background-color:#3498db;"> <a href="'.base_url().'confirm_mail?id='.$id_client.'" target="_blank" style="text-decoration:underline;background-color:#ffffff;border:solid 1px #3498db;border-radius:5px;box-sizing:border-box;color:#3498db;cursor:pointer;display:inline-block;font-size:14px;font-weight:bold;margin:0;padding:12px 25px;text-decoration:none;text-transform:capitalize;background-color:#3498db;border-color:#3498db;color:#ffffff;">¡Sí, validar mi registro!</a> </td>
+											  <td style="font-family:sans-serif;font-size:14px;vertical-align:top;background-color:#ffffff;border-radius:5px;text-align:center;background-color:#3498db;"> <a href="'.base_url().'confirm_mail?id='.$id_user.'&id_t='.$id_tienda.'" target="_blank" style="text-decoration:underline;background-color:#ffffff;border:solid 1px #3498db;border-radius:5px;box-sizing:border-box;color:#3498db;cursor:pointer;display:inline-block;font-size:14px;font-weight:bold;margin:0;padding:12px 25px;text-decoration:none;text-transform:capitalize;background-color:#3498db;border-color:#3498db;color:#ffffff;">Aceptar Invitación</a> </td>
 											</tr>
 										  </tbody>
 										</table>
@@ -212,7 +221,7 @@ class MMails extends CI_Model {
 		//cargamos la configuración para enviar con mailtrap (config), gamil (configGmail) o yahoo (configYahoo)
 		$this->email->initialize($this->config);
 
-		$this->email->from('contacto@lubricardelivery.com');
+		$this->email->from('contacto@imagom3.com');
 		$this->email->to($para);
 		$this->email->subject($título);
 		$this->email->message($mensaje);
@@ -232,7 +241,7 @@ class MMails extends CI_Model {
 		$para = $datos_reg['username'];
 
 		// título
-		$título = 'Lubricar Delibery: Correo confirmado';
+		$título = 'Imago M3: Correo confirmado';
 
 		// mensaje
 		$mensaje = '
@@ -328,30 +337,7 @@ class MMails extends CI_Model {
 							<tr>
 							  <td style="font-family:sans-serif;font-size:14px;vertical-align:top;">
 								<h2 style="font-size:15px;line-height:28px;margin:0 0 12px 0">Su registro ya fue confirmado.</h2>
-								<p style="font-family:sans-serif;font-size:14px;font-weight:normal;margin:0;Margin-bottom:15px;">Aquí hay una copia de la información que nos envió...</p>
-								
-								<ul class="m_392633976507179222profile-list" style="display:block;margin:15px 20px;padding:0;list-style:none;border-top:1px solid #eee">
-								  <li style="display:block;margin:0;padding:5px 0;border-bottom:1px solid #eee">
-									<strong>Nombre:</strong>
-									'.$datos_reg['name'].'
-								  </li>
-								  <li style="display:block;margin:0;padding:5px 0;border-bottom:1px solid #eee">
-									<strong>Apellido:</strong>
-									'.$datos_reg['lastname'].'
-								  </li>
-								  <li style="display:block;margin:0;padding:5px 0;border-bottom:1px solid #eee">
-									<strong>Teléfono:</strong>
-									'.$datos_reg['phone'].'
-								  </li>
-								  <li style="display:block;margin:0;padding:5px 0;border-bottom:1px solid #eee">
-									<strong>Móvil:</strong>
-									'.$datos_reg['cell_phone'].'
-								  </li>
-								  <li style="display:block;margin:0;padding:5px 0;border-bottom:1px solid #eee">
-									<strong>Correo (Usuario):</strong>
-									<a href="mailto:'.$datos_reg['username'].'" target="_blank">'.$datos_reg['username'].'</a>
-								  </li>
-								</ul>
+								<p style="font-family:sans-serif;font-size:14px;font-weight:normal;margin:0;Margin-bottom:15px;">Usted ha sido asociado a la tienda '.$datos_reg['tiendaname'].'</p>
 							  </td>
 							</tr>
 						  </table>
@@ -390,7 +376,7 @@ class MMails extends CI_Model {
 		//cargamos la configuración para enviar con mailtrap (config), gamil (configGmail) o yahoo (configYahoo)
 		$this->email->initialize($this->config);
 
-		$this->email->from('contacto@lubricardelivery.com');
+		$this->email->from('contacto@imagom3.com');
 		$this->email->to($para);
 		$this->email->subject($título);
 		$this->email->message($mensaje);

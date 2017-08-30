@@ -129,6 +129,14 @@ class MUser extends CI_Model {
             return $query->result();
     }
 
+    // Public method to obtain the users by id
+    public function obtenerUserName($username) {
+        $this->db->where('username', $username);
+        $query = $this->db->get('users');
+        
+        return $query->result();
+    }
+
     // Public method to update a record 
     public function update($datos) {
         $result = $this->db->where('username =', $datos['username']);
