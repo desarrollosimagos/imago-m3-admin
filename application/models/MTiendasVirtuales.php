@@ -28,8 +28,12 @@ class MTiendasVirtuales extends CI_Model {
 
     //Public method to obtain the applications
     public function obtener_tiendas() {
-        $query = $this->db->get('tiendas');
-
+        //~ $query = $this->db->get('tiendas');
+		$this->db->select('t.id, t.rif, t.name');
+		$this->db->from('users_tiendas u_t');
+		$this->db->join('tiendas t', 't.id = u_t.tienda_id');
+		$this->db->where('u_t.user_id =', $this->session->userdata['logged_in']['id']);
+		$query = $this->db->get();
         if ($query->num_rows() > 0)
             return $query->result();
         else

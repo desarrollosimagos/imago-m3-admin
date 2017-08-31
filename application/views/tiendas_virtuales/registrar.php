@@ -48,7 +48,7 @@
 								<select class="form-control m-b" name="tienda_id" id="tienda_id">
 									<option value="0" selected="">Seleccione</option>
 									<?php foreach ($listar_tiendas as $tienda) { ?>
-										<option value="<?php echo $tienda->id ?>"><?php echo $tienda->name; ?></option>
+										<option value="<?php echo $tienda->id ?>"><?php echo $tienda->rif.'  |  '.$tienda->name; ?></option>
 									<?php } ?>
 								</select>
 							</div>
