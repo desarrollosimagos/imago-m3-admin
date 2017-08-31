@@ -55,30 +55,30 @@ class MUser extends CI_Model {
             return $query->result();
     }
     
-    // Public method to obtain the franchises assigned to user
-    public function obtenerUsersFranchises() {
-        $query = $this->db->get('users_franchises');
+    // Public method to obtain the tiendas assigned to user
+    public function obtenerUsersTiendas() {
+        $query = $this->db->get('users_tiendas');
         if ($query->num_rows() > 0)
             return $query->result();
         else
             return $query->result();
     }
     
-    // Public method to obtain the services of the franchises by franchise_id
-    public function obtenerFranchisesUserId($id_user) {
+    // Public method to obtain the services of the tiendas by tienda_id
+    public function obtenerTiendasUserId($id_user) {
         $this->db->where('user_id', $id_user);
-        $query = $this->db->get('users_franchises');
+        $query = $this->db->get('users_tiendas');
         if ($query->num_rows() > 0)
             return $query->result();
         else
             return $query->result();
     }
     
-    // Public method to obtain the permissions asociated by user_id and franchise_id
-    public function obtenerUserFranchiseId($id_user, $id_franchise) {
+    // Public method to obtain the permissions asociated by user_id and tienda_id
+    public function obtenerUserTiendaId($id_user, $id_tienda) {
 		$this->db->where('user_id =', $id_user);
-		$this->db->where('franchise_id =', $id_franchise);
-        $query = $this->db->get('users_franchises');
+		$this->db->where('tienda_id =', $id_tienda);
+        $query = $this->db->get('users_tiendas');
 
         if ($query->num_rows() > 0)
             return $query->result();
@@ -99,9 +99,9 @@ class MUser extends CI_Model {
         }
     }
     
-    // Public method to insert the franchise associated
-    public function insert_franchise($datos) {
-		$result = $this->db->insert("users_franchises", $datos);
+    // Public method to insert the tienda associated
+    public function insert_tienda($datos) {
+		$result = $this->db->insert("users_tiendas", $datos);
 		return $result;
     }
     
@@ -165,12 +165,12 @@ class MUser extends CI_Model {
         return $result;
     }
     
-    // Public method to delete the franchises asociated 
-    public function delete_user_franchise($id_user, $id_franchise) {
-		$result = $this->db->delete('users_franchises', array('user_id' => $id_user, 'franchise_id' => $id_franchise));
+    // Public method to delete the tiendas asociated 
+    public function delete_user_tienda($id_user, $id_tienda) {
+		$result = $this->db->delete('users_tiendas', array('user_id' => $id_user, 'tienda_id' => $id_tienda));
     }
 
-    // Public method to delete the franchises asociated 
+    // Public method to delete the tiendas asociated 
     public function delete_user_action($id_user, $id_action) {
 		$result = $this->db->delete('permissions', array('user_id' => $id_user, 'action_id' => $id_action));
     }

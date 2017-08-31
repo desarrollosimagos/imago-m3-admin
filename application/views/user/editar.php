@@ -64,29 +64,29 @@
 								</select>
 							</div>
 						</div>
-						<div class="form-group" id="franquicias">
-							<label class="col-sm-2 control-label" >Franquicia</label>
+						<div class="form-group" id="div_tiendas">
+							<label class="col-sm-2 control-label" >Tienda</label>
 							<div class="col-sm-10">
-								<select class="form-control m-b" id="franchises" multiple="multiple">
+								<select class="form-control m-b" id="tiendas" multiple="multiple">
 									<?php
-									// Armamos un arreglo de ids de franquicias asignadas a otros usuarios diferentes al que se está editando
-									//~ $franquicias_ids = array();
-									//~ $franquicia_asoc_id = 0;  // Variable que almacenará el id de la franquicia que pertenece al usuario editado
-									//~ foreach ($user_franquicias as $user_franquicia) {
-										//~ if($user_franquicia->user_id != $id){
-											//~ $franquicias_ids[] = $user_franquicia->franchise_id;
+									// Armamos un arreglo de ids de tiendas asignadas a otros usuarios diferentes al que se está editando
+									//~ $tiendas_ids = array();
+									//~ $tienda_asoc_id = 0;  // Variable que almacenará el id de la tienda que pertenece al usuario editado
+									//~ foreach ($user_tiendas as $user_tienda) {
+										//~ if($user_tienda->user_id != $id){
+											//~ $tiendas_ids[] = $user_tienda->franchise_id;
 										//~ }else{
-											//~ $franquicia_asoc_id = $user_franquicia->franchise_id;
+											//~ $tienda_asoc_id = $user_tienda->franchise_id;
 										//~ }
 									//~ }
 									// Primero creamos un arreglo con la lista de ids de servicios proveniente del controlador
-									$ids_franchises = explode(",",$ids_franchises);
+									$ids_tiendas = explode(",",$ids_tiendas);
 									?>
-									<?php foreach ($franquicias as $franquicia) { ?>
-										<?php if(in_array($franquicia->id, $ids_franchises)) { ?>
-										<option selected="selected" value="<?php echo $franquicia->id ?>"><?php echo $franquicia->name ?></option>
+									<?php foreach ($tiendas as $tienda) { ?>
+										<?php if(in_array($tienda->id, $ids_tiendas)) { ?>
+										<option selected="selected" value="<?php echo $tienda->id ?>"><?php echo $tienda->name ?></option>
 										<?php }else{ ?>
-										<option value="<?php echo $franquicia->id ?>"><?php echo $franquicia->name ?></option>
+										<option value="<?php echo $tienda->id ?>"><?php echo $tienda->name ?></option>
 										<?php } ?>
 									<?php } ?>
 								</select>
