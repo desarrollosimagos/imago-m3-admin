@@ -31,7 +31,7 @@
                                     <th>Nombre</th>
                                     <th>Apellido</th>
                                     <th>Usuario</th>
-                                    <th>Franquicias</th>
+                                    <th>Tiendas</th>
                                     <th>Permisos</th>
                                     <th>Editar</th>
                                     <th>Activar/Desactivar</th>
@@ -56,12 +56,12 @@
                                         <td>
                                             <?php
                                             echo "<br>";
-                                            // Validamos qué franquicias están asociadas a cada usuario
-                                            foreach($users_franquicias as $user_franquicia){
-												if($usuario->id == $user_franquicia->user_id){
-													foreach ($franquicias as $franquicia){
-														if($user_franquicia->franchise_id == $franquicia->id){
-															echo $franquicia->name."<br>";
+                                            // Validamos qué tiendas están asociadas a cada usuario
+                                            foreach($users_tiendas as $user_tienda){
+												if($usuario->id == $user_tienda->user_id){
+													foreach ($tiendas as $tienda){
+														if($user_tienda->tienda_id == $tienda->id){
+															echo $tienda->name."<br>";
 														}else{
 															echo "";
 														}

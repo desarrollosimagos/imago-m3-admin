@@ -10,7 +10,7 @@ class CUser extends CI_Controller {
         $this->load->model('MUser');
 		$this->load->model('MPerfil');
         $this->load->model('MAcciones');
-        //~ $this->load->model('MFranchises');
+        $this->load->model('MTiendas');
 		
     }
 	
@@ -18,8 +18,8 @@ class CUser extends CI_Controller {
 	{
 		$this->load->view('base');
 		$data['listar'] = $this->MUser->obtener();
-		$data['franquicias'] = $this->MFranchises->obtener();
-		$data['users_franquicias'] = $this->MUser->obtenerUsersFranchises();
+		$data['tiendas'] = $this->MTiendas->obtener();
+		$data['users_tiendas'] = $this->MUser->obtenerUsersTiendas();
 		$data['acciones'] = $this->MAcciones->obtener();
 		$data['permisos'] = $this->MUser->obtener_permisos();
 		$this->load->view('user/lista', $data);
@@ -30,9 +30,9 @@ class CUser extends CI_Controller {
 	{
 		$this->load->view('base');
 		$data['list_perfil'] = $this->MPerfil->obtener();
-		$data['franquicias'] = $this->MFranchises->obtener();
+		$data['tiendas'] = $this->MTiendas->obtener();
 		$data['acciones'] = $this->MAcciones->obtener_without_home();
-		//~ $data['user_franquicias'] = $this->MUser->obtenerUsersFranchises();
+		//~ $data['user_tiendas'] = $this->MUser->obtenerUsersTiendas();
 		$this->load->view('user/registrar',$data);
 		$this->load->view('footer');
 	}
@@ -57,17 +57,17 @@ class CUser extends CI_Controller {
         echo $result;  // No comentar, esta impresión es necesaria para que se ejecute el método insert()
         
         if ($result != 'existe'){
-			// Si hay franquicias asociadas al usuario, registramos la relación en la tabla 'users_franchises'
-			if($this->input->post('franquicias_ids') != ""){
-				// Inserción de las relaciones usuario-franquicia				
-				foreach($this->input->post('franquicias_ids') as $franchise_id){
-					$data = array('user_id'=>$result, 'franchise_id'=>$franchise_id);
-					$this->MUser->insert_franchise($data);
+			// Si hay tiendas asociadas al usuario, registramos la relación en la tabla 'users_tiendas'
+			if($this->input->post('tiendas_ids') != ""){
+				// Inserción de las relaciones usuario-tienda				
+				foreach($this->input->post('tiendas_ids') as $tienda_id){
+					$data = array('user_id'=>$result, 'tienda_id'=>$tienda_id, 'tipo'=>1, 'status'=>1);
+					$this->MUser->insert_tienda($data);
 				}
 			}
 			// Si hay acciones asociadas al usuario, registramos la relación en la tabla 'permissions'
 			if($this->input->post('actions_ids') != ""){
-				// Inserción de las relaciones usuario-franquicia				
+				// Inserción de las relaciones usuario-tienda				
 				foreach($this->input->post('actions_ids') as $action_id){
 					$data = array('user_id'=>$result, 'action_id'=>$action_id, 'parameter_permit'=>'777');
 					$this->MUser->insert_action($data);
@@ -82,19 +82,19 @@ class CUser extends CI_Controller {
 		$this->load->view('base');
         $data['id'] = $this->uri->segment(2);
 		$data['list_perfil'] = $this->MPerfil->obtener();
-		$data['franquicias'] = $this->MFranchises->obtener();
-		//~ $data['user_franquicias'] = $this->MUser->obtenerUsersFranchises();
+		$data['tiendas'] = $this->MTiendas->obtener();
+		//~ $data['user_tiendas'] = $this->MUser->obtenerUsersTiendas();
         $data['editar'] = $this->MUser->obtenerUsers($data['id']);
-        // Lista de ids de franquicias asociadas al usuario
-        $ids_franchises = "";
-        $query_franchises = $this->MUser->obtenerFranchisesUserId($data['id']);
-        if(count($query_franchises) > 0){
-			foreach($query_franchises as $franchise){
-				$ids_franchises .= $franchise->franchise_id.",";
+        // Lista de ids de tiendas asociadas al usuario
+        $ids_tiendas = "";
+        $query_tiendas = $this->MUser->obtenerTiendasUserId($data['id']);
+        if(count($query_tiendas) > 0){
+			foreach($query_tiendas as $tienda){
+				$ids_tiendas .= $tienda->tienda_id.",";
 			}
 		}
-		$ids_franchises = substr($ids_franchises,0,-1);  // Quitamos la última coma de la cadena
-		$data['ids_franchises'] = $ids_franchises;
+		$ids_tiendas = substr($ids_tiendas,0,-1);  // Quitamos la última coma de la cadena
+		$data['ids_tiendas'] = $ids_tiendas;
 		$data['permissions'] = $this->MUser->obtener_permisos_id($data['id']);
 		$data['acciones'] = $this->MAcciones->obtener_without_home();
 		// Lista de ids de acciones asociadas al usuario
@@ -131,43 +131,43 @@ class CUser extends CI_Controller {
         echo $result;
         
         if ($result) {
-			// Si hay nuevas franquicias asociadas al usuario, los registramos en la tabla 'users_franchises'
-			if($this->input->post('franquicias_ids') != ""){
-				// Proceso de registro de frasnquicias asociados al usuario
-				$ids_franchises = array(); // Aquí almacenaremos los ids de las franquicias a asociar
-				// Asociamos las nuevas franquicias seleccionadas del combo select
-				foreach($this->input->post('franquicias_ids') as $franchise_id){
-					// Primero verificamos si ya está asociada cada franquicia, si no lo está, la insertamos
-					$check_associated = $this->MUser->obtenerUserFranchiseId($this->input->post('id'), $franchise_id);
+			// Si hay nuevas tiendas asociadas al usuario, los registramos en la tabla 'users_tiendas'
+			if($this->input->post('tiendas_ids') != ""){
+				// Proceso de registro de tiendas asociados al usuario
+				$ids_tiendas = array(); // Aquí almacenaremos los ids de las tiendas a asociar
+				// Asociamos las nuevas tiendas seleccionadas del combo select
+				foreach($this->input->post('tiendas_ids') as $tienda_id){
+					// Primero verificamos si ya está asociada cada tienda, si no lo está, la insertamos
+					$check_associated = $this->MUser->obtenerUserTiendaId($this->input->post('id'), $tienda_id);
 					//~ echo count($check_associated);
 					if(count($check_associated) == 0){
-						$data_franchise = array('user_id'=>$this->input->post('id'), 'franchise_id'=>$franchise_id);
-						$this->MUser->insert_franchise($data_franchise);
+						$data_tienda = array('user_id'=>$this->input->post('id'), 'tienda_id'=>$tienda_id, 'tipo'=>1, 'status'=>1);
+						$this->MUser->insert_tienda($data_tienda);
 					}
 					// Vamos colectando los ids recorridos
-					$ids_franchises[] = $franchise_id;
+					$ids_tiendas[] = $tienda_id;
 				}
 				
-				// Validamos qué franquicias han sido quitadas del combo select para proceder a borrar las relaciones
-				// Primero buscamos todas las franquicias asociadas al usuario
-				$query_associated = $this->MUser->obtenerFranchisesUserId($this->input->post('id'));
+				// Validamos qué tiendas han sido quitadas del combo select para proceder a borrar las relaciones
+				// Primero buscamos todas las tiendas asociadas al usuario
+				$query_associated = $this->MUser->obtenerTiendasUserId($this->input->post('id'));
 				if(count($query_associated) > 0){
-					// Verificamos cuales de las franquicias no están en la nueva lista
+					// Verificamos cuales de las tiendas no están en la nueva lista
 					foreach($query_associated as $association){
-						if(!in_array($association->franchise_id, $ids_franchises)){
-							// Eliminamos la asociacion de la tabla users_franchises
-							$this->MUser->delete_user_franchise($this->input->post('id'), $association->franchise_id);
+						if(!in_array($association->tienda_id, $ids_tiendas)){
+							// Eliminamos la asociacion de la tabla users_tiendas
+							$this->MUser->delete_user_tienda($this->input->post('id'), $association->tienda_id);
 						}
 					}
 				}
 			}else{
-				// Eliminamos las asociaciones de la tabla users_franchises correspondientes al usuario seleccionado
-				// Primero buscamos todas las franquicias asociados al usuario
-				$query_associated = $this->MUser->obtenerFranchisesUserId($this->input->post('id'));
+				// Eliminamos las asociaciones de la tabla users_tiendas correspondientes al usuario seleccionado
+				// Primero buscamos todas las tiendas asociados al usuario
+				$query_associated = $this->MUser->obtenerTiendasUserId($this->input->post('id'));
 				if(count($query_associated) > 0){
 					// Eliminamos las asociaciones encontradas
 					foreach($query_associated as $association){
-						$this->MUser->delete_user_franchise($this->input->post('id'), $association->franchise_id);
+						$this->MUser->delete_user_tienda($this->input->post('id'), $association->tienda_id);
 					}
 				}
 			}

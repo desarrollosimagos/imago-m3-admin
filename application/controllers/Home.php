@@ -10,6 +10,7 @@ Class Home extends CI_Controller {
 	// Show login page
     public function home() {
 		$this->load->view('base');
+		//~ $this->basicauthpublic->logout();
     }
 
 }
