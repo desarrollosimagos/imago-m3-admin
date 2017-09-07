@@ -22,6 +22,20 @@ class MTiendas extends CI_Model {
             return $query->result();
     }
 
+    //Public method to obtain the tienda
+    public function obtenerByUser() {
+        //~ $query = $this->db->get('tiendas');
+		$this->db->select('t.id, t.rif, t.name, t.status, t.address, t.phone');
+		$this->db->from('users_tiendas u_t');
+		$this->db->join('tiendas t', 't.id = u_t.tienda_id');
+		$this->db->where('u_t.user_id =', $this->session->userdata['logged_in']['id']);
+		$query = $this->db->get();
+        if ($query->num_rows() > 0)
+            return $query->result();
+        else
+            return $query->result();
+    }
+
     //Public method to obtain the applications
     public function obtener_tiendasv() {
         $query = $this->db->get('tienda_virtual');

@@ -15,7 +15,7 @@ class CTiendas extends CI_Controller {
 	public function index()
 	{
 		$this->load->view('base');
-		$data['listar'] = $this->MTiendas->obtener();
+		$data['listar'] = $this->MTiendas->obtenerByUser();
 		$data['listar_usuarios'] = $this->MTiendas->obtener_usuarios();
 		$this->load->view('tiendas/lista', $data);
 		$this->load->view('footer');
