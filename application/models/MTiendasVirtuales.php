@@ -15,10 +15,12 @@ class MTiendasVirtuales extends CI_Model {
     //Public method to obtain the tienda
     public function obtener() {
         //~ $query = $this->db->get('tienda');
-        $this->db->select('t.id, t.nombre, t.descripcion, t.url, t.tienda_id, t.tokens, t.token_cliente, t.secret_api, t.url_callback, t.cliente_api_id, t.app_id, t.aplicacion_id, a.nombre nombre_aplicacion, a.ruta');
-		$this->db->from('tienda_virtual t');
-		$this->db->join('aplicacion a', 'a.id = t.aplicacion_id');
-        //~ $this->db->where('franchise_id', $id_franchise);
+        $this->db->select('t_v.id, t_v.nombre, t_v.descripcion, t_v.url, t_v.tienda_id, t_v.tokens, t_v.token_cliente, t_v.secret_api, t_v.url_callback, t_v.cliente_api_id, t_v.app_id, t_v.aplicacion_id, a.nombre nombre_aplicacion, a.ruta');
+		$this->db->from('users_tiendas u_t');
+		$this->db->join('tiendas t', 't.id = u_t.tienda_id');
+		$this->db->join('tienda_virtual t_v', 't_v.tienda_id = t.id');
+		$this->db->join('aplicacion a', 'a.id = t_v.aplicacion_id');
+        $this->db->where('u_t.user_id =', $this->session->userdata['logged_in']['id']);
 		$query = $this->db->get();
         if ($query->num_rows() > 0)
             return $query->result();
