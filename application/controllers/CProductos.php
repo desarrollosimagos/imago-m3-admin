@@ -104,7 +104,7 @@ class CProductos extends CI_Controller {
         $data['id'] = $this->uri->segment(3);
         $data['editar'] = $this->MProductos->obtenerProductos($data['id']);
         $data['listar_unidades'] = $this->MProductos->obtener_unidades();
-        $data['listar_tiendas'] = $this->MProductos->obtener_tiendas();
+        $data['listar_tiendas'] = $this->MProductos->obtener_tiendas_fil();
         $data['tiendas_asociadas'] = $this->MProductos->obtenerTiendas($data['id']);
         $this->load->view('productos/editar', $data);
 		$this->load->view('footer');

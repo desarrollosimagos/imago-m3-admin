@@ -32,10 +32,25 @@ class MProductos extends CI_Model {
             return $query->result();
     }
 
-    //Public method to obtain the shops
+    // Método publico, para obtener las tiendas virtuales
     public function obtener_tiendas() {
         $query = $this->db->get('tienda_virtual');
 
+        if ($query->num_rows() > 0)
+            return $query->result();
+        else
+            return $query->result();
+    }
+
+    // Método publico, para obtener las tiendas virtuales asociadas a las tiendas del usuario logueado
+    public function obtener_tiendas_fil() {
+        //~ $query = $this->db->get('tienda_virtual');
+		$this->db->select('t_v.id, t_v.nombre');
+		$this->db->from('users_tiendas u_t');
+		$this->db->join('tiendas t', 't.id = u_t.tienda_id');
+		$this->db->join('tienda_virtual t_v', 't_v.tienda_id = t.id');
+		$this->db->where('u_t.user_id =', $this->session->userdata['logged_in']['id']);
+		$query = $this->db->get();
         if ($query->num_rows() > 0)
             return $query->result();
         else
