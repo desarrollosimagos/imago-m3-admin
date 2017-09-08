@@ -101,10 +101,10 @@
 						<!-- Tabla de tiendas -->
 						<hr>
 						<div class="ibox-title">
-							<h5>Asociar Tiendas <small></small></h5>
+							<h5>Asociar Tiendas Virtuales<small></small></h5>
 						</div>
 						<div class="col-md-2">
-							<label class="control-label" >Tienda</label>
+							<label class="control-label" >Tienda Virtual</label>
 							<select class="form-control" name="tiendav_id" id="tiendav_id">
 								<option value="0" selected="">Seleccione</option>
 								<?php foreach ($listar_tiendas as $tienda) { ?>
