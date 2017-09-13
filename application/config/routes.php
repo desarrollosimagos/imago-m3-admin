@@ -152,3 +152,4 @@ $route['assets/(:any)'] = 'assets/$1';
 $route['mercado/update'] = 'CApis/mlibre';
 $route['olx/update'] = 'CApis/mlibre';
 $route['prestashop/update'] = 'CApis/mlibre';
+$route['product/get_json/(:num)'] = 'CApis/product/$1';
