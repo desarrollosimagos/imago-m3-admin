@@ -159,5 +159,13 @@ Class CApis extends CI_Controller {
 		
 		echo count($productos);
 	}
+	
+	// Genera un json con los datos de un producto por id dado
+	public function product()
+    {
+		$data['id'] = $this->uri->segment(3);
+        $result = $this->MProductos->obtenerProductos($data['id']);
+        echo json_encode($result);
+    }
 
 }
