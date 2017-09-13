@@ -22,6 +22,21 @@ class MProductos extends CI_Model {
             return $query->result();
     }
 
+    //Public method to obtain the productos
+    public function obtenerByUser() {
+        //~ $query = $this->db->get('productos');
+        $this->db->select('p.id, p.nombre, p.referencia, p.costo_dolar, p.costo_bolivar, p.unidad_medida, p.tienda_id, p.c_compra, p.c_vende, p.c_fabrica, p.modificado');
+		$this->db->from('users_tiendas u_t');
+		$this->db->join('tiendas t', 't.id = u_t.tienda_id');
+		$this->db->join('productos p', 'p.tienda_id = t.id');
+        $this->db->where('u_t.user_id =', $this->session->userdata['logged_in']['id']);
+		$query = $this->db->get();
+        if ($query->num_rows() > 0)
+            return $query->result();
+        else
+            return $query->result();
+    }
+
     //Public method to obtain the units
     public function obtener_unidades() {
         $query = $this->db->get('measurement_units');
@@ -36,6 +51,20 @@ class MProductos extends CI_Model {
     public function obtener_tiendas() {
         $query = $this->db->get('tienda_virtual');
 
+        if ($query->num_rows() > 0)
+            return $query->result();
+        else
+            return $query->result();
+    }
+    
+    // Método publico, para obtener las tiendas físicas asociadas al usuario logueado
+    public function obtener_tiendas_fisicas() {
+        //~ $query = $this->db->get('tiendas');
+		$this->db->select('t.id, t.rif, t.name');
+		$this->db->from('users_tiendas u_t');
+		$this->db->join('tiendas t', 't.id = u_t.tienda_id');
+		$this->db->where('u_t.user_id =', $this->session->userdata['logged_in']['id']);
+		$query = $this->db->get();
         if ($query->num_rows() > 0)
             return $query->result();
         else

@@ -66,17 +66,17 @@
 								</select>
 							</div>
 						</div>
-						<!--<div class="form-group">
+						<div class="form-group">
 							<label class="col-sm-2 control-label" >Tienda *</label>
 							<div class="col-sm-6">
-								<select class="form-control m-b" name="tiendav_id" id="tiendav_id">
+								<select class="form-control m-b" name="tienda_id" id="tienda_id">
 									<option value="0" selected="">Seleccione</option>
-									<?php foreach ($listar_tiendas as $tienda) { ?>
-										<option value="<?php echo $tienda->id ?>"><?php echo $tienda->nombre; ?></option>
+									<?php foreach ($listar_tiendas_fisicas as $tienda) { ?>
+										<option value="<?php echo $tienda->id ?>"><?php echo $tienda->rif." - ".$tienda->name; ?></option>
 									<?php } ?>
 								</select>
 							</div>
-						</div>-->
+						</div>
 						<div class="form-group">
 							<label class="col-sm-2 control-label" >Se compra:</label>
 							<div class="col-sm-1">
@@ -175,6 +175,7 @@
                                 <input type="hidden" id="codigos_des1" name="codigos_des1" placeholder="Códigos">
 								<input class="form-control"  type='hidden' id="id" name="id" value="<?php echo $id ?>"/>
 								<input id="id_unidad_medida" type="hidden" value="<?php echo $editar[0]->unidad_medida ?>"/>
+								<input id="id_tienda" type="hidden" value="<?php echo $editar[0]->tienda_id ?>"/>
 								<button class="btn btn-white" id="volver" type="button">Volver</button>
 								<button class="btn btn-primary" id="edit" type="submit">Guardar</button>
 							</div>
@@ -202,7 +203,7 @@ $(document).ready(function(){
     
     // Auto-selección de combos con las opciones correspondientes
     $("#unidad_medida").select2('val', $("#id_unidad_medida").val());
-    //~ $("#tiendav_id").select2('val', $("#id_tienda").val());
+    $("#tienda_id").select2('val', $("#id_tienda").val());
 	
 	$("#costo_dolar,#costo_bolivar").numeric(); //Valida solo permite valores numéricos
 	
@@ -271,11 +272,11 @@ $(document).ready(function(){
 			$('#unidad_medida').parent('div').addClass('has-error');
 			$('#unidad_medida').focus();
 			
-        } /*else if ($('#tiendav_id').val().trim() == "0") {
+        } else if ($('#tiendav_id').val().trim() == "0") {
 			swal("Disculpe,", "para continuar debe seleccionar la tienda");
 			$('#tiendav_id').parent('div').addClass('has-error');
 			
-        }*/ else {
+        } else {
             
             // Formateamos los precios para usar coma en vez de punto
             //~ $("#costo_dolar").val(String($("#costo_dolar").val()).replace('.',','));

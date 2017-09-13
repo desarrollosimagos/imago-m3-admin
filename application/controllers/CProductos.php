@@ -14,9 +14,10 @@ class CProductos extends CI_Controller {
 	public function index()
 	{
 		$this->load->view('base');
-		$data['listar'] = $this->MProductos->obtener();
+		$data['listar'] = $this->MProductos->obtenerByUser();
 		$data['listar_unidades'] = $this->MProductos->obtener_unidades();
 		$data['listar_tiendas'] = $this->MProductos->obtener_tiendas();
+		$data['listar_tiendas_fisicas'] = $this->MProductos->obtener_tiendas_fisicas();
 		$this->load->view('productos/lista', $data);
 		$this->load->view('footer');
 	}
@@ -26,6 +27,7 @@ class CProductos extends CI_Controller {
 		$this->load->view('base');
 		$data['listar_unidades'] = $this->MProductos->obtener_unidades();
 		$data['listar_tiendas'] = $this->MProductos->obtener_tiendas();
+		$data['listar_tiendas_fisicas'] = $this->MProductos->obtener_tiendas_fisicas();
 		$this->load->view('productos/registrar', $data);
 		$this->load->view('footer');
 	}
@@ -105,6 +107,7 @@ class CProductos extends CI_Controller {
         $data['editar'] = $this->MProductos->obtenerProductos($data['id']);
         $data['listar_unidades'] = $this->MProductos->obtener_unidades();
         $data['listar_tiendas'] = $this->MProductos->obtener_tiendas_fil();
+        $data['listar_tiendas_fisicas'] = $this->MProductos->obtener_tiendas_fisicas();
         $data['tiendas_asociadas'] = $this->MProductos->obtenerTiendas($data['id']);
         $this->load->view('productos/editar', $data);
 		$this->load->view('footer');
