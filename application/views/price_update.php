@@ -72,11 +72,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 	<div id="body">
 		<?php
-		if(isset($num_act) && isset($errores)){
+		if(isset($num_act) && isset($errores) && isset($registros)){
 		?>
 		<p>Productos actualizados: <?php echo $num_act; ?></p>
 
 		<p>Productos sin actualizar: <?php echo $errores; ?></p>
+		
+		<p>Productos registrados: <?php echo $registros; ?></p>
 		<?php
 		}else{
 		?>
