@@ -41,6 +41,7 @@
                                     <th>API Cliente</th>
                                     <th>App</th>
                                     <th>Aplicación</th>
+                                    <th>Fórmula</th>
                                     <th>Editar</th>
                                     <th>Eliminar</th>
                                     <th>Actualizar</th>
@@ -101,6 +102,9 @@
 												}
 											}
 											?>
+                                        </td>
+                                        <td>
+                                            <?php echo $tienda->formula; ?>
                                         </td>
                                         <td style='text-align: center'>
                                             <a href="<?php echo base_url() ?>tiendasv/edit/<?= $tienda->id; ?>" title="Editar" style='color: #1ab394'><i class="fa fa-edit fa-2x"></i></a>
@@ -166,6 +170,7 @@ $(document).ready(function(){
             {"sClass": "registro center", "sWidth": "10%"},
             {"sClass": "none", "sWidth": "10%"},
             {"sClass": "registro center", "sWidth": "10%"},
+            {"sClass": "none", "sWidth": "10%"},
             {"sClass": "none", "sWidth": "10%"},
             {"sClass": "none", "sWidth": "10%"},
             {"sClass": "none", "sWidth": "10%"},
