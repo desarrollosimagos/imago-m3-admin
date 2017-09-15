@@ -44,6 +44,7 @@ class CTiendasVirtuales extends CI_Controller {
             'cliente_api_id' => $_POST['cliente_api_id'],
             'app_id' => $_POST['app_id'],
             'aplicacion_id' => $_POST['aplicacion_id'],
+            'formula' => $_POST['formula'],
             'status' => 1
         );
         
@@ -79,6 +80,7 @@ class CTiendasVirtuales extends CI_Controller {
             'cliente_api_id' => $_POST['cliente_api_id'],
             'app_id' => $_POST['app_id'],
             'aplicacion_id' => $_POST['aplicacion_id'],
+            'formula' => $_POST['formula'],
             'status' => 1,
             'd_update' => date('Y-m-d')." ".date("H:i:s")
         );

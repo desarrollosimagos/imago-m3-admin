@@ -101,6 +101,12 @@
 							</div>
 						</div>
 						<div class="form-group">
+							<label class="col-sm-2 control-label">Formula</label>
+							<div class="col-sm-6">
+								<input type="text" class="form-control" maxlength="20" name="formula" id="formula" value="<?php echo $editar[0]->formula ?>">
+							</div>
+						</div>
+						<div class="form-group">
 							<div class="col-sm-4 col-sm-offset-2">
 								 <input class="form-control" type='hidden' id="id" name="id" value="<?php echo $id ?>"/>
 								 <input id="id_tienda" type="hidden" value="<?php echo $editar[0]->tienda_id ?>"/>

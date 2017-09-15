@@ -40,9 +40,16 @@ Class CApis extends CI_Controller {
 				$errores = 0;  // Número de errores (Actualizaciones fallidas)
 				$num_act = 0;  // Actualizaciones exitosas
 				foreach($productos as $producto){
-
-					$body = array('price' => $producto->precio);
-
+					// Si la tienda virtual tiene fómula especificada le añadimos el cálculo de élla como comisión al precio del producto
+					if($datosb_tienda[0]->formula == ""){
+						$body = array('price' => $producto->precio);
+					}else{
+						$precio = $datosb_tienda[0]->formula;
+						$p = $producto->precio;
+						$f_precio = str_replace('P',$p,$precio);
+						eval("\$result = $f_precio;");
+						$body = array('price' => $result);
+					}
 					$response = $meli->put('/items/'.$producto->referencia, $body, $params);
 					//~ print_r($response);
 					//~ echo $response['httpCode'];
@@ -100,8 +107,17 @@ Class CApis extends CI_Controller {
 						$errores = 0;  // Número de errores (Actualizaciones fallidas)
 						$num_act = 0;  // Actualizaciones exitosas
 						foreach($productos as $producto){
-
-							$body = array('price' => $producto->precio);
+							// Si la tienda virtual tiene fómula especificada le añadimos el cálculo de élla como comisión al precio del producto
+							if($datosb_tienda[0]->formula == ""){
+								$body = array('price' => $producto->precio);
+							}else{
+								$precio = $datosb_tienda[0]->formula;
+								$p = $producto->precio;
+								$f_precio = str_replace('P',$p,$precio);
+								eval("\$result = $f_precio;");
+								$body = array('price' => $result);
+							}
+							//~ $body = array('price' => $producto->precio);
 
 							$response = $meli->put('/items/'.$producto->referencia, $body, $params);
 							//~ print_r($response);
