@@ -272,7 +272,7 @@ $(document).ready(function(){
 			$('#unidad_medida').parent('div').addClass('has-error');
 			$('#unidad_medida').focus();
 			
-        } else if ($('#tiendav_id').val().trim() == "0") {
+        } else if ($('#tienda_id').val().trim() == "0") {
 			swal("Disculpe,", "para continuar debe seleccionar la tienda");
 			$('#tiendav_id').parent('div').addClass('has-error');
 			
@@ -364,6 +364,7 @@ $(document).ready(function(){
 				cantidad = 1;
 			}
 			var botonQuitar = "<a  style='color: #1ab394' class='quitar'><i class='fa fa-trash fa-2x'></i></a>";
+			var checkboxActualizar = "<input type='checkbox' id='price_"+tiendav_id+"x' class='check'>";
 			
 			// Añadimos la tienda a la tabla (primero verificamos si aún no está añadida)
 			var num_apariciones = 0;
@@ -375,8 +376,12 @@ $(document).ready(function(){
 				}
 			});
 			if(num_apariciones == 0){
-				var i = table.row.add([tienda, referencia_tienda, precio, cantidad, botonQuitar]).draw();
-				table.rows(i).nodes().to$().attr("id", tiendav_id);
+				var i = table.row.add([tienda, referencia_tienda, precio, cantidad, botonQuitar, checkboxActualizar]).draw();
+				table.rows(i).nodes().to$().attr("id", tiendav_id);  // Asignamos el id al tr de la fila agregada
+				//~ alert(table.rows(i).nodes().to$().find("td").eq(1).text());
+				// Asignamos un id a la celda (columna) correpondiente al precio de la fila agregada
+				// Este id será para identificar el precio de una tienda recien añadida y sin guardar
+				table.rows(i).nodes().to$().find("td").eq(2).attr("id", 'price_'+tiendav_id+'x_column');
 			}else{
 				swal("Disculpe,", "la tienda ya se encuentra en la lista");
 			}
@@ -426,7 +431,9 @@ $(document).ready(function(){
             check.prop("checked", "checked");  // Marcamos nuevamente el checkbox
             // Volvemos editable la columna correspondiente
 			var valor_bs = column.text();
-            column.html("<input type='text' value='"+valor_bs.trim()+"' size='8px'>");
+			var id_new_input = "id='"+id+"_input'"  // Asignamos un id al input compuesto del id del checkbox marcado más el sufijo '_input'
+            column.html("<input "+id_new_input+" type='text' value='"+valor_bs.trim()+"' size='8px'>");
+            $("#"+id+"_input").numeric();
         }else{
 			accion = 'desmarcar';
 			//~ alert(accion);
