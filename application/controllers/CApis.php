@@ -39,6 +39,7 @@ Class CApis extends CI_Controller {
 				$i = 0;
 				$errores = 0;  // Número de errores (Actualizaciones fallidas)
 				$num_act = 0;  // Actualizaciones exitosas
+				$num_reg = 0;  // Registros exitosos
 				foreach($productos as $producto){
 					// Si la tienda virtual tiene fómula especificada le añadimos el cálculo de élla como comisión al precio del producto
 					if($datosb_tienda[0]->formula == ""){
@@ -55,6 +56,51 @@ Class CApis extends CI_Controller {
 					//~ echo $response['httpCode'];
 					if(isset($response['body']->error)){
 						$errores++;
+						if($response['body']->error == 'not_found'){
+							// Consultamos los detalles del producto
+							$datos_producto = $this->MProductos->obtenerProductos($producto->producto_id);  // Detalles del producto
+							// Procedemos a registrar el nuevo producto en la tienda virtual de mercado libre
+							// Constriumos el item a enviar
+							$item = array(
+								"title" => $datos_producto[0]->nombre,
+								"category_id" => "MLV1227",
+								"price" => $datos_producto[0]->costo_bolivar,
+								"currency_id" => "VEF",
+								"available_quantity" => $producto->cantidad,
+								"buying_mode" => "buy_it_now",
+								"listing_type_id" => "bronze",
+								"condition" => "new",
+								"description" => "Item:, <strong> Ray-Ban WAYFARER Gloss Black RB2140 901 </strong> Model: RB2140. Size: 50mm. Name: WAYFARER. Color: Gloss Black. Includes Ray-Ban Carrying Case and Cleaning Cloth. New in Box",
+								"video_id" => "RXWn6kftTHY",
+								//~ "warranty" => "12 month by Ray Ban",
+								"pictures" => array(
+									array(
+										"source" => "https://upload.wikimedia.org/wikipedia/commons/f/fd/Ray_Ban_Original_Wayfarer.jpg"
+									),
+									array(
+										"source" => "https://upload.wikimedia.org/wikipedia/commons/a/ab/Teashades.gif"
+									)
+								)
+							);
+							
+							// Ejecutamos el método de envío de ítems
+							$response_reg = $meli->post('/items', $item, $params);
+							// Aumentamos el contador de registros si el ítem fue registrado correctamente
+							if($response_reg['httpCode'] == '201'){
+								$num_reg++;
+								//~ print_r($response_reg);
+								// Actualizamos el código de referencia en la tabla de asociaciones de productos con tiendas virtuales 'productos_tiendav'
+								$cod_ref = $response_reg['body']->id;
+								//~ $cod_ref = explode('MLV', $cod_ref);
+								//~ $cod_ref = $cod_ref[1];
+								$data_referencia = array(
+									'producto_id' => $producto->producto_id, 
+									'tiendav_id' => $id,
+									'referencia' => $cod_ref
+								);
+								$update_referencia = $this->MTiendasVirtuales->update_tp($data_referencia);
+							}
+						}
 					}
 					if($response['httpCode'] == '200'){
 						$num_act++;
@@ -67,6 +113,7 @@ Class CApis extends CI_Controller {
 				$data['mensaje'] = "Ha actualizado los precios con exito!";
 				$data['num_act'] = $num_act;
 				$data['errores'] = $errores;
+				$data['registros'] = $num_reg;
 				$this->load->view('price_update', $data);
 				$this->load->view('footer');
 			}else{
@@ -106,6 +153,7 @@ Class CApis extends CI_Controller {
 						$i = 0;
 						$errores = 0;  // Número de errores (Actualizaciones fallidas)
 						$num_act = 0;  // Actualizaciones exitosas
+						$num_reg = 0;  // Registros exitosos
 						foreach($productos as $producto){
 							// Si la tienda virtual tiene fómula especificada le añadimos el cálculo de élla como comisión al precio del producto
 							if($datosb_tienda[0]->formula == ""){
@@ -124,6 +172,51 @@ Class CApis extends CI_Controller {
 							//~ echo $response['httpCode'];
 							if(isset($response['body']->error)){
 								$errores++;
+								if($response['body']->error == 'not_found'){
+									// Consultamos los detalles del producto
+									$datos_producto = $this->MProductos->obtenerProductos($producto->producto_id);  // Detalles del producto
+									// Procedemos a registrar el nuevo producto en la tienda virtual de mercado libre
+									// Constriumos el item a enviar
+									$item = array(
+										"title" => $datos_producto[0]->nombre,
+										"category_id" => "MLV1227",
+										"price" => $datos_producto[0]->costo_bolivar,
+										"currency_id" => "VEF",
+										"available_quantity" => $producto->cantidad,
+										"buying_mode" => "buy_it_now",
+										"listing_type_id" => "bronze",
+										"condition" => "new",
+										"description" => "Item:, <strong> Ray-Ban WAYFARER Gloss Black RB2140 901 </strong> Model: RB2140. Size: 50mm. Name: WAYFARER. Color: Gloss Black. Includes Ray-Ban Carrying Case and Cleaning Cloth. New in Box",
+										"video_id" => "RXWn6kftTHY",
+										//~ "warranty" => "12 month by Ray Ban",
+										"pictures" => array(
+											array(
+												"source" => "https://upload.wikimedia.org/wikipedia/commons/f/fd/Ray_Ban_Original_Wayfarer.jpg"
+											),
+											array(
+												"source" => "https://upload.wikimedia.org/wikipedia/commons/a/ab/Teashades.gif"
+											)
+										)
+									);
+									
+									// Ejecutamos el método de envío de items
+									$response_reg = $meli->post('/items', $item, $params);
+									// Aumentamos el contador de registros si el ítem fue registrado correctamente
+									if($response_reg['httpCode'] == '201'){
+										$num_reg++;
+										//~ print_r($response_reg);
+										// Actualizamos el código de referencia en la tabla de asociaciones de productos con tiendas virtuales 'productos_tiendav'
+										$cod_ref = $response_reg['body']->id;
+										//~ $cod_ref = explode('MLV', $cod_ref);
+										//~ $cod_ref = $cod_ref[1];
+										$data_referencia = array(
+											'producto_id' => $producto->producto_id, 
+											'tiendav_id' => $id,
+											'referencia' => $cod_ref
+										);
+										$update_referencia = $this->MTiendasVirtuales->update_tp($data_referencia);
+									}
+								}
 							}
 							if($response['httpCode'] == '200'){
 								$num_act++;
@@ -136,6 +229,7 @@ Class CApis extends CI_Controller {
 						$data['mensaje'] = "Ha actualizado los precios con exito!";
 						$data['num_act'] = $num_act;
 						$data['errores'] = $errores;
+						$data['registros'] = $num_reg;
 						$this->load->view('price_update', $data);
 						$this->load->view('footer');
 					}else{

@@ -100,6 +100,13 @@ class MTiendasVirtuales extends CI_Model {
         }
     }
 
+    // Public method to update a record of the table 'productos_tienda'
+    public function update_tp($datos) {
+		$result = $this->db->where('producto_id', $datos['producto_id']);
+		$result = $this->db->where('tiendav_id', $datos['tiendav_id']);
+		$result = $this->db->update('productos_tiendav', $datos);
+		return $result;
+    }
 
     // Public method to delete a record
      public function delete($id) {
