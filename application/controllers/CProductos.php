@@ -47,6 +47,7 @@ class CProductos extends CI_Controller {
 		$datos = array(
             'nombre' => $_POST['nombre'],
             'referencia' => $_POST['referencia'],
+            'descripcion' => $_POST['descripcion'],
             'costo_dolar' => $_POST['costo_dolar'],
             'costo_bolivar' => $_POST['costo_bolivar'],
             'unidad_medida' => $_POST['unidad_medida'],
@@ -60,6 +61,34 @@ class CProductos extends CI_Controller {
         $result = $this->MProductos->insert($datos);
         
         echo $result;  // No comentar, esta impresión es necesaria para que se ejecute el método insert()
+        
+        // Si el producto fue registrado satisfactoriamente registramos las fotos
+        if($result != 'existe'){
+			// Sección para el registro del archivo en la ruta establecida para tal fin (assets/img/productos)
+			$ruta = getcwd();  // Obtiene el directorio actual en donde se esta trabajando
+			//~ print_r($_FILES);
+			$i = 0;
+			foreach($_FILES['imagen']['name'] as $imagen){
+				if($imagen != ""){
+					// Obtenemos la extensión
+					$ext = explode(".",$imagen);
+					$ext = $ext[1];
+					$datos2 = array(
+						'producto_id' => $result,
+						'foto' => "foto".($i+1)."_".$result.".".$ext,
+						'd_create' => date('Y-m-d')
+					);
+					$insertar_foto = $this->MProductos->insert_foto($datos2);
+					if (move_uploaded_file($_FILES['imagen']['tmp_name'][$i], $ruta."/assets/img/productos/foto".($i+1)."_".$result.".".$ext)) {
+						echo "El fichero es válido y se subió con éxito.\n";
+					} else {
+						echo "¡Posible ataque de subida de ficheros!\n";
+					}
+					
+					$i++;
+				}
+			}
+		}
     }
     
     // Método para asociar tiendas a un producto
@@ -109,6 +138,7 @@ class CProductos extends CI_Controller {
         $data['listar_tiendas'] = $this->MProductos->obtener_tiendas_fil();
         $data['listar_tiendas_fisicas'] = $this->MProductos->obtener_tiendas_fisicas();
         $data['tiendas_asociadas'] = $this->MProductos->obtenerTiendas($data['id']);
+        $data['fotos_asociadas'] = $this->MProductos->obtenerFotos($data['id']);
         $this->load->view('productos/editar', $data);
 		$this->load->view('footer');
     }
@@ -129,6 +159,7 @@ class CProductos extends CI_Controller {
             'id' => $_POST['id'],
             'nombre' => $_POST['nombre'],
             'referencia' => $_POST['referencia'],
+            'descripcion' => $_POST['descripcion'],
             'costo_dolar' => $_POST['costo_dolar'],
             'costo_bolivar' => $_POST['costo_bolivar'],
             'unidad_medida' => $_POST['unidad_medida'],
@@ -139,7 +170,34 @@ class CProductos extends CI_Controller {
             'modificado' => date('Y-m-d')
         );
         
-        $result = $this->MProductos->update($datos);	
+        $result = $this->MProductos->update($datos);
+        
+        if($result){
+			// Sección para el registro del archivo en la ruta establecida para tal fin (assets/img/productos)
+			$ruta = getcwd();  // Obtiene el directorio actual en donde se esta trabajando
+			print_r($_FILES);
+			$i = 0;
+			foreach($_FILES['imagen']['name'] as $imagen){
+				if($imagen != ""){
+					// Obtenemos la extensión
+					$ext = explode(".",$imagen);
+					$ext = $ext[1];
+					$datos2 = array(
+						'producto_id' => $_POST['id'],
+						'foto' => "foto".($i+1)."_".$_POST['id'].".".$ext,
+						'd_create' => date('Y-m-d')
+					);
+					$insertar_foto = $this->MProductos->insert_foto($datos2);
+					if (move_uploaded_file($_FILES['imagen']['tmp_name'][$i], $ruta."/assets/img/productos/foto".($i+1)."_".$_POST['id'].".".$ext)) {
+						echo "El fichero es válido y se subió con éxito.\n";
+					} else {
+						echo "¡Posible ataque de subida de ficheros!\n";
+					}
+					
+					$i++;
+				}
+			}
+		}
 	}
 	
 	// Método para actualizar desde la lista
@@ -172,7 +230,7 @@ class CProductos extends CI_Controller {
 	// Método para eliminar
 	function delete($id) {
 		
-        $result1 = $this->MProductos->delete_pt_associated($id);  // Primero borramos los registros asociados en la tabla 'productos_tienda'
+        $result1 = $this->MProductos->delete_pt_associated($id);  // Primero borramos los registros asociados en la tabla 'productos_tiendav'
         
         $result2 = $this->MProductos->delete($id);  // Borramos el producto
     }

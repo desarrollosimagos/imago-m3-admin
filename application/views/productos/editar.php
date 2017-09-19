@@ -30,147 +30,243 @@
 				</div>
 				<div class="ibox-content">
 					<form id="form_productos" method="post" accept-charset="utf-8" class="form-horizontal">
-						<div class="form-group">
-							<label class="col-sm-2 control-label" >Nombre *</label>
-							<div class="col-sm-10">
-								<input type="text" class="form-control" name="nombre" id="nombre" maxlength="150" value="<?php echo $editar[0]->nombre ?>">
+						<ul class="nav nav-tabs">
+						  <li class="active"><a data-toggle="tab" href="#home">Datos</a></li>
+						  <li><a data-toggle="tab" href="#disponibilidad">Disponibilidad</a></li>
+						  <li><a data-toggle="tab" href="#menu1">Fotos</a></li>
+						  <li><a data-toggle="tab" href="#menu2">Asociar Tiendas Virtuales</a></li>
+						</ul>
+						
+						<!-- Tab content -->
+						<div class="tab-content">
+							
+							<!-- Datos -->
+							<div id="home" class="tab-pane fade in active">
+								<br>
+								<div class="col-lg-6">
+									<div class="form-group">
+										<label class="col-sm-2 control-label" >Nombre *</label>
+										<div class="col-sm-10">
+											<input type="text" class="form-control" name="nombre" id="nombre" maxlength="150" value="<?php echo $editar[0]->nombre ?>">
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-sm-2 control-label" >Referencia *</label>
+										<div class="col-sm-10">
+											<input type="text" class="form-control" name="referencia" id="referencia" maxlength="150" value="<?php echo $editar[0]->referencia ?>">
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-sm-2 control-label" >Descripción</label>
+										<div class="col-sm-10">
+											<input type="text" class="form-control" name="descripcion" id="descripcion" maxlength="150" value="<?php echo $editar[0]->descripcion ?>">
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-sm-2 control-label" >Tienda *</label>
+										<div class="col-sm-6">
+											<select class="form-control m-b" name="tienda_id" id="tienda_id">
+												<option value="0" selected="">Seleccione</option>
+												<?php foreach ($listar_tiendas_fisicas as $tienda) { ?>
+													<option value="<?php echo $tienda->id ?>"><?php echo $tienda->rif." - ".$tienda->name; ?></option>
+												<?php } ?>
+											</select>
+										</div>
+									</div>
+								</div>
+								<div class="col-lg-6">
+									<div class="form-group">
+										<label class="col-sm-2 control-label" >Precio en Dólares *</label>
+										<div class="col-sm-6">
+											<input type="text" class="form-control" name="costo_dolar" id="costo_dolar" maxlength="11" value="<?php echo $editar[0]->costo_dolar ?>">
+											<label id="label_precio_dolar" style="color:red;"></label>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-sm-2 control-label" >Precio en Bolívares *</label>
+										<div class="col-sm-6">
+											<input type="text" class="form-control" name="costo_bolivar" id="costo_bolivar" maxlength="11" value="<?php echo $editar[0]->costo_bolivar ?>">
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-sm-2 control-label" >Unidades de medida *</label>
+										<div class="col-sm-6">
+											<select class="form-control m-b" name="unidad_medida" id="unidad_medida">
+												<option value="0" selected="">Seleccione</option>
+												<?php foreach ($listar_unidades as $unidad) { ?>
+													<option value="<?php echo $unidad->id ?>"><?php echo $unidad->name." - ".$unidad->symbol; ?></option>
+												<?php } ?>
+											</select>
+										</div>
+									</div>
+								</div>
 							</div>
+							
+							<!-- Disponibilidad -->
+							<div id="disponibilidad" class="tab-pane fade">
+								<br>
+								<div class="form-group col-lg-12">
+									<label class="col-sm-2 control-label" >Se compra:</label>
+									<div class="col-sm-1">
+										<input type="checkbox" class="form-control" name="c_compra" id="c_compra" <?php if($editar[0]->c_compra == 1){ echo "checked='checked'"; }?>>
+									</div>
+								</div>
+								<div class="form-group col-lg-12">
+									<label class="col-sm-2 control-label" >Se vende:</label>
+									<div class="col-sm-1">
+										<input type="checkbox" class="form-control" name="c_vende" id="c_vende" <?php if($editar[0]->c_vende == 1){ echo "checked='checked'"; }?>>
+									</div>
+								</div>
+								<div class="form-group col-lg-12">
+									<label class="col-sm-2 control-label" >Se fabrica:</label>
+									<div class="col-sm-1">
+										<input type="checkbox" class="form-control" name="c_fabrica" id="c_fabrica" <?php if($editar[0]->c_fabrica == 1){ echo "checked='checked'"; }?>>
+									</div>
+								</div>
+							</div>
+							
+							<!-- Fotos -->
+							<div id="menu1" class="tab-pane fade">
+								<br>
+								<?php //print_r($fotos_asociadas); echo count($fotos_asociadas);?>
+								<div class="col-lg-6">
+									<div class="form-group"><label class="col-sm-2 control-label" >Nueva Foto 1</label>
+										<div class="col-sm-10">
+											<input type="file" class="form-control" name="imagen[]" onChange="valida_tipo($(this))">
+										</div>
+									</div>
+									<div class="form-group"><label class="col-sm-2 control-label" >Nueva Foto 2</label>
+										<div class="col-sm-10">
+											<input type="file" class="form-control" name="imagen[]" onChange="valida_tipo($(this))">
+										</div>
+									</div>
+									<div class="form-group"><label class="col-sm-2 control-label" >Nueva Foto 3</label>
+										<div class="col-sm-10">
+											<input type="file" class="form-control" name="imagen[]" onChange="valida_tipo($(this))">
+										</div>
+									</div>
+									<div class="form-group"><label class="col-sm-2 control-label" >Nueva Foto 4</label>
+										<div class="col-sm-10">
+											<input type="file" class="form-control" name="imagen[]" onChange="valida_tipo($(this))">
+										</div>
+									</div>
+								</div>
+								<div class="col-lg-6">
+									<div class="form-group">
+										<div class="col-sm-3">
+											<?php if(count($fotos_asociadas) > 0){ ?>
+											<label class="col-sm-2 control-label" >Foto 1</label>
+											<img style="height:100px;width:100px;" src="<?php echo base_url(); ?>assets/img/productos/<?php echo $fotos_asociadas[0]->foto; ?>">
+											<?php } ?>
+										</div>
+										<div class="col-sm-3">
+											<?php if(count($fotos_asociadas) > 1){ ?>
+											<label class="col-sm-2 control-label" >Foto 2</label>
+											<img style="height:100px;width:100px;" src="<?php echo base_url(); ?>assets/img/productos/<?php echo $fotos_asociadas[1]->foto; ?>">
+											<?php } ?>
+										</div>
+										<div class="col-sm-3">
+											<?php if(count($fotos_asociadas) > 2){ ?>
+											<label class="col-sm-2 control-label" >Foto 3</label>
+											<img style="height:100px;width:100px;" src="<?php echo base_url(); ?>assets/img/productos/<?php echo $fotos_asociadas[2]->foto; ?>">
+											<?php } ?>
+										</div>
+										<div class="col-sm-3">
+											<?php if(count($fotos_asociadas) > 3){ ?>
+											<label class="col-sm-2 control-label" >Foto 4</label>
+											<img style="height:100px;width:100px;" src="<?php echo base_url(); ?>assets/img/productos/<?php echo $fotos_asociadas[3]->foto; ?>">
+											<?php } ?>
+										</div>
+									</div>
+								</div>
+							</div>
+							
+							<!-- Asociar tiendas virtuales -->
+							<div id="menu2" class="tab-pane fade">
+								<br>
+								
+								<!-- Form Tabla de tiendas -->
+								<div class="col-lg-12">
+									<div class="ibox-title">
+										<h5>Asociar Tiendas Virtuales<small></small></h5>
+									</div>
+									<div class="col-md-2">
+										<label class="control-label" >Tienda Virtual</label>
+										<select class="form-control" name="tiendav_id" id="tiendav_id">
+											<option value="0" selected="">Seleccione</option>
+											<?php foreach ($listar_tiendas as $tienda) { ?>
+												<option value="<?php echo $tienda->id ?>"><?php echo $tienda->nombre; ?></option>
+											<?php } ?>
+										</select>
+									</div>
+									<div class="col-md-2">
+										<label class="control-label" >Referencia</label>
+										<input type="text" class="form-control input-sm" name="referencia_tienda" id="referencia_tienda">
+									</div>
+									<div class="col-md-2">
+										<label class="control-label" >Precio</label>
+										<input type="text" class="form-control input-sm" name="precio" id="precio" value="<?php echo $editar[0]->costo_bolivar ?>">
+									</div>
+									<div class="col-md-2">
+										<label class="control-label" >Cantidad</label>
+										<input type="text" class="form-control input-sm" name="cantidad" id="cantidad" value="1">
+									</div>
+									<div class="col-md-2">
+										<label style="font-weight:bold"></label>
+										<br>
+										<button type="button" class="btn btn-w-m btn-primary" id="i_new_line"><i class="fa fa-plus"></i>&nbsp;Agregar Tienda</button>
+									</div>
+								</div>
+								
+								<!-- Tabla tiendas -->
+								<div class="table-responsive col-md-12">
+									<table style="width: 100%" class="tab_tiendas table dataTable table-striped table-bordered dt-responsive jambo_table bulk_action" id="tab_tiendas">
+										<thead>
+											<tr>
+												<th>Tienda</th>
+												<!--<th>Precio</th>
+												<th>Impuesto</th>-->
+												<th>Referencia</th>
+												<th>Precio</th>
+												<th>Cantidad</th>
+												<th>Eliminar</th>
+												<th>Actualizar</th>
+											</tr>
+										</thead>
+										<tbody>
+											<?php foreach ($tiendas_asociadas as $tienda) { ?>
+												<tr id="<?php echo $tienda->tiendav_id; ?>">
+													<td style='text-align: center' id="<?php echo $tienda->id; ?>">
+													<?php foreach ($listar_tiendas as $tienda2) {
+														if ($tienda->tiendav_id == $tienda2->id){
+															echo $tienda2->nombre."<br>";
+														}
+													}?></td>
+													<td style='text-align: center'><?php echo $tienda->referencia; ?></td>
+													<td style='text-align: center' id="price_<?php echo $tienda->id;?>_column">
+													<?php echo $tienda->precio; ?>
+													</td>
+													<td style='text-align: center'><?php echo $tienda->cantidad; ?></td>
+													<td style='text-align: center'><a  style="color: #1ab394" class='quitar' id="<?php echo $tienda->id; ?>"><i class='fa fa-trash fa-2x'></i></a></td>
+													<td>
+														<input type="checkbox" id="price_<?php echo $tienda->id;?>" class="check">
+													</td>
+												</tr>
+											<?php } ?>
+										</tbody>
+									</table>
+								</div>
+								
+							</div>
+						
 						</div>
-						<div class="form-group">
-							<label class="col-sm-2 control-label" >Referencia *</label>
-							<div class="col-sm-10">
-								<input type="text" class="form-control" name="referencia" id="referencia" maxlength="150" value="<?php echo $editar[0]->referencia ?>">
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-sm-2 control-label" >Precio en Dólares *</label>
-							<div class="col-sm-6">
-								<input type="text" class="form-control" name="costo_dolar" id="costo_dolar" maxlength="11" value="<?php echo $editar[0]->costo_dolar ?>">
-								<label id="label_precio_dolar" style="color:red;"></label>
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-sm-2 control-label" >Precio en Bolívares *</label>
-							<div class="col-sm-6">
-								<input type="text" class="form-control" name="costo_bolivar" id="costo_bolivar" maxlength="11" value="<?php echo $editar[0]->costo_bolivar ?>">
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-sm-2 control-label" >Unidades de medida *</label>
-							<div class="col-sm-6">
-								<select class="form-control m-b" name="unidad_medida" id="unidad_medida">
-									<option value="0" selected="">Seleccione</option>
-									<?php foreach ($listar_unidades as $unidad) { ?>
-										<option value="<?php echo $unidad->id ?>"><?php echo $unidad->name." - ".$unidad->symbol; ?></option>
-									<?php } ?>
-								</select>
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-sm-2 control-label" >Tienda *</label>
-							<div class="col-sm-6">
-								<select class="form-control m-b" name="tienda_id" id="tienda_id">
-									<option value="0" selected="">Seleccione</option>
-									<?php foreach ($listar_tiendas_fisicas as $tienda) { ?>
-										<option value="<?php echo $tienda->id ?>"><?php echo $tienda->rif." - ".$tienda->name; ?></option>
-									<?php } ?>
-								</select>
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-sm-2 control-label" >Se compra:</label>
-							<div class="col-sm-1">
-								<input type="checkbox" class="form-control" name="c_compra" id="c_compra" <?php if($editar[0]->c_compra == 1){ echo "checked='checked'"; }?>>
-							</div>
-							<label class="col-sm-2 control-label" >Se vende:</label>
-							<div class="col-sm-1">
-								<input type="checkbox" class="form-control" name="c_vende" id="c_vende" <?php if($editar[0]->c_vende == 1){ echo "checked='checked'"; }?>>
-							</div>
-							<label class="col-sm-2 control-label" >Se fabrica:</label>
-							<div class="col-sm-1">
-								<input type="checkbox" class="form-control" name="c_fabrica" id="c_fabrica" <?php if($editar[0]->c_fabrica == 1){ echo "checked='checked'"; }?>>
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-sm-2 control-label" >Modificado *</label>
-							<div class="col-sm-6">
-								<input type="text" class="form-control" name="modificado" id="modificado" readonly="true" value="<?php echo $editar[0]->modificado ?>">
-							</div>
-						</div>
+						<!-- Cierre Tab content -->
+						
 						<br>
-						<!-- Tabla de tiendas -->
-						<hr>
-						<div class="ibox-title">
-							<h5>Asociar Tiendas Virtuales<small></small></h5>
-						</div>
-						<div class="col-md-2">
-							<label class="control-label" >Tienda Virtual</label>
-							<select class="form-control" name="tiendav_id" id="tiendav_id">
-								<option value="0" selected="">Seleccione</option>
-								<?php foreach ($listar_tiendas as $tienda) { ?>
-									<option value="<?php echo $tienda->id ?>"><?php echo $tienda->nombre; ?></option>
-								<?php } ?>
-							</select>
-						</div>
-						<div class="col-md-2">
-							<label class="control-label" >Referencia</label>
-							<input type="text" class="form-control input-sm" name="referencia_tienda" id="referencia_tienda">
-						</div>
-						<div class="col-md-2">
-							<label class="control-label" >Precio</label>
-							<input type="text" class="form-control input-sm" name="precio" id="precio" value="<?php echo $editar[0]->costo_bolivar ?>">
-						</div>
-						<div class="col-md-2">
-							<label class="control-label" >Cantidad</label>
-							<input type="text" class="form-control input-sm" name="cantidad" id="cantidad" value="1">
-						</div>
-						<div class="col-md-2">
-							<label style="font-weight:bold"></label>
-							<br>
-							<button type="button" class="btn btn-w-m btn-primary" id="i_new_line"><i class="fa fa-plus"></i>&nbsp;Agregar Tienda</button>
-						</div>
-						<div class="table-responsive col-md-12">
-							<table style="width: 100%" class="tab_tiendas table dataTable table-striped table-bordered dt-responsive jambo_table bulk_action" id="tab_tiendas">
-								<thead>
-									<tr>
-										<th>Tienda</th>
-										<!--<th>Precio</th>
-										<th>Impuesto</th>-->
-										<th>Referencia</th>
-										<th>Precio</th>
-										<th>Cantidad</th>
-										<th>Eliminar</th>
-										<th>Actualizar</th>
-									</tr>
-								</thead>
-								<tbody>
-									<?php foreach ($tiendas_asociadas as $tienda) { ?>
-										<tr id="<?php echo $tienda->tiendav_id; ?>">
-											<td style='text-align: center' id="<?php echo $tienda->id; ?>">
-											<?php foreach ($listar_tiendas as $tienda2) {
-												if ($tienda->tiendav_id == $tienda2->id){
-													echo $tienda2->nombre."<br>";
-												}
-											}?></td>
-											<td style='text-align: center'><?php echo $tienda->referencia; ?></td>
-											<td style='text-align: center' id="price_<?php echo $tienda->id;?>_column">
-											<?php echo $tienda->precio; ?>
-											</td>
-											<td style='text-align: center'><?php echo $tienda->cantidad; ?></td>
-											<td style='text-align: center'><a  style="color: #1ab394" class='quitar' id="<?php echo $tienda->id; ?>"><i class='fa fa-trash fa-2x'></i></a></td>
-											<td>
-												<input type="checkbox" id="price_<?php echo $tienda->id;?>" class="check">
-											</td>
-										</tr>
-									<?php } ?>
-								</tbody>
-							</table>
-						</div>
-						<!-- Tabla de tiendas -->
 						<br>
-						<br>
+						<!-- Enviar-->
 						<div class="form-group">
-							<div class="col-sm-4 col-sm-offset-2">
+							<div class="col-sm-12">
 								<!--Campo para almacenar los códigos de los registros a desasociar-->
                                 <input type="hidden" id="codigos_des1" name="codigos_des1" placeholder="Códigos">
 								<input class="form-control"  type='hidden' id="id" name="id" value="<?php echo $id ?>"/>
@@ -285,7 +381,19 @@ $(document).ready(function(){
             //~ alert($("#costo_dolar").val());
             //~ alert($("#costo_bolivar").val());
             
-            $.post('<?php echo base_url(); ?>CProductos/update', $("#form_productos").serialize(), function (response) {
+            var formData = new FormData(document.getElementById("form_productos"));  // Forma de capturar todos los datos del formulario
+			
+			$.ajax({
+				//~ method: "POST",
+				type: "post",
+				dataType: "html",
+				url: '<?php echo base_url(); ?>CProductos/update',
+				data: formData,
+				cache: false,
+				contentType: false,
+				processData: false
+			})
+			.done(function(response) {
 				if (response[0] == '1') {
 					swal("Disculpe,", "este producto se encuentra registrado");
 				}else{
@@ -331,8 +439,59 @@ $(document).ready(function(){
 							window.location.href = '<?php echo base_url(); ?>productos';
 						});
 					});
-				}
+				}				
+			}).fail(function() {
+				console.log("error ajax");
 			});
+            
+            //~ $.post('<?php echo base_url(); ?>CProductos/update', $("#form_productos").serialize(), function (response) {
+				//~ if (response[0] == '1') {
+					//~ swal("Disculpe,", "este producto se encuentra registrado");
+				//~ }else{
+					//~ // Asociamos las tiendas al producto
+					//~ var data = [];
+					//~ $("#tab_tiendas tbody tr").each(function () {
+						//~ var id_tienda, tienda_text, referencia_t;
+						//~ id_tienda = $(this).attr('id');  // id tienda
+						//~ tienda_text = $(this).find('td').eq(0).attr('id'); //text tienda
+						//~ referencia_t = $(this).find('td').eq(1).text();
+						//~ if($(this).find('td').eq(2).find('input').val() == undefined){
+							//~ precio = $(this).find('td').eq(2).text().trim();
+							//~ if(precio == ""){precio = 0;}
+						//~ }else if($(this).find('td').eq(2).find('input').val() == ""){
+							//~ precio = 0;
+						//~ }else{
+							//~ precio = $(this).find('td').eq(2).find('input').val().trim();
+						//~ }
+						//~ alert(precio);
+						//~ cantidad = $(this).find('td').eq(3).text();
+//~ 
+						//~ campos = { "id_tienda" : id_tienda, "tienda" : tienda_text, "referencia" : referencia_t, "precio" : precio, "cantidad" : cantidad }
+						//~ data.push(campos);
+//~ 
+					//~ });
+					//~ 
+					//~ // Borramos la asociación con las tiendas quitadas de la lista
+					//~ if ($("#codigos_des1").val() != '') {
+						//~ $.post('<?php echo base_url(); ?>CProductos/unassociate_stores', {'id_producto':$("#id").val(), 'codigos_des1':$("#codigos_des1").val()}, function (response2) {
+						//~ 
+						//~ });
+					//~ }
+					//~ 
+					//~ // Registramos la asociación con las tiendas de la lista
+					//~ $.post('<?php echo base_url(); ?>CProductos/associate_stores', {'id_producto':$("#id").val(), 'tiendas':data}, function (response2) {
+						//~ swal({
+							//~ title: "Registro",
+							 //~ text: "Actualizado con exito",
+							  //~ type: "success" 
+							//~ },
+						//~ function(){						
+							//~ // Reiniciamos
+							//~ window.location.href = '<?php echo base_url(); ?>productos';
+						//~ });
+					//~ });
+				//~ }
+			//~ });
         }
     });
     
@@ -445,5 +604,23 @@ $(document).ready(function(){
 	});
 	
 });
+
+// Validamos que los archivos sean de tipo .jpg, jpeg o png
+function valida_tipo(input) {
+	
+	var max_size = '';
+	var archivo = input.val();
+	
+	var ext = archivo.split(".");
+	ext = ext[1];
+	
+	if (ext != 'jpg' && ext != 'jpeg' && ext != 'png'){
+		swal("Disculpe,", "sólo se admiten archivos .jpg, .jpeg y png");
+		input.val('');
+		input.parent('div').addClass('has-error');
+	}else{
+		input.parent('div').removeClass('has-error');
+	}
+};
 
 </script>
