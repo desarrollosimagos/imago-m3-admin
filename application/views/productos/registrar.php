@@ -26,67 +26,127 @@
 				</div>
 				<div class="ibox-content">
 					<form id="form_productos" method="post" accept-charset="utf-8" class="form-horizontal">
+						<ul class="nav nav-tabs">
+						  <li class="active"><a data-toggle="tab" href="#home">Datos</a></li>
+						  <li><a data-toggle="tab" href="#disponibilidad">Disponibilidad</a></li>
+						  <li><a data-toggle="tab" href="#menu1">Fotos</a></li>
+						</ul>
+
+						<div class="tab-content">
+							
+							<!-- Datos -->
+							<div id="home" class="tab-pane fade in active">
+								<br>
+								<div class="col-lg-6">
+									<div class="form-group">
+										<label class="col-sm-2 control-label" >Nombre *</label>
+										<div class="col-sm-10">
+											<input type="text" class="form-control"  maxlength="100" name="nombre" id="nombre">
+										</div>
+									</div>
+									<div class="form-group"><label class="col-sm-2 control-label" >Referencia *</label>
+										<div class="col-sm-10">
+											<input type="text" class="form-control"  name="referencia" maxlength="150" id="referencia">
+										</div>
+									</div>
+									<div class="form-group"><label class="col-sm-2 control-label" >Descripción *</label>
+										<div class="col-sm-10">
+											<input type="text" class="form-control"  name="descripcion" maxlength="150" id="descripcion">
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-sm-2 control-label" >Tienda *</label>
+										<div class="col-sm-10">
+											<select class="form-control m-b" name="tienda_id" id="tienda_id">
+												<option value="0" selected="">Seleccione</option>
+												<?php foreach ($listar_tiendas_fisicas as $tienda) { ?>
+													<option value="<?php echo $tienda->id ?>"><?php echo $tienda->rif." - ".$tienda->name; ?></option>
+												<?php } ?>
+											</select>
+										</div>
+									</div>
+								</div>
+								<div class="col-lg-6">
+									<div class="form-group"><label class="col-sm-2 control-label" >Precio en Dólares *</label>
+										<div class="col-sm-10">
+											<input type="text" class="form-control"  name="costo_dolar" maxlength="11" id="costo_dolar">
+											<label id="label_precio_dolar" style="color:red;"></label>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-sm-2 control-label">Precio en Bolívares *</label>
+										<div class="col-sm-10">
+											<input type="text" class="form-control" maxlength="11" name="costo_bolivar" id="costo_bolivar">
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-sm-2 control-label" >Unidades de medida *</label>
+										<div class="col-sm-10">
+											<select class="form-control m-b" name="unidad_medida" id="unidad_medida">
+												<option value="0" selected="">Seleccione</option>
+												<?php foreach ($listar_unidades as $unidad) { ?>
+													<option value="<?php echo $unidad->id ?>"><?php echo $unidad->name." - ".$unidad->symbol; ?></option>
+												<?php } ?>
+											</select>
+										</div>
+									</div>
+								</div>
+							</div>
+							
+							<!-- Disponibilidad -->
+							<div id="disponibilidad" class="tab-pane fade">
+								<br>
+								<div class="form-group col-lg-12">
+									<label class="col-sm-2 control-label" >Se compra:</label>
+									<div class="col-sm-1">
+										<input type="checkbox" class="form-control" name="c_compra" id="c_compra">
+									</div>
+								</div>
+								<div class="form-group col-lg-12">
+									<label class="col-sm-2 control-label" >Se vende:</label>
+									<div class="col-sm-1">
+										<input type="checkbox" class="form-control" name="c_vende" id="c_vende">
+									</div>
+								</div>
+								<div class="form-group col-lg-12">
+									<label class="col-sm-2 control-label" >Se fabrica:</label>
+									<div class="col-sm-1">
+										<input type="checkbox" class="form-control" name="c_fabrica" id="c_fabrica">
+									</div>
+								</div>
+							</div>
+							
+							<!-- Fotos -->
+							<div id="menu1" class="tab-pane fade">
+								<br>
+								<div class="col-lg-6">
+									<div class="form-group"><label class="col-sm-2 control-label" >Foto Principal</label>
+										<div class="col-sm-10">
+											<input type="file" class="form-control" name="imagen[]" onChange="valida_tipo($(this))">
+										</div>
+									</div>
+									<div class="form-group"><label class="col-sm-2 control-label" >Foto 2</label>
+										<div class="col-sm-10">
+											<input type="file" class="form-control" name="imagen[]" onChange="valida_tipo($(this))">
+										</div>
+									</div>
+									<div class="form-group"><label class="col-sm-2 control-label" >Foto 3</label>
+										<div class="col-sm-10">
+											<input type="file" class="form-control" name="imagen[]" onChange="valida_tipo($(this))">
+										</div>
+									</div>
+									<div class="form-group"><label class="col-sm-2 control-label" >Foto 4</label>
+										<div class="col-sm-10">
+											<input type="file" class="form-control" name="imagen[]" onChange="valida_tipo($(this))">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						
+						<!-- Enviar-->
 						<div class="form-group">
-							<label class="col-sm-2 control-label" >Nombre *</label>
-							<div class="col-sm-10">
-								<input type="text" class="form-control"  maxlength="100" name="nombre" id="nombre">
-							</div>
-						</div>
-						<div class="form-group"><label class="col-sm-2 control-label" >Referencia *</label>
-							<div class="col-sm-10">
-								<input type="text" class="form-control"  name="referencia" maxlength="150" id="referencia">
-							</div>
-						</div>
-						<div class="form-group"><label class="col-sm-2 control-label" >Precio en Dólares *</label>
-							<div class="col-sm-6">
-								<input type="text" class="form-control"  name="costo_dolar" maxlength="11" id="costo_dolar">
-								<label id="label_precio_dolar" style="color:red;"></label>
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-sm-2 control-label">Precio en Bolívares *</label>
-							<div class="col-sm-6">
-								<input type="text" class="form-control" maxlength="11" name="costo_bolivar" id="costo_bolivar">
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-sm-2 control-label" >Unidades de medida *</label>
-							<div class="col-sm-6">
-								<select class="form-control m-b" name="unidad_medida" id="unidad_medida">
-									<option value="0" selected="">Seleccione</option>
-									<?php foreach ($listar_unidades as $unidad) { ?>
-										<option value="<?php echo $unidad->id ?>"><?php echo $unidad->name." - ".$unidad->symbol; ?></option>
-									<?php } ?>
-								</select>
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-sm-2 control-label" >Tienda *</label>
-							<div class="col-sm-6">
-								<select class="form-control m-b" name="tienda_id" id="tienda_id">
-									<option value="0" selected="">Seleccione</option>
-									<?php foreach ($listar_tiendas_fisicas as $tienda) { ?>
-										<option value="<?php echo $tienda->id ?>"><?php echo $tienda->rif." - ".$tienda->name; ?></option>
-									<?php } ?>
-								</select>
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-sm-2 control-label" >Se compra:</label>
-							<div class="col-sm-1">
-								<input type="checkbox" class="form-control" name="c_compra" id="c_compra">
-							</div>
-							<label class="col-sm-2 control-label" >Se vende:</label>
-							<div class="col-sm-1">
-								<input type="checkbox" class="form-control" name="c_vende" id="c_vende">
-							</div>
-							<label class="col-sm-2 control-label" >Se fabrica:</label>
-							<div class="col-sm-1">
-								<input type="checkbox" class="form-control" name="c_fabrica" id="c_fabrica">
-							</div>
-						</div>
-						<div class="form-group">
-							<div class="col-sm-4 col-sm-offset-2">
+							<div class="col-sm-12">
 								<button class="btn btn-white" id="volver" type="button">Volver</button>
 								<button class="btn btn-primary" id="registrar" type="submit">Guardar</button>
 							</div>
@@ -160,21 +220,6 @@ $(document).ready(function(){
 			$('#tienda_id').parent('div').addClass('has-error');
 			
         } else {
-
-            //~ $.post('<?php echo base_url(); ?>CProductos/add', $('#form_productos').serialize(), function (response) {
-				//~ if (response[0] == '1') {
-                    //~ swal("Disculpe,", "este nombre se encuentra registrado");
-                //~ }else{
-					//~ swal({ 
-						//~ title: "Registro",
-						 //~ text: "Guardado con exito",
-						  //~ type: "success" 
-						//~ },
-					//~ function(){
-					  //~ window.location.href = '<?php echo base_url(); ?>productos';
-					//~ });
-				//~ }
-            //~ });
             
             // Formateamos los precios para usar coma en vez de punto
             //~ $("#costo_dolar").val(String($("#costo_dolar").val()).replace('.',','));
@@ -217,6 +262,25 @@ $(document).ready(function(){
 			});
         }
     });
+    
 });
+
+// Validamos que los archivos sean de tipo .jpg, jpeg o png
+function valida_tipo(input) {
+	
+	var max_size = '';
+	var archivo = input.val();
+	
+	var ext = archivo.split(".");
+	ext = ext[1];
+	
+	if (ext != 'jpg' && ext != 'jpeg' && ext != 'png'){
+		swal("Disculpe,", "sólo se admiten archivos .jpg, .jpeg y png");
+		input.val('');
+		input.parent('div').addClass('has-error');
+	}else{
+		input.parent('div').removeClass('has-error');
+	}
+};
 
 </script>

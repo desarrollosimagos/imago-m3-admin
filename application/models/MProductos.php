@@ -25,7 +25,7 @@ class MProductos extends CI_Model {
     //Public method to obtain the productos
     public function obtenerByUser() {
         //~ $query = $this->db->get('productos');
-        $this->db->select('p.id, p.nombre, p.referencia, p.costo_dolar, p.costo_bolivar, p.unidad_medida, p.tienda_id, p.c_compra, p.c_vende, p.c_fabrica, p.modificado');
+        $this->db->select('p.id, p.nombre, p.referencia, p.descripcion, p.costo_dolar, p.costo_bolivar, p.unidad_medida, p.tienda_id, p.c_compra, p.c_vende, p.c_fabrica, p.modificado');
 		$this->db->from('users_tiendas u_t');
 		$this->db->join('tiendas t', 't.id = u_t.tienda_id');
 		$this->db->join('productos p', 'p.tienda_id = t.id');
@@ -108,6 +108,26 @@ class MProductos extends CI_Model {
             return $id;
         }
     }
+
+    // Public method to insert the data
+    public function insert_foto($datos) {
+		// Primero obtenemos el nombre de la foto sin extensión para que no haya riesgo de duplicado
+		$without_ext = explode(".",$datos['foto']);
+		$without_ext = $without_ext[0];
+        $result = $this->db->where('producto_id =', $datos['producto_id']);
+        $result = $this->db->like('foto', $without_ext);
+        $result = $this->db->get('fotos');
+        if ($result->num_rows() > 0) {
+			$result = $this->db->where('producto_id =', $datos['producto_id']);
+			$result = $this->db->like('foto', $without_ext);
+			$result = $this->db->update("fotos", $datos);
+            return 'existe';
+        } else {
+            $result = $this->db->insert("fotos", $datos);
+            $id = $this->db->insert_id();
+            return $id;
+        }
+    }
     
     // Método público, forma de insertar los datos de la asociación entre productos y tiendas
     public function insertTiendas($datos) {
@@ -129,6 +149,16 @@ class MProductos extends CI_Model {
     public function obtenerProductos($id) {
         $this->db->where('id', $id);
         $query = $this->db->get('productos');
+        if ($query->num_rows() > 0)
+            return $query->result();
+        else
+            return $query->result();
+    }
+
+    // Public method to obtain the productos by id
+    public function obtenerFotos($producto_id) {
+        $this->db->where('producto_id', $producto_id);
+        $query = $this->db->get('fotos');
         if ($query->num_rows() > 0)
             return $query->result();
         else

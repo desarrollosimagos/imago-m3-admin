@@ -131,6 +131,33 @@
     </div>
 </div>
 
+<!-- Modal -->
+<div class="modal fade" id="cargando" role="dialog">
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content">
+			<!--<div class="modal-header">
+			  <button type="button" class="close" data-dismiss="modal">&times;</button>
+			  <h4 class="modal-title">Modal Header</h4>
+			</div>-->
+			<div class="modal-body">
+				<!-- Imagen de carga -->
+				<div class="col-md-12" id="resultado">
+					<div>
+						<i class="fa fa-refresh fa-spin">
+							
+						</i>
+						<span>Validando...</span>
+					</div>
+				</div>
+				<!-- Imagen de carga -->
+			</div>
+			<!--<div class="modal-footer">
+			  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>-->
+		</div>
+	</div>
+</div>
+
 
  <!-- Page-Level Scripts -->
 <script>

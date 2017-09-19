@@ -43,13 +43,16 @@ Class CApis extends CI_Controller {
 				foreach($productos as $producto){
 					// Si la tienda virtual tiene fómula especificada le añadimos el cálculo de élla como comisión al precio del producto
 					if($datosb_tienda[0]->formula == ""){
-						$body = array('price' => $producto->precio);
+						$result = $producto->precio;
+						$body = array('price' => $result);
+						//~ $body = array('description' => 'prueba');
 					}else{
 						$precio = $datosb_tienda[0]->formula;
 						$p = $producto->precio;
 						$f_precio = str_replace('P',$p,$precio);
 						eval("\$result = $f_precio;");
 						$body = array('price' => $result);
+						//~ $body = array('description' => 'prueba');
 					}
 					$response = $meli->put('/items/'.$producto->referencia, $body, $params);
 					//~ print_r($response);
@@ -59,28 +62,27 @@ Class CApis extends CI_Controller {
 						if($response['body']->error == 'not_found'){
 							// Consultamos los detalles del producto
 							$datos_producto = $this->MProductos->obtenerProductos($producto->producto_id);  // Detalles del producto
+							// Consultamos las fotos del producto
+							$fotos_producto = $this->MProductos->obtenerFotos($producto->producto_id);  // Fotos del producto
+							$lista_fotos = array();
+							foreach($fotos_producto as $fotos){
+								$lista_fotos[] = array("source"=>base_url()."assets/img/productos/".$fotos->foto);
+							}
 							// Procedemos a registrar el nuevo producto en la tienda virtual de mercado libre
 							// Constriumos el item a enviar
 							$item = array(
 								"title" => $datos_producto[0]->nombre,
 								"category_id" => "MLV1227",
-								"price" => $datos_producto[0]->costo_bolivar,
+								"price" => $result,
 								"currency_id" => "VEF",
 								"available_quantity" => $producto->cantidad,
 								"buying_mode" => "buy_it_now",
 								"listing_type_id" => "bronze",
 								"condition" => "new",
-								"description" => "Item:, <strong> Ray-Ban WAYFARER Gloss Black RB2140 901 </strong> Model: RB2140. Size: 50mm. Name: WAYFARER. Color: Gloss Black. Includes Ray-Ban Carrying Case and Cleaning Cloth. New in Box",
-								"video_id" => "RXWn6kftTHY",
+								"description" => $datos_producto[0]->descripcion,
+								//~ "video_id" => "RXWn6kftTHY",
 								//~ "warranty" => "12 month by Ray Ban",
-								"pictures" => array(
-									array(
-										"source" => "https://upload.wikimedia.org/wikipedia/commons/f/fd/Ray_Ban_Original_Wayfarer.jpg"
-									),
-									array(
-										"source" => "https://upload.wikimedia.org/wikipedia/commons/a/ab/Teashades.gif"
-									)
-								)
+								"pictures" => $lista_fotos  // Arreglo con lista de fotos
 							);
 							
 							// Ejecutamos el método de envío de ítems
@@ -157,13 +159,16 @@ Class CApis extends CI_Controller {
 						foreach($productos as $producto){
 							// Si la tienda virtual tiene fómula especificada le añadimos el cálculo de élla como comisión al precio del producto
 							if($datosb_tienda[0]->formula == ""){
-								$body = array('price' => $producto->precio);
+								$result = $producto->precio;
+								$body = array('price' => $result);
+								//~ $body = array('description' => 'prueba');
 							}else{
 								$precio = $datosb_tienda[0]->formula;
 								$p = $producto->precio;
 								$f_precio = str_replace('P',$p,$precio);
 								eval("\$result = $f_precio;");
 								$body = array('price' => $result);
+								//~ $body = array('description' => 'prueba');
 							}
 							//~ $body = array('price' => $producto->precio);
 
@@ -172,31 +177,31 @@ Class CApis extends CI_Controller {
 							//~ echo $response['httpCode'];
 							if(isset($response['body']->error)){
 								$errores++;
+								//~ print_r($response);
 								if($response['body']->error == 'not_found'){
 									// Consultamos los detalles del producto
 									$datos_producto = $this->MProductos->obtenerProductos($producto->producto_id);  // Detalles del producto
+									// Consultamos las fotos del producto
+									$fotos_producto = $this->MProductos->obtenerFotos($producto->producto_id);  // Fotos del producto
+									$lista_fotos = array();
+									foreach($fotos_producto as $fotos){
+										$lista_fotos[] = array("source"=>base_url()."assets/img/productos/".$fotos->foto);
+									}
 									// Procedemos a registrar el nuevo producto en la tienda virtual de mercado libre
 									// Constriumos el item a enviar
 									$item = array(
 										"title" => $datos_producto[0]->nombre,
 										"category_id" => "MLV1227",
-										"price" => $datos_producto[0]->costo_bolivar,
+										"price" => $result,
 										"currency_id" => "VEF",
 										"available_quantity" => $producto->cantidad,
 										"buying_mode" => "buy_it_now",
 										"listing_type_id" => "bronze",
 										"condition" => "new",
-										"description" => "Item:, <strong> Ray-Ban WAYFARER Gloss Black RB2140 901 </strong> Model: RB2140. Size: 50mm. Name: WAYFARER. Color: Gloss Black. Includes Ray-Ban Carrying Case and Cleaning Cloth. New in Box",
-										"video_id" => "RXWn6kftTHY",
+										"description" => $datos_producto[0]->descripcion,
+										//~ "video_id" => "RXWn6kftTHY",
 										//~ "warranty" => "12 month by Ray Ban",
-										"pictures" => array(
-											array(
-												"source" => "https://upload.wikimedia.org/wikipedia/commons/f/fd/Ray_Ban_Original_Wayfarer.jpg"
-											),
-											array(
-												"source" => "https://upload.wikimedia.org/wikipedia/commons/a/ab/Teashades.gif"
-											)
-										)
+										"pictures" => $lista_fotos  // Arreglo con lista de fotos
 									);
 									
 									// Ejecutamos el método de envío de items
