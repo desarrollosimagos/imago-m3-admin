@@ -175,7 +175,7 @@ class CProductos extends CI_Controller {
         if($result){
 			// Sección para el registro del archivo en la ruta establecida para tal fin (assets/img/productos)
 			$ruta = getcwd();  // Obtiene el directorio actual en donde se esta trabajando
-			print_r($_FILES);
+			//~ print_r($_FILES);
 			$i = 0;
 			foreach($_FILES['imagen']['name'] as $imagen){
 				if($imagen != ""){
