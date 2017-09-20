@@ -47,7 +47,7 @@ Class Basicauth
 						// Listamos las tiendas asociadas
 						$ids_serv = array();  // Variable para almacenar los ids de los servicios y filtrar los repetidos
 						foreach($query_user_tienda->result() as $tienda){
-							print $tienda->tienda_id;
+							//~ print $tienda->tienda_id;
 							$query_tienda = $this->CI->db->get_where('tiendas', array('id'=>$tienda->tienda_id));
 							//~ print_r($query_tienda->result());
 							$tiendas[] = $query_tienda->result();
