@@ -44,14 +44,16 @@ Class CApis extends CI_Controller {
 					// Si la tienda virtual tiene fómula especificada le añadimos el cálculo de élla como comisión al precio del producto
 					if($datosb_tienda[0]->formula == ""){
 						$result = $producto->precio;
-						$body = array('price' => $result);
+						//~ $body = array('price' => $result);
+						$body = array('price' => $result, 'available_quantity' => $producto->cantidad);
 						//~ $body = array('description' => 'prueba');
 					}else{
 						$precio = $datosb_tienda[0]->formula;
 						$p = $producto->precio;
 						$f_precio = str_replace('P',$p,$precio);
 						eval("\$result = $f_precio;");
-						$body = array('price' => $result);
+						//~ $body = array('price' => $result);
+						$body = array('price' => $result, 'available_quantity' => $producto->cantidad);
 						//~ $body = array('description' => 'prueba');
 					}
 					$response = $meli->put('/items/'.$producto->referencia, $body, $params);
@@ -160,14 +162,16 @@ Class CApis extends CI_Controller {
 							// Si la tienda virtual tiene fómula especificada le añadimos el cálculo de élla como comisión al precio del producto
 							if($datosb_tienda[0]->formula == ""){
 								$result = $producto->precio;
-								$body = array('price' => $result);
+								//~ $body = array('price' => $result);
+								$body = array('price' => $result, 'available_quantity' => $producto->cantidad);
 								//~ $body = array('description' => 'prueba');
 							}else{
 								$precio = $datosb_tienda[0]->formula;
 								$p = $producto->precio;
 								$f_precio = str_replace('P',$p,$precio);
 								eval("\$result = $f_precio;");
-								$body = array('price' => $result);
+								//~ $body = array('price' => $result);
+								$body = array('price' => $result, 'available_quantity' => $producto->cantidad);
 								//~ $body = array('description' => 'prueba');
 							}
 							//~ $body = array('price' => $producto->precio);
@@ -177,6 +181,7 @@ Class CApis extends CI_Controller {
 							//~ echo $response['httpCode'];
 							if(isset($response['body']->error)){
 								$errores++;
+								//~ echo $producto->referencia;
 								//~ print_r($response);
 								if($response['body']->error == 'not_found'){
 									// Consultamos los detalles del producto
