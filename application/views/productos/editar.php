@@ -59,7 +59,8 @@
 									<div class="form-group">
 										<label class="col-sm-2 control-label" >Descripción</label>
 										<div class="col-sm-10">
-											<input type="text" class="form-control" name="descripcion" id="descripcion" maxlength="150" value="<?php echo $editar[0]->descripcion ?>">
+											<!--<input type="text" class="form-control" name="descripcion" id="descripcion" maxlength="150" value="<?php echo $editar[0]->descripcion ?>">-->
+											<textarea name="descripcion" id="descripcion" cols="52"><?php echo $editar[0]->descripcion ?></textarea>
 										</div>
 									</div>
 									<div class="form-group">
