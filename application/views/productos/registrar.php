@@ -49,9 +49,10 @@
 											<input type="text" class="form-control"  name="referencia" maxlength="150" id="referencia">
 										</div>
 									</div>
-									<div class="form-group"><label class="col-sm-2 control-label" >Descripción *</label>
+									<div class="form-group"><label class="col-sm-2 control-label" >Descripción</label>
 										<div class="col-sm-10">
-											<input type="text" class="form-control"  name="descripcion" maxlength="150" id="descripcion">
+											<!--<input type="text" class="form-control"  name="descripcion" maxlength="150" id="descripcion">-->
+											<textarea name="descripcion" id="descripcion" cols="52"></textarea>
 										</div>
 									</div>
 									<div class="form-group">
