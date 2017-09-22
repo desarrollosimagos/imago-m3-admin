@@ -41,20 +41,27 @@ Class CApis extends CI_Controller {
 				$num_act = 0;  // Actualizaciones exitosas
 				$num_reg = 0;  // Registros exitosos
 				foreach($productos as $producto){
+					// Consultamos los detalles del producto
+					$datos_producto = $this->MProductos->obtenerProductos($producto->producto_id);  // Detalles del producto
+					// Consultamos las fotos del producto
+					$fotos_producto = $this->MProductos->obtenerFotos($producto->producto_id);  // Fotos del producto
+					$lista_fotos = array();
+					foreach($fotos_producto as $fotos){
+						$lista_fotos[] = array("source"=>base_url()."assets/img/productos/".$fotos->foto);
+					}
+					// Armamos la descripción a enviar
+					$desc = $datos_producto[0]->descripcion;
+					
 					// Si la tienda virtual tiene fómula especificada le añadimos el cálculo de élla como comisión al precio del producto
 					if($datosb_tienda[0]->formula == ""){
 						$result = $producto->precio;
-						//~ $body = array('price' => $result);
-						$body = array('price' => $result, 'available_quantity' => $producto->cantidad);
-						//~ $body = array('description' => 'prueba');
+						$body = array('price' => round($result, 2), 'available_quantity' => $producto->cantidad);
 					}else{
 						$precio = $datosb_tienda[0]->formula;
 						$p = $producto->precio;
 						$f_precio = str_replace('P',$p,$precio);
 						eval("\$result = $f_precio;");
-						//~ $body = array('price' => $result);
-						$body = array('price' => $result, 'available_quantity' => $producto->cantidad);
-						//~ $body = array('description' => 'prueba');
+						$body = array('price' => round($result, 2), 'available_quantity' => $producto->cantidad);
 					}
 					$response = $meli->put('/items/'.$producto->referencia, $body, $params);
 					//~ print_r($response);
@@ -62,26 +69,18 @@ Class CApis extends CI_Controller {
 					if(isset($response['body']->error)){
 						$errores++;
 						if($response['body']->error == 'not_found'){
-							// Consultamos los detalles del producto
-							$datos_producto = $this->MProductos->obtenerProductos($producto->producto_id);  // Detalles del producto
-							// Consultamos las fotos del producto
-							$fotos_producto = $this->MProductos->obtenerFotos($producto->producto_id);  // Fotos del producto
-							$lista_fotos = array();
-							foreach($fotos_producto as $fotos){
-								$lista_fotos[] = array("source"=>base_url()."assets/img/productos/".$fotos->foto);
-							}
 							// Procedemos a registrar el nuevo producto en la tienda virtual de mercado libre
 							// Constriumos el item a enviar
 							$item = array(
 								"title" => $datos_producto[0]->nombre,
 								"category_id" => "MLV1227",
-								"price" => $result,
+								"price" => round($result, 2),
 								"currency_id" => "VEF",
 								"available_quantity" => $producto->cantidad,
 								"buying_mode" => "buy_it_now",
 								"listing_type_id" => "bronze",
 								"condition" => "new",
-								"description" => $datos_producto[0]->descripcion,
+								"description" => $desc,
 								//~ "video_id" => "RXWn6kftTHY",
 								//~ "warranty" => "12 month by Ray Ban",
 								"pictures" => $lista_fotos  // Arreglo con lista de fotos
@@ -104,6 +103,13 @@ Class CApis extends CI_Controller {
 								);
 								$update_referencia = $this->MTiendasVirtuales->update_tp($data_referencia);
 							}
+						}
+					}else{
+						// Si no hubo errores en el envío del precio y la cantidad, entonces enviamos la descripción
+						$body = array('text' => $desc);
+						$response_desc = $meli->put('/items/'.$producto->referencia.'/description', $body, $params);
+						if(isset($response_desc['body']->error)){
+							print_r($response_desc);
 						}
 					}
 					if($response['httpCode'] == '200'){
@@ -159,20 +165,27 @@ Class CApis extends CI_Controller {
 						$num_act = 0;  // Actualizaciones exitosas
 						$num_reg = 0;  // Registros exitosos
 						foreach($productos as $producto){
+							// Consultamos los detalles del producto
+							$datos_producto = $this->MProductos->obtenerProductos($producto->producto_id);  // Detalles del producto
+							// Consultamos las fotos del producto
+							$fotos_producto = $this->MProductos->obtenerFotos($producto->producto_id);  // Fotos del producto
+							$lista_fotos = array();
+							foreach($fotos_producto as $fotos){
+								$lista_fotos[] = array("source"=>base_url()."assets/img/productos/".$fotos->foto);
+							}
+							// Armamos la descripción a enviar
+							$desc = $datos_producto[0]->descripcion;
+							
 							// Si la tienda virtual tiene fómula especificada le añadimos el cálculo de élla como comisión al precio del producto
 							if($datosb_tienda[0]->formula == ""){
 								$result = $producto->precio;
-								//~ $body = array('price' => $result);
-								$body = array('price' => $result, 'available_quantity' => $producto->cantidad);
-								//~ $body = array('description' => 'prueba');
+								$body = array('price' => round($result, 2), 'available_quantity' => $producto->cantidad);
 							}else{
 								$precio = $datosb_tienda[0]->formula;
 								$p = $producto->precio;
 								$f_precio = str_replace('P',$p,$precio);
 								eval("\$result = $f_precio;");
-								//~ $body = array('price' => $result);
-								$body = array('price' => $result, 'available_quantity' => $producto->cantidad);
-								//~ $body = array('description' => 'prueba');
+								$body = array('price' => round($result, 2), 'available_quantity' => $producto->cantidad);
 							}
 							//~ $body = array('price' => $producto->precio);
 
@@ -184,26 +197,18 @@ Class CApis extends CI_Controller {
 								//~ echo $producto->referencia;
 								//~ print_r($response);
 								if($response['body']->error == 'not_found'){
-									// Consultamos los detalles del producto
-									$datos_producto = $this->MProductos->obtenerProductos($producto->producto_id);  // Detalles del producto
-									// Consultamos las fotos del producto
-									$fotos_producto = $this->MProductos->obtenerFotos($producto->producto_id);  // Fotos del producto
-									$lista_fotos = array();
-									foreach($fotos_producto as $fotos){
-										$lista_fotos[] = array("source"=>base_url()."assets/img/productos/".$fotos->foto);
-									}
 									// Procedemos a registrar el nuevo producto en la tienda virtual de mercado libre
 									// Constriumos el item a enviar
 									$item = array(
 										"title" => $datos_producto[0]->nombre,
 										"category_id" => "MLV1227",
-										"price" => $result,
+										"price" => round($result, 2),
 										"currency_id" => "VEF",
 										"available_quantity" => $producto->cantidad,
 										"buying_mode" => "buy_it_now",
 										"listing_type_id" => "bronze",
 										"condition" => "new",
-										"description" => $datos_producto[0]->descripcion,
+										"description" => $desc,
 										//~ "video_id" => "RXWn6kftTHY",
 										//~ "warranty" => "12 month by Ray Ban",
 										"pictures" => $lista_fotos  // Arreglo con lista de fotos
@@ -226,6 +231,13 @@ Class CApis extends CI_Controller {
 										);
 										$update_referencia = $this->MTiendasVirtuales->update_tp($data_referencia);
 									}
+								}
+							}else{
+								// Si no hubo errores en el envío del precio y la cantidad, entonces enviamos la descripción
+								$body = array('text' => $desc);
+								$response_desc = $meli->put('/items/'.$producto->referencia.'/description', $body, $params);
+								if(isset($response_desc['body']->error)){
+									print_r($response_desc);
 								}
 							}
 							if($response['httpCode'] == '200'){
