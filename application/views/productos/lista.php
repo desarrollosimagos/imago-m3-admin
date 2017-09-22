@@ -62,7 +62,7 @@
                                         <td>
                                             <?php echo $perfil->referencia; ?>
                                         </td>
-                                        <td>
+                                        <td id="checkbox_<?php echo $perfil->id;?>_column_dl">
                                             <?php echo $perfil->costo_dolar; ?>
                                         </td>
                                         <td id="checkbox_<?php echo $perfil->id;?>_column">
@@ -233,7 +233,7 @@ $(document).ready(function(){
         });
     });
     
-    // Función para marcar/desmarcar los inputs y volver editable o no las celdas de Costo en Bolívares
+    // Función para marcar/desmarcar los inputs y volver editable o no las celdas de Costo en Dólares y Costo en Bolívares
 	$("table#tab_productos").on('change', 'input#check_all', function (e) {
 		e.preventDefault();
 		
@@ -244,27 +244,49 @@ $(document).ready(function(){
 		var accion = '';
 		if (check.is(':checked')) {
             accion = 'marcar';
-            //~ alert(accion);
             check.prop("checked", "checked");  // Marcamos nuevamente el checkbox
-            // Recorremos la tabla marcando todos los checkbox
+            // Recorremos la tabla marcando todos los checkbox y convirtiendo las columnas de costos en inputs editables
             $("#tab_productos tbody tr").each(function () {
 				$(this).find('td').find('input').prop("checked", "checked");
+				var id_dl = $(this).find('td').eq(4).attr('id');  // Id de la columna de dólares
+				id_dl = id_dl.replace("checkbox", "input");
+				var id_new_input_dl = "id='"+id_dl+"'"  // Asignamos un id al input compuesto del id del td padre pero reemplazando el prefijo 'checkbox' por 'input'
+				var id_bs = $(this).find('td').eq(5).attr('id');  // Id de la columna de bolívares
+				id_bs = id_bs.replace("checkbox", "input");
+				var id_new_input_bs = "id='"+id_bs+"'"  // Asignamos un id al input compuesto del id del td padre pero reemplazando el prefijo 'checkbox' por 'input'
+				// Campos de costos en dólares
+				var valor_dl = $(this).find('td').eq(4).text();
+				if(valor_dl == ""){
+					valor_dl = $(this).find('td').eq(4).find('input').val();
+					$(this).find('td').eq(4).html("<input "+id_new_input_dl+" type='text' value='"+valor_dl.trim()+"' size='8px' onChange='referenciar(\""+id_dl+"\")'>");
+					$(this).find('td').eq(4).find('input').numeric();
+				}else{
+					$(this).find('td').eq(4).html("<input "+id_new_input_dl+" type='text' value='"+valor_dl.trim()+"' size='8px' onChange='referenciar(\""+id_dl+"\")'>");
+					$(this).find('td').eq(4).find('input').numeric();
+				}
+				// Campos de costos en bolívares
 				var valor_bs = $(this).find('td').eq(5).text();
-				//~ alert(valor_bs);
 				if(valor_bs == ""){
 					valor_bs = $(this).find('td').eq(5).find('input').val()
-					$(this).find('td').eq(5).html("<input type='text' value='"+valor_bs.trim()+"' size='8px'>");
+					$(this).find('td').eq(5).html("<input "+id_new_input_bs+" type='text' value='"+valor_bs.trim()+"' size='8px'>");
+					$(this).find('td').eq(5).find('input').numeric();
 				}else{
-					$(this).find('td').eq(5).html("<input type='text' value='"+valor_bs.trim()+"' size='8px'>");
+					$(this).find('td').eq(5).html("<input "+id_new_input_bs+" type='text' value='"+valor_bs.trim()+"' size='8px'>");
+					$(this).find('td').eq(5).find('input').numeric();
 				}
 			});
         }else{
 			accion = 'desmarcar';
 			//~ alert(accion);
 			check.prop("checked", "");  // Desmarcamos nuevamente el checkbox
-			// Recorremos la tabla desmarcando todos los checkbox
+			// Recorremos la tabla desmarcando todos los checkbox y convirtiendo las columnas de costos en texto plano
             $("#tab_productos tbody tr").each(function () {
-				$(this).find('td').find('input').prop("checked", "");				
+				$(this).find('td').find('input').prop("checked", "");
+				// Campos de costos en dólares				
+				var valor_dl = $(this).find('td').eq(4).find('input').val();
+				//~ alert(valor_dl);
+				$(this).find('td').eq(4).text(valor_dl);
+				// Campos de costos en bolívares
 				var valor_bs = $(this).find('td').eq(5).find('input').val();
 				//~ alert(valor_bs);
 				$(this).find('td').eq(5).text(valor_bs);
@@ -272,15 +294,23 @@ $(document).ready(function(){
 		}
 	});
 	
-	// Función para marcar/desmarcar un input seleccionado y volver editable o no la celda de Costo en Bolívares correspondiente
+	// Función para marcar/desmarcar un input seleccionado y volver editable o no las celdas de Costo en Dólares y Costo en Bolívares correspondiente
 	$("table#tab_productos").on('change', 'input.check', function (e) {
 		e.preventDefault();
         var id = this.getAttribute('id');
         var id_column = id+"_column";
         var column = $("#"+id_column);
-        
+        var id_column_dl = id+"_column_dl";
+        var column_dl = $("#"+id_column_dl);
+                
         //~ alert(id_column);
         
+        // Ids para los inputs de edición de montos
+        var id_dl = id_column_dl.replace("checkbox", "input");  // Id de la columna de dólares		
+		var id_new_input_dl = "id='"+id_dl+"'"  // Asignamos un id al input compuesto del id del checkbox marcado pero reemplazando el prefijo 'checkbox' por 'input'
+		var id_bs = id_column.replace("checkbox", "input");  // Id de la columna de bolívares		
+		var id_new_input_bs = "id='"+id_bs+"'"  // Asignamos un id al input compuesto del id del checkbox marcado pero reemplazando el prefijo 'checkbox' por 'input'
+		
         var check = $(this);
 		
 		//~ alert(check.prop('checked'));  // Saber si el campo está marcado o no
@@ -290,14 +320,24 @@ $(document).ready(function(){
             accion = 'marcar';
             //~ alert(accion);
             check.prop("checked", "checked");  // Marcamos nuevamente el checkbox
-            // Volvemos editable la columna correspondiente
+            // Volvemos editable las columnas correspondientes
+            // Columna de precio en dólares
+			var valor_dl = column_dl.text();
+            column_dl.html("<input "+id_new_input_dl+" type='text' value='"+valor_dl.trim()+"' size='8px' onChange='referenciar(\""+id_dl+"\")'>");
+            column_dl.find('input').numeric();
+			// Columna de precio en bolívares
 			var valor_bs = column.text();
-            column.html("<input type='text' value='"+valor_bs.trim()+"' size='8px'>");
+            column.html("<input "+id_new_input_bs+" type='text' value='"+valor_bs.trim()+"' size='8px'>");
+            column.find('input').numeric();
         }else{
 			accion = 'desmarcar';
 			//~ alert(accion);
 			check.prop("checked", "");  // Desmarcamos nuevamente el checkbox
-			// Volvemos no editable la columna correspondiente
+			// Volvemos no editable las columnas correspondientes
+			// Columna de precio en dólares
+			var valor_dl = column_dl.find('input').val();
+            column_dl.text(valor_dl);
+            // Columna de precio en bolívares
 			var valor_bs = column.find('input').val();
             column.text(valor_bs);
 		}
@@ -315,7 +355,12 @@ $(document).ready(function(){
 			
 			if (checkbox.is(':checked')) {
 				num_checked += 1;
-				var costo_mat_dolar = $(this).find('td').eq(4).text();  // Costo del material en dólares
+				// Captura del costo del material en dólares teniendo en cuenta si está en un input o es texto plano
+				if($(this).find('td').eq(4).find('input').val().trim() == undefined){
+					var costo_mat_dolar = $(this).find('td').eq(4).text();
+				}else{
+					var costo_mat_dolar = $(this).find('td').eq(4).find('input').val();
+				}
 				var valor_referencial = parseFloat(costo_mat_dolar) * precio_dolar;
 				// Indicamos el monto referencial
 				$(this).find('td').eq(5).find('input').val(valor_referencial.toFixed(2));
@@ -358,7 +403,7 @@ $(document).ready(function(){
 						var id = $(this).find('td').eq(13).find('a').attr('id');
 						var nombre = $(this).find('td').eq(2).text().trim();
 						var referencia = $(this).find('td').eq(3).text().trim();
-						var costo_dolar = $(this).find('td').eq(4).text().trim();
+						var costo_dolar = $(this).find('td').eq(4).find('input').val().trim();
 						var costo_bolivar = $(this).find('td').eq(5).find('input').val().trim();
 						var unidad_medida = $(this).find('td').eq(6).attr('id');
 						unidad_medida = unidad_medida.split('_');
@@ -369,15 +414,12 @@ $(document).ready(function(){
 						var c_compra = $(this).find('td').eq(8).text().trim();
 						var c_vende = $(this).find('td').eq(9).text().trim();
 						var c_fabrica = $(this).find('td').eq(10).text().trim();
-						//~ alert("Id: "+id+", "+"Nombre: "+nombre+", "+"Referencia: "+referencia+", "+"costo_dolar: "+costo_dolar+", "+"costo_bolivar: "+costo_bolivar);
 						// Actualizamos los datos del material
 						$.post('<?php echo base_url(); ?>CProductos/update_list', {'id':id, 'nombre':nombre, 'referencia':referencia, 'costo_dolar':costo_dolar, 'costo_bolivar':costo_bolivar, 'unidad_medida':unidad_medida, 'c_compra':c_compra, 'c_vende':c_vende, 'c_fabrica':c_fabrica}, function (response) {
 							//~ alert(response);
 						});
 					}
 				});
-				
-				//~ alert(num_checked);
 				
 				if (num_checked == 0) {
 					swal("Disculpe,", "no ha marcado ningún elemento de la lista");			
@@ -396,5 +438,20 @@ $(document).ready(function(){
 	});
 	
 });
+
+// Función para referenciar del precio en bolívares al cambiar el precio en dólares de algún producto
+function referenciar(id_input_dl){
+	var precio_dolar = $("#precio_dolar").val();  // Capturamos el precio del dólar previamente cargado en el campo oculto 'precio_dolar'
+	//~ var precio_dolar = 22938.23;  // Prueba con valor estático
+	
+	var input_dolar = $("#"+id_input_dl).val();  // Capturamos el precio en dólares del producto modificado
+	// Preparamos el input del precio en bolívares
+	var id_input_bolivar = id_input_dl.replace("_dl","");
+	var input_bolivar = $("#"+id_input_bolivar);
+	
+	// Calculamos el nuevo precio y lo asinamos al input de monto en bolívares correspondiente al producto
+	var valor_referencial = parseFloat(input_dolar) * precio_dolar;
+	input_bolivar.val(valor_referencial.toFixed(2));
+}
         
 </script>
