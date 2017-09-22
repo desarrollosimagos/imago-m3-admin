@@ -408,7 +408,7 @@ $(document).ready(function(){
 						tienda_text = $(this).find('td').eq(0).attr('id'); //text tienda
 						referencia_t = $(this).find('td').eq(1).text();
 						// Captura del precio verificando si está en un input o en texto plano
-						if($(this).find('td').eq(2).find('input').val().trim() == undefined){
+						if($(this).find('td').eq(2).find('input').val() == undefined){
 							precio = $(this).find('td').eq(2).text().trim();
 							if(precio == ""){precio = 0;}
 						}else if($(this).find('td').eq(2).find('input').val() == ""){
