@@ -58,6 +58,21 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		$(document).ready(function () {
 			// Aplicamos select2() a todos los combos select
 			$("select").select2();
+			
+			// Función añadida manualmente para alternar entre mini-barra y barra de menú completa u ocultar en dispositivos móviles
+			// .navbar-minimalize = clase del botón de acción
+			// .md-skin = clase de la etiqueta body asignada automáticamente por los plugins de la plantilla
+			$(".navbar-minimalize").on('click', function(){
+				var cadena1 = "md-skin fixed-nav no-skin-config pace-done pace-done";
+				var cadena1_small = "md-skin fixed-nav no-skin-config body-small pace-done pace-done";
+				var cadena2 = "md-skin fixed-nav no-skin-config pace-done pace-done mini-navbar";
+				var cadena2_small = "md-skin fixed-nav no-skin-config body-small pace-done pace-done mini-navbar";
+				if($(".md-skin").attr("class") == cadena1 || $(".md-skin").attr("class") == cadena1_small){
+					$(".md-skin").addClass("mini-navbar");
+				}else if($(".md-skin").attr("class") == cadena2 || $(".md-skin").attr("class") == cadena2_small){
+					$(".md-skin").removeClass("mini-navbar");
+				}
+			});
 		});
 	</script>
 </head>

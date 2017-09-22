@@ -247,7 +247,9 @@
 													<td style='text-align: center' id="price_<?php echo $tienda->id;?>_column">
 													<?php echo $tienda->precio; ?>
 													</td>
-													<td style='text-align: center'><?php echo $tienda->cantidad; ?></td>
+													<td style='text-align: center' id="price_<?php echo $tienda->id;?>_column_cantidad">
+													<?php echo $tienda->cantidad; ?>
+													</td>
 													<td style='text-align: center'><a  style="color: #1ab394" class='quitar' id="<?php echo $tienda->id; ?>"><i class='fa fa-trash fa-2x'></i></a></td>
 													<td>
 														<input type="checkbox" id="price_<?php echo $tienda->id;?>" class="check">
@@ -405,7 +407,8 @@ $(document).ready(function(){
 						id_tienda = $(this).attr('id');  // id tienda
 						tienda_text = $(this).find('td').eq(0).attr('id'); //text tienda
 						referencia_t = $(this).find('td').eq(1).text();
-						if($(this).find('td').eq(2).find('input').val() == undefined){
+						// Captura del precio verificando si está en un input o en texto plano
+						if($(this).find('td').eq(2).find('input').val().trim() == undefined){
 							precio = $(this).find('td').eq(2).text().trim();
 							if(precio == ""){precio = 0;}
 						}else if($(this).find('td').eq(2).find('input').val() == ""){
@@ -414,7 +417,16 @@ $(document).ready(function(){
 							precio = $(this).find('td').eq(2).find('input').val().trim();
 						}
 						//~ alert(precio);
-						cantidad = $(this).find('td').eq(3).text();
+						// Captura de la cantidad verificando si está en un input o en texto plano
+						if($(this).find('td').eq(3).find('input').val() == undefined){
+							cantidad = $(this).find('td').eq(3).text().trim();
+							if(cantidad == ""){cantidad = 0;}
+						}else if($(this).find('td').eq(3).find('input').val() == ""){
+							cantidad = 0;
+						}else{
+							cantidad = $(this).find('td').eq(3).find('input').val().trim();
+						}
+						//~ alert(cantidad);
 
 						campos = { "id_tienda" : id_tienda, "tienda" : tienda_text, "referencia" : referencia_t, "precio" : precio, "cantidad" : cantidad }
 						data.push(campos);
@@ -577,6 +589,8 @@ $(document).ready(function(){
         var id = this.getAttribute('id');
         var id_column = id+"_column";
         var column = $("#"+id_column);
+        var id_column_cant = id+"_column_cantidad";
+        var column_cant = $("#"+id_column_cant);
         
         //~ alert(id_column);
         
@@ -589,18 +603,28 @@ $(document).ready(function(){
             accion = 'marcar';
             //~ alert(accion);
             check.prop("checked", "checked");  // Marcamos nuevamente el checkbox
-            // Volvemos editable la columna correspondiente
+            // Volvemos editables las columnas de precio y cantidad
+            // Precio
 			var valor_bs = column.text();
 			var id_new_input = "id='"+id+"_input'"  // Asignamos un id al input compuesto del id del checkbox marcado más el sufijo '_input'
             column.html("<input "+id_new_input+" type='text' value='"+valor_bs.trim()+"' size='8px'>");
             $("#"+id+"_input").numeric();
+            // Cantidad
+            var valor_cant = column_cant.text();
+			var id_new_input_cant = "id='"+id+"_input_cant'"  // Asignamos un id al input compuesto del id del checkbox marcado más el sufijo '_input_cant'
+            column_cant.html("<input "+id_new_input_cant+" type='text' value='"+valor_cant.trim()+"' size='8px'>");
+            $("#"+id+"_input_cant").numeric();
         }else{
 			accion = 'desmarcar';
 			//~ alert(accion);
 			check.prop("checked", "");  // Desmarcamos nuevamente el checkbox
-			// Volvemos no editable la columna correspondiente
+			// Volvemos no editable las columnas de precio y cantidad
+			// Precio
 			var valor_bs = column.find('input').val();
             column.text(valor_bs);
+			// Cantidad
+			var valor_cant = column_cant.find('input').val();
+            column_cant.text(valor_cant);
 		}
 	});
 	
