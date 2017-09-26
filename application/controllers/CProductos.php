@@ -217,7 +217,7 @@ class CProductos extends CI_Controller {
             'modificado' => date('Y-m-d')
         );
         
-        $result = $this->MProductos->update($datos);
+        $result = $this->MProductos->update_prices($datos);
         
         // Actualización de datos en la tabla de 'productos_tienda'
         $datos2 = array(
