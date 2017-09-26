@@ -10,8 +10,8 @@ class MMails extends CI_Model {
 		'protocol' => 'smtp',
 		'smtp_host' => 'ssl://smtp.gmail.com',
 		'smtp_port' => 465,
-		'smtp_user' => 'solorzano202009@gmail.com',
-		'smtp_pass' => '76839981js',
+		'smtp_user' => 'imagom3@gmail.com',
+		'smtp_pass' => 'imagom3123**',
 		'mailtype' => 'html',
 		'crlf' => "\r\n",
 		'charset' => 'utf-8',
@@ -219,7 +219,7 @@ class MMails extends CI_Model {
 		';
 		
 		//cargamos la configuración para enviar con mailtrap (config), gamil (configGmail) o yahoo (configYahoo)
-		$this->email->initialize($this->config);
+		$this->email->initialize($this->configGmail);
 
 		$this->email->from('contacto@imagom3.com');
 		$this->email->to($para);
@@ -374,7 +374,7 @@ class MMails extends CI_Model {
 		';
 
 		//cargamos la configuración para enviar con mailtrap (config), gamil (configGmail) o yahoo (configYahoo)
-		$this->email->initialize($this->config);
+		$this->email->initialize($this->configGmail);
 
 		$this->email->from('contacto@imagom3.com');
 		$this->email->to($para);
