@@ -14,7 +14,7 @@
 <div class="wrapper wrapper-content animated fadeInRight">
     <div class="row">
         <div class="col-lg-12">
-            <a href="<?php echo base_url() ?>productos/register">
+            <a href="<?php echo base_url() ?>productos/register" id="agregar">
             <button class="btn btn-outline btn-primary dim" type="button"><i class="fa fa-plus"></i> Agregar</button>
             </a>
             <button class="btn btn-outline btn-primary dim" id="referenciar" type="button"><i class="fa fa-refresh"></i> Referenciar</button>
@@ -117,8 +117,21 @@
                                 <?php } ?>
                             </tbody>
                         </table>
+                        
                         <div class="text-right">
-							<button class="btn btn-outline btn-primary dim" id="actualizar_montos" type="button"><i class="fa fa-floppy-o"></i> Actualizar</button>
+							<!-- Imagen de carga -->
+							<div class="col-md-6" style="display:none;" id="resultado">
+								<div>
+									<i class="fa fa-refresh fa-spin">
+										
+									</i>
+									<span style="color:red !important;">Actualizando...</span>
+								</div>
+							</div>
+							<!-- Imagen de carga -->
+							<div class="col-md-6" style="display:block;" id="resultado">
+								<button class="btn btn-outline btn-primary dim" id="actualizar_montos" type="button"><i class="fa fa-floppy-o"></i> Actualizar</button>
+							</div>
 						</div>
                     </div>
                 </div>
@@ -374,67 +387,116 @@ $(document).ready(function(){
         }
 	});
 	
+	
 	// Proceso de actualización de montos de los materiales seleccionados
 	$("#actualizar_montos").on('click', function (e) {
+		var num_checked = 0;  // Contador de checkbox marcados
 		
-		swal({
-			title: "Actualizar productos",
-			text: "¿Está seguro de actualizar los montos de los productos?",
-			type: "warning",
-			showCancelButton: true,
-			confirmButtonColor: "#DD6B55",
-			confirmButtonText: "Actualizar",
-			cancelButtonText: "Cancelar",
-			closeOnConfirm: false,
-			closeOnCancel: true
-		  },
-		function(isConfirm){
-			if (isConfirm) {
-		
-				var num_checked = 0;  // Contador de checkbox marcados
-				
-				// Recorremos la tabla para verificar que campos están editables y proceder a actualizarles el monto
-				$("#tab_productos tbody tr").each(function () {
-					var checkbox;
-					checkbox = $(this).find('td').eq(0).find('input');
-					
-					if (checkbox.is(':checked')) {
-						num_checked += 1;
-						var id = $(this).find('td').eq(13).find('a').attr('id');
-						var nombre = $(this).find('td').eq(2).text().trim();
-						var referencia = $(this).find('td').eq(3).text().trim();
-						var costo_dolar = $(this).find('td').eq(4).find('input').val().trim();
-						var costo_bolivar = $(this).find('td').eq(5).find('input').val().trim();
-						var unidad_medida = $(this).find('td').eq(6).attr('id');
-						unidad_medida = unidad_medida.split('_');
-						unidad_medida = unidad_medida[1];
-						//~ var tienda_id = $(this).find('td').eq(7).attr('id');
-						//~ tienda_id = tienda_id.split('_');
-						//~ tienda_id = tienda_id[1];
-						var c_compra = $(this).find('td').eq(8).text().trim();
-						var c_vende = $(this).find('td').eq(9).text().trim();
-						var c_fabrica = $(this).find('td').eq(10).text().trim();
-						// Actualizamos los datos del material
-						$.post('<?php echo base_url(); ?>CProductos/update_list', {'id':id, 'nombre':nombre, 'referencia':referencia, 'costo_dolar':costo_dolar, 'costo_bolivar':costo_bolivar, 'unidad_medida':unidad_medida, 'c_compra':c_compra, 'c_vende':c_vende, 'c_fabrica':c_fabrica}, function (response) {
-							//~ alert(response);
-						});
-					}
-				});
-				
-				if (num_checked == 0) {
-					swal("Disculpe,", "no ha marcado ningún elemento de la lista");			
-				}else{
-					swal({ 
-						title: "Actualizado",
-						 text: "Actualizado con exito",
-						  type: "success" 
-						},
-					function(){
-					  window.location.href = '<?php echo base_url(); ?>productos';
-					});
-				}
+		// Recorremos la tabla para verificar que campos están editables y proceder a actualizarles el monto
+		$("#tab_productos tbody tr").each(function () {
+			var checkbox;
+			checkbox = $(this).find('td').eq(0).find('input');
+			
+			if (checkbox.is(':checked')) {
+				num_checked += 1;
 			}
-		});  // Cierre del confirm
+		});
+		
+		if (num_checked == 0) {
+			swal("Disculpe,", "no ha marcado ningún elemento de la lista");
+			$('#resultado').css({display:'none'});
+			$('#agregar').prop('disabled',false);
+			$('#referenciar').prop('disabled',false);		
+		}else{
+		
+			swal({
+				title: "Actualizar productos",
+				text: "¿Está seguro de actualizar los montos de los productos?",
+				type: "warning",
+				showCancelButton: true,
+				confirmButtonColor: "#DD6B55",
+				confirmButtonText: "Actualizar",
+				cancelButtonText: "Cancelar",
+				closeOnConfirm: true,
+				closeOnCancel: true
+			  },
+			function(isConfirm){
+				if (isConfirm) {
+					
+					var num_filas = 0;  // Contador de registros a actualizar
+					
+					var num_updated = 0;  // Contador de número de registros actualizados
+					
+					// Recorremos la tabla para verificar que campos están editables y proceder a actualizarles el monto
+					$("#tab_productos tbody tr").each(function () {
+						var checkbox;
+						checkbox = $(this).find('td').eq(0).find('input');
+						
+						if (checkbox.is(':checked')) {
+							num_filas += 1;
+						}
+					});
+					
+					// Recorremos la tabla para verificar que campos están editables y proceder a actualizarles el monto
+					$("#tab_productos tbody tr").each(function () {
+						var checkbox;
+						checkbox = $(this).find('td').eq(0).find('input');
+						
+						if (checkbox.is(':checked')) {
+							var id = $(this).find('td').eq(13).find('a').attr('id');
+							var nombre = $(this).find('td').eq(2).text().trim();
+							var referencia = $(this).find('td').eq(3).text().trim();
+							var costo_dolar = $(this).find('td').eq(4).find('input').val().trim();
+							var costo_bolivar = $(this).find('td').eq(5).find('input').val().trim();
+							var unidad_medida = $(this).find('td').eq(6).attr('id');
+							unidad_medida = unidad_medida.split('_');
+							unidad_medida = unidad_medida[1];
+							//~ var tienda_id = $(this).find('td').eq(7).attr('id');
+							//~ tienda_id = tienda_id.split('_');
+							//~ tienda_id = tienda_id[1];
+							var c_compra = $(this).find('td').eq(8).text().trim();
+							var c_vende = $(this).find('td').eq(9).text().trim();
+							var c_fabrica = $(this).find('td').eq(10).text().trim();
+							// Actualizamos los datos del producto
+							//~ $.post('<?php echo base_url(); ?>CProductos/update_list', {'id':id, 'nombre':nombre, 'referencia':referencia, 'costo_dolar':costo_dolar, 'costo_bolivar':costo_bolivar, 'unidad_medida':unidad_medida, 'c_compra':c_compra, 'c_vende':c_vende, 'c_fabrica':c_fabrica}, function (response) {
+								//~ // alert(response);
+							//~ });
+							
+							$.ajax({
+								url : '<?php echo base_url(); ?>CProductos/update_list',
+								type : 'POST',
+								async: false,  // Para que no proceda con las siguientes instrucciones hasta terminar la petición
+								//~ dataType : 'json',
+								data : {'id':id, 'nombre':nombre, 'referencia':referencia, 'costo_dolar':costo_dolar, 'costo_bolivar':costo_bolivar, 'unidad_medida':unidad_medida, 'c_compra':c_compra, 'c_vende':c_vende, 'c_fabrica':c_fabrica},
+								beforeSend:function(objeto){ 
+									$('#resultado').css({display:'block'});
+									$('#agregar').prop('disabled',true);
+									$('#referenciar').prop('disabled',true);
+								},
+								success : function(data) {
+									
+									num_updated += 1;
+									
+									//~ alert(num_updated +"_"+ num_filas);
+									if(num_updated == num_filas){
+										$('#resultado').css({display:'none'});
+										$('#agregar').prop('disabled',false);
+										$('#referenciar').prop('disabled',false);
+										
+										window.location.href = '<?php echo base_url(); ?>productos';
+									}
+									
+								},
+							});
+						}
+						//~ alert(num_updated);
+					});
+					
+				}
+			});  // Cierre del confirm
+			
+		}  // Cierre del if que valida si hay checkbox marcados
+		
 	});
 	
 });
