@@ -70,11 +70,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <div id="container">
 
 	<div id="body">
-		<p>Precios actualizados: <?php echo $prueba; ?></p>
+		<p>Precios actualizados: (<?php echo $resultados; ?>)</p>
 		<p>
 			<ul>
-				<li><a href="<?php echo base_url();?>tiendasv/">Tiendas</a></li>
-				<li><a href="<?php echo base_url();?>tiendasv/">Productos</a></li>
+				<li><a href="<?php echo base_url();?>tiendas/">Tiendas</a></li>
+				<li><a href="<?php echo base_url();?>productos/">Productos</a></li>
 				<li><a href="<?php echo base_url();?>tiendasv/">Tiendas Virtuales</a></li>
 			</ul>
 		</p>

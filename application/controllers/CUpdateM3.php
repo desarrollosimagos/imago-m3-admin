@@ -7,19 +7,23 @@ class CUpdateM3 extends CI_Controller {
         parent::__construct();
        
 		// Load database
-        $this->load->model('MMessages');
+        $this->load->model('MUpdateM3');
 		
     }
 	
 	// Método para guardar un nuevo registro desde la interfaz pública
     public function update_prices() {
-
+		
+		$result = $this->MUpdateM3->update_prices_db();
+		
+		$consulta_ejecutada = $this->db->last_query();
+		
         $datos = array(
             //~ 'name' => $this->input->post('name'),
             //~ 'email' => $this->input->post('email'),
             //~ 'subject' => $this->input->post('subject'),
             //~ 'message' => $this->input->post('message')
-            'prueba' => "Prueba"
+            'resultados' => $consulta_ejecutada
         );
         $this->load->view('base');
 		$this->load->view('update_prices/price_update_m3', $datos);
