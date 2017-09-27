@@ -219,19 +219,31 @@ class MMails extends CI_Model {
 		';
 		
 		//cargamos la configuración para enviar con mailtrap (config), gamil (configGmail) o yahoo (configYahoo)
-		$this->email->initialize($this->configGmail);
-
-		$this->email->from('contacto@imagom3.com');
-		$this->email->to($para);
-		$this->email->subject($título);
-		$this->email->message($mensaje);
-		if($this->email->send()){
-			echo "Email enviado";
-		}else{
-			echo $this->email->print_debugger();
-		}
+		//~ $this->email->initialize($this->configGmail);
+//~ 
+		//~ $this->email->from('contacto@imagom3.com');
+		//~ $this->email->to($para);
+		//~ $this->email->subject($título);
+		//~ $this->email->message($mensaje);
+		//~ if($this->email->send()){
+			//~ echo "Email enviado";
+		//~ }else{
+			//~ echo $this->email->print_debugger();
+		//~ }
 		// con esto podemos ver el resultado
 		//~ var_dump($this->email->print_debugger());
+		
+		// Envío con la función nativa de emails (mail())
+		$cabeceras = 'From: contacto@imagom3.com' . "\r\n" .
+		'Reply-To: contacto@imagom3.com' . "\r\n" .
+		'Content-type: text/html; charset=utf-8' . "\r\n".
+		'X-Mailer: PHP/' . phpversion();
+
+		if(mail($para, $título, $mensaje, $cabeceras)){
+			echo "Email enviado";
+		}else{
+			echo "No se pudo enviar";
+		}
 	}
 	
 	// Public method to send a email of confirmation
