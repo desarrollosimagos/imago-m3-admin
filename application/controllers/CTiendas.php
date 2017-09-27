@@ -36,6 +36,7 @@ class CTiendas extends CI_Controller {
             'rif' => $_POST['rif'],
             'name' => $_POST['name'],
             'address' => $_POST['address'],
+            'referencia' => $_POST['referencia'],
             'phone' => $_POST['phone'],
             'status' => 1
         );
@@ -163,6 +164,7 @@ class CTiendas extends CI_Controller {
             'rif' => $_POST['rif'],
             'name' => $_POST['name'],
             'address' => $_POST['address'],
+            'referencia' => $_POST['referencia'],
             'phone' => $_POST['phone'],
             'status' => 1,
             'd_update' => date('Y-m-d')." ".date("H:i:s")
