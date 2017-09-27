@@ -34,6 +34,7 @@
                                     <th>Nombre</th>
                                     <th>status</th>
                                     <th>Dirección</th>
+                                    <th>Referencia</th>
                                     <th>Teléfono</th>
                                     <th>Editar</th>
                                     <th>Eliminar</th>
@@ -65,6 +66,9 @@
                                         </td>
                                         <td>
                                             <?php echo $tienda->address; ?>
+                                        </td>
+                                        <td>
+                                            <?php echo $tienda->referencia; ?>
                                         </td>
                                         <td>
                                             <?php echo $tienda->phone; ?>
@@ -130,6 +134,7 @@ $(document).ready(function(){
             {"sClass": "registro center", "sWidth": "30%"},
             {"sClass": "registro center", "sWidth": "30%"},
             {"sClass": "registro center", "sWidth": "10%"},
+            {"sClass": "none", "sWidth": "10%"},
             {"sClass": "none", "sWidth": "10%"},
             {"sClass": "none", "sWidth": "10%"},
             {"sWidth": "3%", "bSortable": false, "sClass": "center sorting_false", "bSearchable": false},

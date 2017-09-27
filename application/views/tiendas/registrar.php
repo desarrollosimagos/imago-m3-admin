@@ -42,6 +42,11 @@
 								<input type="text" class="form-control"  name="address" maxlength="250" id="address">
 							</div>
 						</div>
+						<div class="form-group"><label class="col-sm-2 control-label" >Referencia Externa</label>
+							<div class="col-sm-8">
+								<input type="text" class="form-control"  name="referencia" maxlength="250" id="referencia">
+							</div>
+						</div>
 						<div class="form-group">
 							<label class="col-sm-2 control-label">Teléfono</label>
 							<div class="col-sm-4">
@@ -173,7 +178,7 @@ $(document).ready(function(){
         window.location = url;
     });
     
-    //~ $("#costo_dolar,#costo_bolivar").numeric(); //Valida solo permite valores numéricos
+    $("#phone").numeric(); //Valida solo permite valores numéricos
 
     $("#registrar").click(function (e) {
 
