@@ -209,7 +209,7 @@ class CProductos extends CI_Controller {
             'referencia' => $_POST['referencia'],
             'costo_dolar' => $_POST['costo_dolar'],
             'costo_bolivar' => $_POST['costo_bolivar'],
-            'unidad_medida' => $_POST['unidad_medida'],
+            //~ 'unidad_medida' => $_POST['unidad_medida'],
             //~ 'tiendav_id' => $_POST['tiendav_id'],
             'c_compra' => $_POST['c_compra'],
             'c_vende' => $_POST['c_vende'],
