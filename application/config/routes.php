@@ -146,6 +146,9 @@ $route['aplicaciones'] = 'CAplicaciones';
 $route['aplicaciones/register'] = 'CAplicaciones/register';
 $route['aplicaciones/edit/(:num)'] = 'CAplicaciones/edit/$1';
 $route['aplicaciones/delete/(:num)'] = 'CAplicaciones/delete/$1';
+/*   Update prices M3 */
+$route['update_prices'] = 'CUpdateM3';
+$route['update_prices_m3'] = 'CUpdateM3/update_prices';
 /*assets*/
 $route['assets/(:any)'] = 'assets/$1';
 // APIs de tiendas virtuales
