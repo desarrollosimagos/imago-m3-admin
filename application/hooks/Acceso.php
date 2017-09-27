@@ -94,7 +94,7 @@ class Acceso
 					//mostraría tanto archivos como directorios
                     if ($file!="." && $file!=".."){
                         $controlador = str_replace('.php', '', $file);
-                        $controllersbase = array('Welcome','CLogin','CClientPublic','COrderPublic','CMessages','CApis');  // Controladores a ignorar
+                        $controllersbase = array('Welcome','CLogin','CClientPublic','COrderPublic','CMessages','CApis','CPruebas');  // Controladores a ignorar
                         if(!in_array($controlador, $controllersbase) && $controlador != 'index.html'){
 							$this->controladores[] = $controlador;
 						}
