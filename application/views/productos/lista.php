@@ -35,8 +35,8 @@
                                     <th>Referencia</th>
                                     <th>Costo en Dólares</th>
                                     <th>Costo en Bolívares</th>
-                                    <th>Unidad de medida</th>
-                                    <!--<th>Tienda</th>-->
+                                    <!--<th>Unidad de medida</th>-->
+                                    <th>Tienda</th>
                                     <th>Modificado</th>
                                     <th>Descripción</th>
                                     <th>Se compra</th>
@@ -68,7 +68,7 @@
                                         <td id="checkbox_<?php echo $perfil->id;?>_column">
                                             <?php echo $perfil->costo_bolivar; ?>
                                         </td>
-                                        <td id="unidad_<?php echo $perfil->unidad_medida?>">
+                                        <!--<td id="unidad_<?php echo $perfil->unidad_medida?>">
                                             <?php 
 											foreach ($listar_unidades as $unidad){
 												if($perfil->unidad_medida == $unidad->id){
@@ -78,18 +78,18 @@
 												}
 											}
 											?>
-                                        </td>
-                                        <!--<td id="tienda_<?php echo $perfil->tienda_id?>">
+                                        </td>-->
+                                        <td id="tienda_<?php echo $perfil->tienda_id?>">
                                             <?php 
-											foreach ($listar_tiendas as $tienda){
+											foreach ($listar_tiendas_fisicas as $tienda){
 												if($perfil->tienda_id == $tienda->id){
-													echo $tienda->nombre;
+													echo $tienda->name;
 												}else{
 													echo "";
 												}
 											}
 											?>
-                                        </td>-->
+                                        </td>
                                         <td>
                                             <?php echo $perfil->modificado; ?>
                                         </td>
@@ -448,9 +448,9 @@ $(document).ready(function(){
 							var referencia = $(this).find('td').eq(3).text().trim();
 							var costo_dolar = $(this).find('td').eq(4).find('input').val().trim();
 							var costo_bolivar = $(this).find('td').eq(5).find('input').val().trim();
-							var unidad_medida = $(this).find('td').eq(6).attr('id');
-							unidad_medida = unidad_medida.split('_');
-							unidad_medida = unidad_medida[1];
+							//~ var unidad_medida = $(this).find('td').eq(6).attr('id');
+							//~ unidad_medida = unidad_medida.split('_');
+							//~ unidad_medida = unidad_medida[1];
 							//~ var tienda_id = $(this).find('td').eq(7).attr('id');
 							//~ tienda_id = tienda_id.split('_');
 							//~ tienda_id = tienda_id[1];
@@ -467,7 +467,7 @@ $(document).ready(function(){
 								type : 'POST',
 								async: false,  // Para que no proceda con las siguientes instrucciones hasta terminar la petición
 								//~ dataType : 'json',
-								data : {'id':id, 'nombre':nombre, 'referencia':referencia, 'costo_dolar':costo_dolar, 'costo_bolivar':costo_bolivar, 'unidad_medida':unidad_medida, 'c_compra':c_compra, 'c_vende':c_vende, 'c_fabrica':c_fabrica},
+								data : {'id':id, 'nombre':nombre, 'referencia':referencia, 'costo_dolar':costo_dolar, 'costo_bolivar':costo_bolivar, 'c_compra':c_compra, 'c_vende':c_vende, 'c_fabrica':c_fabrica},
 								beforeSend:function(objeto){ 
 									$('#resultado').css({display:'block'});
 									$('#agregar').prop('disabled',true);
