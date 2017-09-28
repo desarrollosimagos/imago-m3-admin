@@ -202,29 +202,42 @@ class CProductos extends CI_Controller {
 	
 	// Método para actualizar desde la lista
     public function update_list() {
-		// Actualización de datos en la tabla de 'productos'
-		$datos = array(
-            'id' => $_POST['id'],
-            'nombre' => $_POST['nombre'],
-            'referencia' => $_POST['referencia'],
-            'costo_dolar' => $_POST['costo_dolar'],
-            'costo_bolivar' => $_POST['costo_bolivar'],
-            //~ 'unidad_medida' => $_POST['unidad_medida'],
-            //~ 'tiendav_id' => $_POST['tiendav_id'],
-            'c_compra' => $_POST['c_compra'],
-            'c_vende' => $_POST['c_vende'],
-            'c_fabrica' => $_POST['c_fabrica'],
-            'modificado' => date('Y-m-d')
-        );
-        
-        $result = $this->MProductos->update_prices($datos);
-        
-        // Actualización de datos en la tabla de 'productos_tienda'
-        $datos2 = array(
-			'precio' => $_POST['costo_bolivar']
-        );
-        
-        $result2 = $this->MProductos->update_pt($_POST['id'], $datos2);
+		//~ print_r($this->input->post());
+		$productos = $this->input->post('productos');
+		
+		// Si el arreglo trae registros se procede a hacer los registros correspondientes
+		if(count($productos) > 0){
+			foreach ($productos as $producto) {
+				// Actualizamos en productos si existe el indice id (la tabla no viene vacía)
+				if(isset($producto['id'])){
+					
+					// Actualización de datos en la tabla de 'productos'
+					$datos = array(
+						'id' => $producto['id'],
+						'nombre' => $producto['nombre'],
+						'referencia' => $producto['referencia'],
+						'costo_dolar' => $producto['costo_dolar'],
+						'costo_bolivar' => $producto['costo_bolivar'],
+						// 'unidad_medida' => $producto['unidad_medida'],
+						// 'tiendav_id' => $producto['tiendav_id'],
+						'c_compra' => $producto['c_compra'],
+						'c_vende' => $producto['c_vende'],
+						'c_fabrica' => $producto['c_fabrica'],
+						'modificado' => date('Y-m-d')
+					);
+					
+					$result = $this->MProductos->update_prices($datos);
+					
+					// Actualización de datos en la tabla de 'productos_tienda'
+					$datos2 = array(
+						'precio' => $producto['costo_bolivar']
+					);
+					
+					$result2 = $this->MProductos->update_pt($producto['id'], $datos2);
+				}
+			}
+		}
+		
     }
     
 	// Método para eliminar
