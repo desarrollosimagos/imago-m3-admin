@@ -22,6 +22,17 @@ class CProductos extends CI_Controller {
 		$this->load->view('footer');
 	}
 	
+	public function index2()
+	{
+		$this->load->view('base');
+		$data['listar'] = $this->MProductos->obtenerByUser();
+		$data['listar_unidades'] = $this->MProductos->obtener_unidades();
+		$data['listar_tiendas'] = $this->MProductos->obtener_tiendas();
+		$data['listar_tiendas_fisicas'] = $this->MProductos->obtener_tiendas_fisicas();
+		$this->load->view('productos/lista', $data);
+		$this->load->view('footer');
+	}
+	
 	public function register()
 	{
 		$this->load->view('base');

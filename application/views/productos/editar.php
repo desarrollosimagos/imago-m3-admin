@@ -551,9 +551,10 @@ $(document).ready(function(){
 				var i = table.row.add([tienda, referencia_tienda, precio, cantidad, botonQuitar, checkboxActualizar]).draw();
 				table.rows(i).nodes().to$().attr("id", tiendav_id);  // Asignamos el id al tr de la fila agregada
 				//~ alert(table.rows(i).nodes().to$().find("td").eq(1).text());
-				// Asignamos un id a la celda (columna) correpondiente al precio de la fila agregada
-				// Este id será para identificar el precio de una tienda recien añadida y sin guardar
+				// Asignamos un id a las celdas (columnas) correpondientes al precio y la cantidad de la fila agregada
+				// Estos ids serán para identificar el precio y la cantidad de una tienda recien añadida y sin guardar
 				table.rows(i).nodes().to$().find("td").eq(2).attr("id", 'price_'+tiendav_id+'x_column');
+				table.rows(i).nodes().to$().find("td").eq(3).attr("id", 'price_'+tiendav_id+'x_column_cantidad');
 			}else{
 				swal("Disculpe,", "la tienda ya se encuentra en la lista");
 			}

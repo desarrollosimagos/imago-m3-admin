@@ -169,10 +169,10 @@ $(document).ready(function(){
             }
             }
         ],
-        "iDisplayLength": 100,
+        "iDisplayLength": 50,
         "iDisplayStart": 0,
         "sPaginationType": "full_numbers",
-        "aLengthMenu": [100, 200, 300],
+        "aLengthMenu": [50, 100, 150],
         "oLanguage": {"sUrl": "<?= assets_url() ?>js/es.txt"},
         "aoColumns": [
             {"sWidth": "3%", "bSortable": false, "sClass": "center sorting_false", "bSearchable": false},
