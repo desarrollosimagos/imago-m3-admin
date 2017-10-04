@@ -46,6 +46,11 @@
 								<input type="text" class="form-control"  name="referencia" maxlength="250" id="referencia" value="<?php echo $editar[0]->referencia ?>">
 							</div>
 						</div>
+						<div class="form-group"><label class="col-sm-2 control-label" >BD Externa</label>
+							<div class="col-sm-8">
+								<input type="text" class="form-control"  name="bd_externa" maxlength="250" id="bd_externa" value="<?php echo $editar[0]->bd_externa ?>">
+							</div>
+						</div>
 						<div class="form-group">
 							<label class="col-sm-2 control-label">Teléfono</label>
 							<div class="col-sm-4">

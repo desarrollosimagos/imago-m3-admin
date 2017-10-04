@@ -35,9 +35,11 @@
                                     <th>status</th>
                                     <th>Dirección</th>
                                     <th>Referencia</th>
+                                    <th>BD Externa</th>
                                     <th>Teléfono</th>
                                     <th>Editar</th>
                                     <th>Eliminar</th>
+                                    <th>Update Precios M3</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -71,6 +73,9 @@
                                             <?php echo $tienda->referencia; ?>
                                         </td>
                                         <td>
+                                            <?php echo $tienda->bd_externa; ?>
+                                        </td>
+                                        <td>
                                             <?php echo $tienda->phone; ?>
                                         </td>
                                         <td style='text-align: center'>
@@ -78,6 +83,9 @@
                                         </td>
                                         <td style='text-align: center'>
                                             <a class='borrar' id='<?php echo $tienda->id; ?>' style='color: #1ab394' title='Eliminar'><i class="fa fa-trash-o fa-2x"></i></a>
+                                        </td>
+                                        <td style='text-align: center'>
+                                            <a class='actualizar' href="<?php echo base_url()."update_prices_m3?id=".$tienda->id; ?>"style='color: #1ab394' title='Actualizar precios'><i class="fa fa-upload fa-2x"></i></a>
                                         </td>
                                     </tr>
                                     <?php $i++ ?>
@@ -137,6 +145,8 @@ $(document).ready(function(){
             {"sClass": "none", "sWidth": "10%"},
             {"sClass": "none", "sWidth": "10%"},
             {"sClass": "none", "sWidth": "10%"},
+            {"sClass": "none", "sWidth": "10%"},
+            {"sWidth": "3%", "bSortable": false, "sClass": "center sorting_false", "bSearchable": false},
             {"sWidth": "3%", "bSortable": false, "sClass": "center sorting_false", "bSearchable": false},
             {"sWidth": "3%", "bSortable": false, "sClass": "center sorting_false", "bSearchable": false}
         ]
