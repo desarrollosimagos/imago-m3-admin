@@ -30,7 +30,7 @@
                             <thead>
                                 <tr>
                                     <th><input type="checkbox" id="check_all"></th>
-                                    <th>#</th>
+                                    <!--<th>#</th>-->
                                     <th>Nombre</th>
                                     <th>Referencia</th>
                                     <th>Costo en Dólares</th>
@@ -46,7 +46,7 @@
                                     <th>Eliminar</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <!--<tbody>
                                 <?php $i = 1; ?>
                                 <?php foreach ($listar as $perfil) { ?>
                                     <tr style="text-align: center">
@@ -68,7 +68,7 @@
                                         <td id="checkbox_<?php echo $perfil->id;?>_column">
                                             <?php echo $perfil->costo_bolivar; ?>
                                         </td>
-                                        <!--<td id="unidad_<?php echo $perfil->unidad_medida?>">
+                                        <td id="unidad_<?php echo $perfil->unidad_medida?>">
                                             <?php 
 											foreach ($listar_unidades as $unidad){
 												if($perfil->unidad_medida == $unidad->id){
@@ -78,7 +78,7 @@
 												}
 											}
 											?>
-                                        </td>-->
+                                        </td>
                                         <td id="tienda_<?php echo $perfil->tienda_id?>">
                                             <?php 
 											foreach ($listar_tiendas_fisicas as $tienda){
@@ -109,13 +109,12 @@
                                             <a href="<?php echo base_url() ?>productos/edit/<?= $perfil->id; ?>" title="Editar" style='color: #1ab394'><i class="fa fa-edit fa-2x"></i></a>
                                         </td>
                                         <td style='text-align: center'>
-                                            
                                             <a class='borrar' id='<?php echo $perfil->id; ?>' style='color: #1ab394' title='Eliminar'><i class="fa fa-trash-o fa-2x"></i></a>
                                         </td>
                                     </tr>
                                     <?php $i++ ?>
                                 <?php } ?>
-                            </tbody>
+                            </tbody>-->
                         </table>
                         
                         <div class="text-right">
@@ -145,44 +144,50 @@
 <script>
 $(document).ready(function(){
 	$('#tab_productos').DataTable({
-        "paging": true,
-        "lengthChange": false,
+        //~ "paging": true,
+        //~ "lengthChange": false,
         "autoWidth": false,
-        "searching": true,
-        "ordering": true,
-        "info": true,
-        dom: '<"html5buttons"B>lTfgitp',
-        buttons: [
-            { extend: 'copy'},
-            {extend: 'csv'},
-            {extend: 'excel', title: 'ExampleFile'},
-            {extend: 'pdf', title: 'ExampleFile'},
-
-            {extend: 'print',
-             customize: function (win){
-                    $(win.document.body).addClass('white-bg');
-                    $(win.document.body).css('font-size', '10px');
-
-                    $(win.document.body).find('table')
-                            .addClass('compact')
-                            .css('font-size', 'inherit');
-            }
-            }
-        ],
-        "iDisplayLength": 50,
-        "iDisplayStart": 0,
-        "sPaginationType": "full_numbers",
-        "aLengthMenu": [50, 100, 150],
+        //~ "searching": true,
+        //~ "ordering": true,
+        //~ "info": true,
+        "processing": true,
+        "serverSide": true,
+        "order": [],
+        "ajax": {
+			"method":"POST",
+			"url": "<?= base_url() ?>productos_json"
+		},
+		"columnDefs": [
+			{
+				//~ "target": [0, 3, 4],
+				"orderable":false,
+			}
+		],
+        //~ "iDisplayLength": 50,
+        //~ "iDisplayStart": 0,
+        //~ "sPaginationType": "full_numbers",
+        //~ "aLengthMenu": [50, 100, 150],
         "oLanguage": {"sUrl": "<?= assets_url() ?>js/es.txt"},
+        //~ "columns": [
+			//~ {"data":"nombre"},
+			//~ {"data":"referencia"},
+			//~ {"data":"costo_dolar"},
+			//~ {"data":"costo_bolivar"},
+			//~ {"data":"name"},
+			//~ {"data":"modificado"},
+			//~ {"data":"descripcion"},
+			//~ {"data":"c_compra"},
+			//~ {"data":"c_vende"},
+			//~ {"data":"c_fabrica"}
+        //~ ],
         "aoColumns": [
             {"sWidth": "3%", "bSortable": false, "sClass": "center sorting_false", "bSearchable": false},
-            {"sClass": "registro center", "sWidth": "5%"},
-            {"sClass": "registro center", "sWidth": "10%"},
             {"sClass": "registro center", "sWidth": "20%"},
             {"sClass": "registro center", "sWidth": "10%"},
             {"sClass": "registro center", "sWidth": "10%"},
             {"sClass": "registro center", "sWidth": "10%"},
             {"sClass": "registro center", "sWidth": "20%"},
+            {"sClass": "registro center", "sWidth": "10%"},
             {"sClass": "none", "sWidth": "20%"},
             {"sClass": "none", "sWidth": "10%"},
             {"sClass": "none", "sWidth": "10%"},
@@ -191,6 +196,16 @@ $(document).ready(function(){
             {"sWidth": "3%", "bSortable": false, "sClass": "center sorting_false", "bSearchable": false}
         ]
     });
+    
+    // Lectura de elementos del paginador
+    //~ $(".pagination").ready(function(){
+		//~ $('.pagination li').each(function(){
+			//~ if($(this).attr("id")){		
+				//~ alert($(this).attr("id"));
+			//~ }
+			//~ alert($(this).text());
+		//~ });
+	//~ });    
     
     // Cargamos el precio actual del dólar en el campo oculto 'precio_dolar'
     $.get('https://s3.amazonaws.com/dolartoday/data.json', function (response) {  // Se produce un error si usamos $.post en vez de $.get
@@ -261,31 +276,31 @@ $(document).ready(function(){
             // Recorremos la tabla marcando todos los checkbox y convirtiendo las columnas de costos en inputs editables
             $("#tab_productos tbody tr").each(function () {
 				$(this).find('td').find('input').prop("checked", "checked");
-				var id_dl = $(this).find('td').eq(4).attr('id');  // Id de la columna de dólares
+				var id_dl = $(this).find('span').eq(0).attr('id');  // Id de la columna de dólares
 				id_dl = id_dl.replace("checkbox", "input");
 				var id_new_input_dl = "id='"+id_dl+"'"  // Asignamos un id al input compuesto del id del td padre pero reemplazando el prefijo 'checkbox' por 'input'
-				var id_bs = $(this).find('td').eq(5).attr('id');  // Id de la columna de bolívares
+				var id_bs = $(this).find('span').eq(1).attr('id');  // Id de la columna de bolívares
 				id_bs = id_bs.replace("checkbox", "input");
 				var id_new_input_bs = "id='"+id_bs+"'"  // Asignamos un id al input compuesto del id del td padre pero reemplazando el prefijo 'checkbox' por 'input'
 				// Campos de costos en dólares
-				var valor_dl = $(this).find('td').eq(4).text();
+				var valor_dl = $(this).find('span').eq(0).text();
 				if(valor_dl == ""){
-					valor_dl = $(this).find('td').eq(4).find('input').val();
-					$(this).find('td').eq(4).html("<input "+id_new_input_dl+" type='text' value='"+valor_dl.trim()+"' size='8px' onChange='referenciar(\""+id_dl+"\")'>");
-					$(this).find('td').eq(4).find('input').numeric();
+					valor_dl = $(this).find('span').eq(0).find('input').val();
+					$(this).find('span').eq(0).html("<input "+id_new_input_dl+" type='text' value='"+valor_dl.trim()+"' size='8px' onChange='referenciar(\""+id_dl+"\")'>");
+					$(this).find('span').eq(0).find('input').numeric();
 				}else{
-					$(this).find('td').eq(4).html("<input "+id_new_input_dl+" type='text' value='"+valor_dl.trim()+"' size='8px' onChange='referenciar(\""+id_dl+"\")'>");
-					$(this).find('td').eq(4).find('input').numeric();
+					$(this).find('span').eq(0).html("<input "+id_new_input_dl+" type='text' value='"+valor_dl.trim()+"' size='8px' onChange='referenciar(\""+id_dl+"\")'>");
+					$(this).find('span').eq(0).find('input').numeric();
 				}
 				// Campos de costos en bolívares
-				var valor_bs = $(this).find('td').eq(5).text();
+				var valor_bs = $(this).find('span').eq(1).text();
 				if(valor_bs == ""){
-					valor_bs = $(this).find('td').eq(5).find('input').val()
-					$(this).find('td').eq(5).html("<input "+id_new_input_bs+" type='text' value='"+valor_bs.trim()+"' size='8px'>");
-					$(this).find('td').eq(5).find('input').numeric();
+					valor_bs = $(this).find('span').eq(1).find('input').val()
+					$(this).find('span').eq(1).html("<input "+id_new_input_bs+" type='text' value='"+valor_bs.trim()+"' size='8px'>");
+					$(this).find('span').eq(1).find('input').numeric();
 				}else{
-					$(this).find('td').eq(5).html("<input "+id_new_input_bs+" type='text' value='"+valor_bs.trim()+"' size='8px'>");
-					$(this).find('td').eq(5).find('input').numeric();
+					$(this).find('span').eq(1).html("<input "+id_new_input_bs+" type='text' value='"+valor_bs.trim()+"' size='8px'>");
+					$(this).find('span').eq(1).find('input').numeric();
 				}
 			});
         }else{
@@ -296,13 +311,13 @@ $(document).ready(function(){
             $("#tab_productos tbody tr").each(function () {
 				$(this).find('td').find('input').prop("checked", "");
 				// Campos de costos en dólares				
-				var valor_dl = $(this).find('td').eq(4).find('input').val();
+				var valor_dl = $(this).find('span').eq(0).find('input').val();
 				//~ alert(valor_dl);
-				$(this).find('td').eq(4).text(valor_dl);
+				$(this).find('span').eq(0).text(valor_dl);
 				// Campos de costos en bolívares
-				var valor_bs = $(this).find('td').eq(5).find('input').val();
+				var valor_bs = $(this).find('span').eq(1).find('input').val();
 				//~ alert(valor_bs);
-				$(this).find('td').eq(5).text(valor_bs);
+				$(this).find('span').eq(1).text(valor_bs);
 			});
 		}
 	});
@@ -369,14 +384,14 @@ $(document).ready(function(){
 			if (checkbox.is(':checked')) {
 				num_checked += 1;
 				// Captura del costo del material en dólares teniendo en cuenta si está en un input o es texto plano
-				if($(this).find('td').eq(4).find('input').val().trim() == undefined){
-					var costo_mat_dolar = $(this).find('td').eq(4).text();
+				if($(this).find('span').eq(0).find('input').val().trim() == undefined){
+					var costo_mat_dolar = $(this).find('span').eq(0).text();
 				}else{
-					var costo_mat_dolar = $(this).find('td').eq(4).find('input').val();
+					var costo_mat_dolar = $(this).find('span').eq(0).find('input').val();
 				}
 				var valor_referencial = parseFloat(costo_mat_dolar) * precio_dolar;
 				// Indicamos el monto referencial
-				$(this).find('td').eq(5).find('input').val(valor_referencial.toFixed(2));
+				$(this).find('span').eq(1).find('input').val(valor_referencial.toFixed(2));
 			}
 		});
 		
@@ -430,11 +445,11 @@ $(document).ready(function(){
 						checkbox = $(this).find('td').eq(0).find('input');
 						
 						if (checkbox.is(':checked')) {
-							var id = $(this).find('td').eq(13).find('a').attr('id');
-							var nombre = $(this).find('td').eq(2).text().trim();
-							var referencia = $(this).find('td').eq(3).text().trim();
-							var costo_dolar = $(this).find('td').eq(4).find('input').val().trim();
-							var costo_bolivar = $(this).find('td').eq(5).find('input').val().trim();
+							var id = $(this).find('td').eq(12).find('a').attr('id');
+							var nombre = $(this).find('td').eq(1).text().trim();
+							var referencia = $(this).find('td').eq(2).text().trim();
+							var costo_dolar = $(this).find('span').eq(0).find('input').val().trim();
+							var costo_bolivar = $(this).find('span').eq(1).find('input').val().trim();
 							//~ var tienda_id = $(this).find('td').eq(6).attr('id');
 							//~ tienda_id = tienda_id.split('_');
 							//~ tienda_id = tienda_id[1];
@@ -456,7 +471,7 @@ $(document).ready(function(){
 						}
 					});
 					
-					//~ console.log(data);
+					console.log(data);
 					
 					$.ajax({
 						url : '<?php echo base_url(); ?>CProductos/update_list',
