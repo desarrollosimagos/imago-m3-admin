@@ -4,7 +4,33 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 
 class MProductos extends CI_Model {
-
+	var $table = "users_tiendas u_t";
+	var $select_column = array(
+		"p.id", 
+		"p.nombre", 
+		"p.referencia", 
+		"p.descripcion", 
+		"p.costo_dolar", 
+		"p.costo_bolivar",
+		"p.tienda_id", 
+		"t.name", 
+		"p.c_compra", 
+		"p.c_vende", 
+		"p.c_fabrica", 
+		"p.modificado"
+	);
+	var $order_column = array(
+		"p.nombre", 
+		"p.referencia",
+		"p.costo_dolar", 
+		"p.costo_bolivar",
+		"t.name", 
+		"p.modificado",
+		"p.descripcion", 
+		"p.c_compra", 
+		"p.c_vende", 
+		"p.c_fabrica"
+	);
 
     public function __construct() {
        
@@ -36,6 +62,57 @@ class MProductos extends CI_Model {
         else
             return $query->result();
     }
+
+    // Método público para construir la consulta
+    public function make_query() {
+        $this->db->select($this->select_column);
+        $this->db->distinct();
+		$this->db->from($this->table);
+		$this->db->join('tiendas t', 't.id = u_t.tienda_id');
+		$this->db->join('productos p', 'p.tienda_id = t.id');
+		if(isset($_POST["search"]["value"])){
+			$this->db->like("p.nombre", $_POST["search"]["value"]);
+			$this->db->or_like("p.referencia", $_POST["search"]["value"]);
+			$this->db->or_like("p.descripcion", $_POST["search"]["value"]);
+			$this->db->or_like("p.costo_dolar", $_POST["search"]["value"]);
+			$this->db->or_like("p.costo_bolivar", $_POST["search"]["value"]);
+			$this->db->or_like("t.name", $_POST["search"]["value"]);
+			$this->db->or_like("p.modificado", $_POST["search"]["value"]);
+		}
+		if(isset($_POST["order"])){
+			$this->db->order_by($this->order_column[$_POST["order"]["0"]["column"]], $_POST["order"]["0"]["dir"]);
+		}else{
+			$this->db->order_by("id", "DESC");
+		}
+        $this->db->where('u_t.user_id =', $this->session->userdata['logged_in']['id']);
+    }
+    
+    // Método público para ejecutar la consulta
+    public function make_datatables(){
+		$this->make_query();
+		if($_POST["length"] != -1){
+			$this->db->limit($_POST["length"], $_POST["start"]);
+		}
+		$query = $this->db->get();
+		return $query->result();		
+	}
+	
+	// Método público para obtener el número de registros resultantes de make_query()
+	public function get_filtered_data(){
+		$this->make_query();
+		$query = $this->db->get();
+		return $query->num_rows();
+	}
+	
+	// Método público para obtener el número total de registros de productos del usuario
+	public function get_all_data(){
+		$this->db->select($this->select_column);
+		$this->db->from($this->table);
+		$this->db->join('tiendas t', 't.id = u_t.tienda_id');
+		$this->db->join('productos p', 'p.tienda_id = t.id');
+		$this->db->where('u_t.user_id =', $this->session->userdata['logged_in']['id']);
+		return $this->db->count_all_results();
+	}
 
     //Public method to obtain the units
     public function obtener_unidades() {
