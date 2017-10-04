@@ -283,6 +283,43 @@ class CProductos extends CI_Controller {
 		}
 		
     }
+	
+	// Método para referenciar y actualizar los precios de los productos en general
+    public function update_list2() {
+		//~ print_r($this->input->post('precio_dolar'));
+		$precio_dolar = $this->input->post('precio_dolar');
+		
+		// Consultamos la lista de productos
+		$productos = $this->MProductos->obtener();
+		
+		//~ print_r($productos);
+		//~ echo count($productos);
+		// Si el arreglo trae registros se procede a hacer las actualizaciones correspondientes
+		if(count($productos) > 0){
+			foreach ($productos as $producto) {
+				
+				// Calculo del nuevo precio referenciando el dólar actual
+				$nuevo_precio = $producto->costo_dolar * $precio_dolar;
+					
+				// Actualización de datos en la tabla de 'productos'
+				$datos = array(
+					'id' => $producto->id,
+					'costo_bolivar' => round($nuevo_precio, 2),
+					'modificado' => date('Y-m-d')
+				);
+				
+				$result = $this->MProductos->update_prices($datos);
+				
+				// Actualización de datos en la tabla de 'productos_tienda'
+				$datos2 = array(
+					'precio' => round($nuevo_precio, 2)
+				);
+				
+				$result2 = $this->MProductos->update_pt($producto->id, $datos2);
+			}
+		}
+		
+    }
     
 	// Método para eliminar
 	function delete($id) {

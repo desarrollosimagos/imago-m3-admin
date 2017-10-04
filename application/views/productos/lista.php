@@ -128,8 +128,11 @@
 								</div>
 							</div>
 							<!-- Imagen de carga -->
-							<div class="col-md-6" style="display:block;" id="resultado">
+							<div class="col-md-6" style="display:block;">
 								<button class="btn btn-outline btn-primary dim" id="actualizar_montos" type="button"><i class="fa fa-floppy-o"></i> Actualizar</button>
+							</div>
+							<div class="col-md-4" style="display:block;">
+								<button class="btn btn-outline btn-primary dim" id="actualizar_montos_general" type="button"><i class="fa fa-refresh"></i> | <i class="fa fa-floppy-o"></i> Referenciar y Actualizar</button>
 							</div>
 						</div>
                     </div>
@@ -403,7 +406,7 @@ $(document).ready(function(){
 	});
 	
 	
-	// Proceso de actualización de montos de los materiales seleccionados
+	// Proceso de actualización de montos de los productos seleccionados
 	$("#actualizar_montos").on('click', function (e) {
 		var num_checked = 0;  // Contador de checkbox marcados
 		
@@ -507,6 +510,39 @@ $(document).ready(function(){
 			
 		}  // Cierre del if que valida si hay checkbox marcados
 		
+	});
+	
+	// Referenciación y actualización general de precios
+	$("#actualizar_montos_general").on('click', function (e) {
+		var precio_dolar = $("#precio_dolar").val();  // Capturamos el precio del dólar previamente cargado en el campo oculto 'precio_dolar'
+		
+		$.ajax({
+			url : '<?php echo base_url(); ?>CProductos/update_list2',
+			type : 'POST',
+			async: false,  // Para que no proceda con las siguientes instrucciones hasta terminar la petición
+			//~ dataType : 'json',
+			data : {'precio_dolar' : precio_dolar},
+			beforeSend:function(objeto){
+				$('#resultado').css({display:'block'});
+				$('#actualizar_montos').css({display:'none'});
+			},
+			success : function(response) {
+				
+				$('#resultado').css({display:'none'});
+				$('#actualizar_montos').css({display:'block'});
+				
+				swal({
+					title: "Actualización",
+					 text: "Actualizado con exito",
+					  type: "success" 
+					},
+				function(){
+					// Reiniciamos
+					window.location.href = '<?php echo base_url(); ?>productos';
+				});
+												
+			},
+		});
 	});
 	
 });
