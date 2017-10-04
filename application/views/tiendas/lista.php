@@ -39,7 +39,7 @@
                                     <th>Teléfono</th>
                                     <th>Editar</th>
                                     <th>Eliminar</th>
-                                    <th>Update Precios M3</th>
+                                    <th>Update Precios</th>
                                 </tr>
                             </thead>
                             <tbody>
