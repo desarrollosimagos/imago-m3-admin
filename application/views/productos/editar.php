@@ -397,6 +397,7 @@ $(document).ready(function(){
 				processData: false
 			})
 			.done(function(response) {
+				//~ alert(response);
 				if (response[0] == '1') {
 					swal("Disculpe,", "este producto se encuentra registrado");
 				}else{
