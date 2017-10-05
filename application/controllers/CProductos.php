@@ -220,7 +220,7 @@ class CProductos extends CI_Controller {
 			// Sección para el registro del archivo en la ruta establecida para tal fin (assets/img/productos)
 			$ruta = getcwd();  // Obtiene el directorio actual en donde se esta trabajando
 			//~ print_r($_FILES);
-			$i = 0;
+			$i = 0;  // Indice de la imágen
 			foreach($_FILES['imagen']['name'] as $imagen){
 				if($imagen != ""){
 					// Obtenemos la extensión
@@ -231,6 +231,7 @@ class CProductos extends CI_Controller {
 						'foto' => "foto".($i+1)."_".$_POST['id'].".".$ext,
 						'd_create' => date('Y-m-d')
 					);
+					//~ echo "foto".($i+1)."_".$_POST['id'].".".$ext;
 					$insertar_foto = $this->MProductos->insert_foto($datos2);
 					if (move_uploaded_file($_FILES['imagen']['tmp_name'][$i], $ruta."/assets/img/productos/foto".($i+1)."_".$_POST['id'].".".$ext)) {
 						echo "El fichero es válido y se subió con éxito.\n";
@@ -238,8 +239,8 @@ class CProductos extends CI_Controller {
 						echo "¡Posible ataque de subida de ficheros!\n";
 					}
 					
-					$i++;
 				}
+				$i++;  // Incrementamos 
 			}
 		}
 	}
