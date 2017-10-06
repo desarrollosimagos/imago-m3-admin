@@ -36,6 +36,9 @@ class CProductos extends CI_Controller {
 	public function ajax_productos()
 	{
 		$fetch_data = $this->MProductos->make_datatables();
+		//~ $consulta_ejecutada = $this->db->last_query();
+		//~ echo $consulta_ejecutada;
+		//~ echo count($fetch_data);
 		$data = array();
 		foreach($fetch_data as $row){
 			$sub_array = array();
@@ -291,7 +294,7 @@ class CProductos extends CI_Controller {
 		$precio_dolar = $this->input->post('precio_dolar');
 		
 		// Consultamos la lista de productos
-		$productos = $this->MProductos->obtener();
+		$productos = $this->MProductos->obtenerByUser();
 		
 		//~ print_r($productos);
 		//~ echo count($productos);
