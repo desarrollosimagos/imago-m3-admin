@@ -8,6 +8,7 @@ class CProductos extends CI_Controller {
        
 		// Load database
         $this->load->model('MProductos');
+        $this->load->model('MTiendasVirtuales');
 		
     }
 	
@@ -45,7 +46,17 @@ class CProductos extends CI_Controller {
 			// Proceso de busqueda de fotos asociadas al producto
 			$num_fotos = $this->MProductos->buscar_fotos($row->id);
 			$num_fotos = count($num_fotos);
-			
+			// Proceso de busqueda de tiendas virtuales asociadas al producto
+			$lista_tiendasv = "";
+			$tiendasv = $this->MProductos->obtenerTiendas($row->id);
+			if(count($tiendasv) > 0){
+				foreach($tiendasv as $tiendav){
+					$t_v = $this->MTiendasVirtuales->obtenerTiendas($tiendav->tiendav_id);
+					$lista_tiendasv .= $t_v[0]->nombre.", ";
+				}
+				$lista_tiendasv = substr($lista_tiendasv, 0, -2);
+			}
+						
 			$sub_array[] = "<input type='checkbox' id='checkbox_".$row->id."' class='check'>";
 			$sub_array[] = $row->nombre;
 			$sub_array[] = $row->referencia;
@@ -54,6 +65,7 @@ class CProductos extends CI_Controller {
 			$sub_array[] = $row->name;
 			$sub_array[] = $row->modificado;
 			$sub_array[] = $row->descripcion;
+			$sub_array[] = $lista_tiendasv;
 			$sub_array[] = $num_fotos;
 			$c_compra; $c_vende; $c_fabrica;
 			if($row->c_compra == 0){$c_compra = "No";}else{$c_compra = "Sí";}
