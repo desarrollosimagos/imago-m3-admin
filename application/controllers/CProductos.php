@@ -42,6 +42,10 @@ class CProductos extends CI_Controller {
 		$data = array();
 		foreach($fetch_data as $row){
 			$sub_array = array();
+			// Proceso de busqueda de fotos asociadas al producto
+			$num_fotos = $this->MProductos->buscar_fotos($row->id);
+			$num_fotos = count($num_fotos);
+			
 			$sub_array[] = "<input type='checkbox' id='checkbox_".$row->id."' class='check'>";
 			$sub_array[] = $row->nombre;
 			$sub_array[] = $row->referencia;
@@ -50,9 +54,14 @@ class CProductos extends CI_Controller {
 			$sub_array[] = $row->name;
 			$sub_array[] = $row->modificado;
 			$sub_array[] = $row->descripcion;
-			$sub_array[] = $row->c_compra;
-			$sub_array[] = $row->c_vende;
-			$sub_array[] = $row->c_fabrica;
+			$sub_array[] = $num_fotos;
+			$c_compra; $c_vende; $c_fabrica;
+			if($row->c_compra == 0){$c_compra = "No";}else{$c_compra = "Sí";}
+			if($row->c_vende == 0){$c_vende = "No";}else{$c_vende = "Sí";}
+			if($row->c_fabrica == 0){$c_fabrica = "No";}else{$c_fabrica = "Sí";}
+			$sub_array[] = $c_compra;
+			$sub_array[] = $c_vende;
+			$sub_array[] = $c_fabrica;
 			$sub_array[] = "<a href='".base_url()."productos/edit/".$row->id."' title='Editar' style='color: #1ab394'><i class='fa fa-edit fa-2x'></i></a>";
 			$sub_array[] = "<a class='borrar' id='".$row->id."' style='color: #1ab394' title='Eliminar'><i class='fa fa-trash-o fa-2x'></i></a>";
 			
