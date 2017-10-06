@@ -39,6 +39,7 @@
                                     <th>Tienda</th>
                                     <th>Modificado</th>
                                     <th>Descripción</th>
+                                    <th>Tiendas Virtuales</th>
                                     <th>Fotos</th>
                                     <th>Se compra</th>
                                     <th>Se vende</th>
@@ -124,6 +125,7 @@ $(document).ready(function(){
             {"sClass": "registro center", "sWidth": "10%"},
             {"sClass": "registro center", "sWidth": "20%"},
             {"sClass": "registro center", "sWidth": "10%"},
+            {"sClass": "none", "sWidth": "20%"},
             {"sClass": "none", "sWidth": "20%"},
             {"sClass": "none", "sWidth": "10%"},
             {"sClass": "none", "sWidth": "10%"},
