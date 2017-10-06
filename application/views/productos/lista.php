@@ -46,75 +46,7 @@
                                     <th>Eliminar</th>
                                 </tr>
                             </thead>
-                            <!--<tbody>
-                                <?php $i = 1; ?>
-                                <?php foreach ($listar as $perfil) { ?>
-                                    <tr style="text-align: center">
-                                        <td>
-                                            <input type="checkbox" id="checkbox_<?php echo $perfil->id;?>" class="check">
-                                        </td>
-                                        <td>
-                                            <?php echo $i; ?>
-                                        </td>
-                                        <td>
-                                            <?php echo $perfil->nombre; ?>
-                                        </td>
-                                        <td>
-                                            <?php echo $perfil->referencia; ?>
-                                        </td>
-                                        <td id="checkbox_<?php echo $perfil->id;?>_column_dl">
-                                            <?php echo $perfil->costo_dolar; ?>
-                                        </td>
-                                        <td id="checkbox_<?php echo $perfil->id;?>_column">
-                                            <?php echo $perfil->costo_bolivar; ?>
-                                        </td>
-                                        <td id="unidad_<?php echo $perfil->unidad_medida?>">
-                                            <?php 
-											foreach ($listar_unidades as $unidad){
-												if($perfil->unidad_medida == $unidad->id){
-													echo $unidad->name." - ".$unidad->symbol;
-												}else{
-													echo "";
-												}
-											}
-											?>
-                                        </td>
-                                        <td id="tienda_<?php echo $perfil->tienda_id?>">
-                                            <?php 
-											foreach ($listar_tiendas_fisicas as $tienda){
-												if($perfil->tienda_id == $tienda->id){
-													echo $tienda->name;
-												}else{
-													echo "";
-												}
-											}
-											?>
-                                        </td>
-                                        <td>
-                                            <?php echo $perfil->modificado; ?>
-                                        </td>
-                                        <td>
-                                            <?php echo $perfil->descripcion; ?>
-                                        </td>
-                                        <td>
-                                            <?php echo $perfil->c_compra; ?>
-                                        </td>
-                                        <td>
-                                            <?php echo $perfil->c_vende; ?>
-                                        </td>
-                                        <td>
-                                            <?php echo $perfil->c_fabrica; ?>
-                                        </td>
-                                        <td style='text-align: center'>
-                                            <a href="<?php echo base_url() ?>productos/edit/<?= $perfil->id; ?>" title="Editar" style='color: #1ab394'><i class="fa fa-edit fa-2x"></i></a>
-                                        </td>
-                                        <td style='text-align: center'>
-                                            <a class='borrar' id='<?php echo $perfil->id; ?>' style='color: #1ab394' title='Eliminar'><i class="fa fa-trash-o fa-2x"></i></a>
-                                        </td>
-                                    </tr>
-                                    <?php $i++ ?>
-                                <?php } ?>
-                            </tbody>-->
+							
                         </table>
                         
                         <div class="text-right">

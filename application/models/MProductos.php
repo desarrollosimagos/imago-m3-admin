@@ -22,14 +22,14 @@ class MProductos extends CI_Model {
 	var $order_column = array(
 		"p.nombre", 
 		"p.referencia",
+		"p.descripcion", 
 		"p.costo_dolar", 
 		"p.costo_bolivar",
 		"t.name", 
-		"p.modificado",
-		"p.descripcion", 
 		"p.c_compra", 
 		"p.c_vende", 
-		"p.c_fabrica"
+		"p.c_fabrica",
+		"p.modificado",
 	);
 
     public function __construct() {
@@ -56,6 +56,14 @@ class MProductos extends CI_Model {
 		$this->db->join('tiendas t', 't.id = u_t.tienda_id');
 		$this->db->join('productos p', 'p.tienda_id = t.id');
         $this->db->where('u_t.user_id =', $this->session->userdata['logged_in']['id']);
+        //~ // Obtenemos los ids de las tiendas del usuario para filtrar los productos // No fue necesario
+        //~ $ids_tiendas = array();
+		//~ foreach($this->session->userdata['logged_in']['tiendas'] as $tiendas){
+			//~ foreach($tiendas as $tienda){
+				//~ $ids_tiendas[] = $tienda->id;
+			//~ }
+		//~ }
+        //~ $this->db->where_in('u_t.tienda_id', $ids_tiendas);
 		$query = $this->db->get();
         if ($query->num_rows() > 0)
             return $query->result();
@@ -70,21 +78,37 @@ class MProductos extends CI_Model {
 		$this->db->from($this->table);
 		$this->db->join('tiendas t', 't.id = u_t.tienda_id');
 		$this->db->join('productos p', 'p.tienda_id = t.id');
-		if(isset($_POST["search"]["value"])){
-			$this->db->like("p.nombre", $_POST["search"]["value"]);
-			$this->db->or_like("p.referencia", $_POST["search"]["value"]);
-			$this->db->or_like("p.descripcion", $_POST["search"]["value"]);
-			$this->db->or_like("p.costo_dolar", $_POST["search"]["value"]);
-			$this->db->or_like("p.costo_bolivar", $_POST["search"]["value"]);
-			$this->db->or_like("t.name", $_POST["search"]["value"]);
-			$this->db->or_like("p.modificado", $_POST["search"]["value"]);
+        $this->db->where('u_t.user_id =', $this->session->userdata['logged_in']['id']);
+		if(isset($_POST["search"]["value"]) && $_POST["search"]["value"] != ""){
+			//~ $this->db->like("p.nombre", $_POST["search"]["value"]);
+			//~ $this->db->or_like("p.referencia", $_POST["search"]["value"]);
+			//~ $this->db->or_like("p.descripcion", $_POST["search"]["value"]);
+			//~ $this->db->or_like("p.costo_dolar", $_POST["search"]["value"]);
+			//~ $this->db->or_like("p.costo_bolivar", $_POST["search"]["value"]);
+			//~ $this->db->or_like("t.name", $_POST["search"]["value"]);
+			//~ $this->db->or_like("p.modificado", $_POST["search"]["value"]);
+			$condicionales_like = "(p.nombre LIKE '%".$_POST["search"]["value"]."%' OR ";
+			$condicionales_like .= "p.referencia LIKE '%".$_POST["search"]["value"]."%' OR ";
+			$condicionales_like .= "p.descripcion LIKE '%".$_POST["search"]["value"]."%' OR ";
+			$condicionales_like .= "p.costo_dolar LIKE '%".$_POST["search"]["value"]."%' OR ";
+			$condicionales_like .= "p.costo_bolivar LIKE '%".$_POST["search"]["value"]."%' OR ";
+			$condicionales_like .= "t.name LIKE '%".$_POST["search"]["value"]."%' OR ";
+			$condicionales_like .= "p.modificado LIKE '%".$_POST["search"]["value"]."%')";
+			$this->db->where($condicionales_like);
 		}
 		if(isset($_POST["order"])){
 			$this->db->order_by($this->order_column[$_POST["order"]["0"]["column"]], $_POST["order"]["0"]["dir"]);
 		}else{
 			$this->db->order_by("id", "DESC");
 		}
-        $this->db->where('u_t.user_id =', $this->session->userdata['logged_in']['id']);
+        //~ // Obtenemos los ids de las tiendas del usuario para filtrar los productos // No fue necesario
+        //~ $ids_tiendas = array();
+		//~ foreach($this->session->userdata['logged_in']['tiendas'] as $tiendas){
+			//~ foreach($tiendas as $tienda){
+				//~ $ids_tiendas[] = $tienda->id;
+			//~ }
+		//~ }
+        //~ $this->db->where_in('u_t.tienda_id', $ids_tiendas);
     }
     
     // Método público para ejecutar la consulta
