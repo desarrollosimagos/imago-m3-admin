@@ -229,6 +229,13 @@ class MProductos extends CI_Model {
             return $id;
         }
     }
+
+    // Public method to serach the fotos associated
+    public function buscar_fotos($producto_id) {
+        $result = $this->db->where('producto_id =', $producto_id);
+        $result = $this->db->get('fotos');
+        return $result->result();
+    }
     
     // Método público, forma de insertar los datos de la asociación entre productos y tiendas
     public function insertTiendas($datos) {
