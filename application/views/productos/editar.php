@@ -8,7 +8,7 @@
         <h2>Productos </h2>
         <ol class="breadcrumb">
             <li>
-                <a href="index.html">Inicio</a>
+                <a href="<?php echo base_url() ?>home">Inicio</a>
             </li>
             
             <li>

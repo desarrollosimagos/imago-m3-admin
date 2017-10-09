@@ -5,7 +5,6 @@
             <li>
                 <a href="<?php echo base_url() ?>home">Inicio</a>
             </li>
-   
             <li class="active">
                 <strong>Menús</strong>
             </li>

@@ -3,10 +3,10 @@
         <h2>Perfiles</h2>
         <ol class="breadcrumb">
             <li>
-                <a href="index.html">Inicio</a>
+                <a href="<?php echo base_url() ?>home">Inicio</a>
             </li>
             <li>
-                <a>Usuarios</a>
+                <a href="<?php echo base_url() ?>profile">Usuarios</a>
             </li>
             <li class="active">
                 <strong>Editar Perfiles</strong>
