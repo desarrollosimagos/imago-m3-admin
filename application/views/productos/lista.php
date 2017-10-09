@@ -384,7 +384,8 @@ $(document).ready(function(){
 						checkbox = $(this).find('td').eq(0).find('input');
 						
 						if (checkbox.is(':checked')) {
-							var id = $(this).find('td').eq(12).find('a').attr('id');
+							var id = $(this).find('a').eq(1).attr('id');
+							//~ alert(id);
 							var nombre = $(this).find('td').eq(1).text().trim();
 							var referencia = $(this).find('td').eq(2).text().trim();
 							var costo_dolar = $(this).find('span').eq(0).find('input').val().trim();
