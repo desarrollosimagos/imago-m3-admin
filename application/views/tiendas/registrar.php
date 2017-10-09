@@ -7,7 +7,7 @@
             </li>
             
             <li>
-                <a href="<?php echo base_url() ?>usuarios">Tiendas</a>
+                <a href="<?php echo base_url() ?>tiendas">Tiendas</a>
             </li>
             
             <li class="active">
