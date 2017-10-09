@@ -335,7 +335,7 @@ class CProductos extends CI_Controller {
 				
 				$result = $this->MProductos->update_prices($datos);
 				
-				// Actualización de datos en la tabla de 'productos_tienda'
+				// Actualización de datos en la tabla de 'productos_tiendav'
 				$datos2 = array(
 					'precio' => round($nuevo_precio, 2)
 				);
