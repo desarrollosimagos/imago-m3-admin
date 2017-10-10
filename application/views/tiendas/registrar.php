@@ -52,6 +52,11 @@
 								<input type="text" class="form-control"  name="bd_externa" maxlength="250" id="bd_externa">
 							</div>
 						</div>
+						<div class="form-group"><label class="col-sm-2 control-label" >Campo Externo</label>
+							<div class="col-sm-8">
+								<input type="text" class="form-control"  name="cp_externo" maxlength="250" id="cp_externo">
+							</div>
+						</div>
 						<div class="form-group">
 							<label class="col-sm-2 control-label">Teléfono</label>
 							<div class="col-sm-4">

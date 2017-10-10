@@ -25,7 +25,7 @@ class MTiendas extends CI_Model {
     //Public method to obtain the tienda
     public function obtenerByUser() {
         //~ $query = $this->db->get('tiendas');
-		$this->db->select('t.id, t.rif, t.name, t.status, t.address, t.referencia, t.bd_externa, t.phone');
+		$this->db->select('t.id, t.rif, t.name, t.status, t.address, t.referencia, t.bd_externa, t.cp_externo, t.phone');
 		$this->db->from('users_tiendas u_t');
 		$this->db->join('tiendas t', 't.id = u_t.tienda_id');
 		$this->db->where('u_t.user_id =', $this->session->userdata['logged_in']['id']);
