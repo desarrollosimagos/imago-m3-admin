@@ -17,7 +17,7 @@ class MUpdateM3 extends CI_Model {
         $consulta = "UPDATE $bd_externa.ps_product_shop, mercuri.productos, ";
 		$consulta .= "mercuri.tiendas SET $bd_externa.ps_product_shop.price = mercuri.productos.costo_bolivar ";
 		$consulta .= "WHERE mercuri.tiendas.id = mercuri.productos.tienda_id AND ";
-		$consulta .= "$bd_externa.ps_product_shop.id_product = mercuri.productos.referencia ";
+		$consulta .= "$bd_externa.ps_product_shop.cp_externo = mercuri.productos.referencia ";
 		$consulta .= "AND $bd_externa.ps_product_shop.id_shop = mercuri.tiendas.referencia ";
 		$consulta .= "AND mercuri.productos.tienda_id = $id_tienda";
 		

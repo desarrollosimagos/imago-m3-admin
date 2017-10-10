@@ -36,6 +36,7 @@
                                     <th>Dirección</th>
                                     <th>Referencia</th>
                                     <th>BD Externa</th>
+                                    <th>Campo Externo</th>
                                     <th>Teléfono</th>
                                     <th>Editar</th>
                                     <th>Eliminar</th>
@@ -74,6 +75,9 @@
                                         </td>
                                         <td>
                                             <?php echo $tienda->bd_externa; ?>
+                                        </td>
+                                        <td>
+                                            <?php echo $tienda->cp_externo; ?>
                                         </td>
                                         <td>
                                             <?php echo $tienda->phone; ?>
@@ -142,6 +146,7 @@ $(document).ready(function(){
             {"sClass": "registro center", "sWidth": "30%"},
             {"sClass": "registro center", "sWidth": "30%"},
             {"sClass": "registro center", "sWidth": "10%"},
+            {"sClass": "none", "sWidth": "10%"},
             {"sClass": "none", "sWidth": "10%"},
             {"sClass": "none", "sWidth": "10%"},
             {"sClass": "none", "sWidth": "10%"},
