@@ -18,7 +18,7 @@ class CUpdateM3 extends CI_Controller {
 			// Consultamos la base de datos externa de la tienda
 			$data_tienda = $this->MTiendas->obtenerTiendas($_GET['id']);
 			
-			$result = $this->MUpdateM3->update_prices_db($_GET['id'], $data_tienda[0]->bd_externa);
+			$result = $this->MUpdateM3->update_prices_db($_GET['id'], $data_tienda[0]->bd_externa, $data_tienda[0]->cp_externo);
 			
 			$consulta_ejecutada = $this->db->last_query();
 			
