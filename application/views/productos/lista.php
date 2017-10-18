@@ -436,7 +436,7 @@ $(document).ready(function(){
 								},
 							function(){
 								// Reiniciamos
-								window.location.href = '<?php echo base_url(); ?>productos';
+								//~ window.location.href = '<?php echo base_url(); ?>productos';
 							});
 															
 						},
