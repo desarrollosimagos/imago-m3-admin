@@ -15,6 +15,8 @@ Class CApis extends CI_Controller {
     }
 	
 	public function mlibre(){
+		// Fecha
+		$fecha = date('Y-m-d H-i-s');
 		// Consultamos los datos de la tienda
 		$id = $this->input->get('id');
 		$datosb_tienda = $this->MTiendasVirtuales->obtenerTiendas($id);  // Datos básicos de la tienda
@@ -35,6 +37,9 @@ Class CApis extends CI_Controller {
 			$meli = new Meli($datosb_tienda[0]->app_id, $datosb_tienda[0]->secret_api);
 			if($datosb_tienda[0]->expires_in + time() + 1 < time()){
 				$params = array('access_token' => $datosb_tienda[0]->tokens);
+				
+				// Generamos un archivo con la lista de productos
+				$this->list_items($productos, $fecha);
 					
 				$i = 0;
 				$errores = 0;  // Número de errores (Actualizaciones fallidas)
@@ -92,7 +97,7 @@ Class CApis extends CI_Controller {
 							if($response_reg['httpCode'] == '201'){
 								$num_reg++;
 								// Registro de incidencia
-								$this->logs($producto->producto_id, "Registrado...", $this->session->userdata['logged_in']['id']);
+								$this->logs($producto->producto_id, $response_reg['body']->id, "Registrado...", $this->session->userdata['logged_in']['id'], $fecha);
 								//~ print_r($response_reg);
 								// Actualizamos el código de referencia en la tabla de asociaciones de productos con tiendas virtuales 'productos_tiendav'
 								$cod_ref = $response_reg['body']->id;
@@ -107,7 +112,7 @@ Class CApis extends CI_Controller {
 							}
 						}else{
 							// Registro de incidencia
-							$this->logs($producto->producto_id, $response['body']->error, $this->session->userdata['logged_in']['id']);
+							$this->logs($producto->producto_id, $producto->referencia, $response['body']->error, $this->session->userdata['logged_in']['id'], $fecha);
 						}
 					}else{
 						// Si no hubo errores en el envío del precio y la cantidad, entonces enviamos la descripción
@@ -120,7 +125,7 @@ Class CApis extends CI_Controller {
 					if($response['httpCode'] == '200'){
 						$num_act++;
 						// Registro de incidencia
-						$this->logs($producto->producto_id, "Actualizado...", $this->session->userdata['logged_in']['id']);
+						$this->logs($producto->producto_id, $response['body']->id, "Actualizado...", $this->session->userdata['logged_in']['id'], $fecha);
 					}
 					//~ echo "<br>";
 					//~ echo "<br>";
@@ -166,6 +171,9 @@ Class CApis extends CI_Controller {
 						}
 						
 						$params = array('access_token' => $_SESSION['access_token']);
+						
+						// Generamos un archivo con la lista de productos
+						$this->list_items($productos, $fecha);
 						
 						$i = 0;
 						$errores = 0;  // Número de errores (Actualizaciones fallidas)
@@ -227,7 +235,7 @@ Class CApis extends CI_Controller {
 									if($response_reg['httpCode'] == '201'){
 										$num_reg++;
 										// Registro de incidencia
-										$this->logs($producto->producto_id, "Registrado...", $this->session->userdata['logged_in']['id']);
+										$this->logs($producto->producto_id, $response_reg['body']->id, "Registrado...", $this->session->userdata['logged_in']['id'], $fecha);
 										//~ print_r($response_reg);
 										// Actualizamos el código de referencia en la tabla de asociaciones de productos con tiendas virtuales 'productos_tiendav'
 										$cod_ref = $response_reg['body']->id;
@@ -242,7 +250,7 @@ Class CApis extends CI_Controller {
 									}
 								}else{
 									// Registro de incidencia
-									$this->logs($producto->producto_id, $response['body']->error, $this->session->userdata['logged_in']['id']);
+									$this->logs($producto->producto_id, $producto->referencia, $response['body']->error, $this->session->userdata['logged_in']['id'], $fecha);
 								}
 							}else{
 								// Si no hubo errores en el envío del precio y la cantidad, entonces enviamos la descripción
@@ -255,7 +263,7 @@ Class CApis extends CI_Controller {
 							if($response['httpCode'] == '200'){
 								$num_act++;
 								// Registro de incidencia
-								$this->logs($producto->producto_id, "Actualizado...", $this->session->userdata['logged_in']['id']);
+								$this->logs($producto->producto_id, $response['body']->id, "Actualizado...", $this->session->userdata['logged_in']['id'], $fecha);
 							}
 							//~ echo "<br>";
 							//~ echo "<br>";
@@ -315,13 +323,27 @@ Class CApis extends CI_Controller {
     }
     
     // Método público para generar un registro de los eventos sucedidos durante una sincronización con la tienda virtual de Mercado Libre
-    function logs($producto_id, $evento, $user_id)
+    function logs($producto_id, $referencia, $evento, $user_id, $fecha)
     {
 		$ruta = getcwd();  // Obtiene el directorio actual en donde se esta trabajando
 		
-        $ddf = fopen($ruta.'/application/logs/logs.log','a');
+        $ddf = fopen($ruta.'/application/logs/logs_'.$fecha.'.log','a');
 	
-		fwrite($ddf,"[".date("r")."] Producto $producto_id: $evento. Usuario: $user_id\r\n");
+		fwrite($ddf,"[".date("r")."] Producto: $producto_id, Num Referencia: $referencia, Evento: $evento, Usuario: $user_id\r\n");
+		
+		fclose($ddf);
+		
+    }
+    // Método público para generar un registro de los eventos sucedidos durante una sincronización con la tienda virtual de Mercado Libre
+    function list_items($list_items, $fecha)
+    {
+		$ruta = getcwd();  // Obtiene el directorio actual en donde se esta trabajando
+		
+        $ddf = fopen($ruta.'/application/logs/list_items_'.$fecha.'.log','a');
+		
+		foreach($list_items as $producto){
+			fwrite($ddf,"Producto id: ".$producto->producto_id.", Tienda id: ".$producto->tiendav_id."Num Referencia: ".$producto->referencia.", Precio: ".$producto->precio.", Cantidad: ".$producto->cantidad."\r\n");
+		}
 		
 		fclose($ddf);
 		
