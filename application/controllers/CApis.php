@@ -45,6 +45,7 @@ Class CApis extends CI_Controller {
 				$errores = 0;  // Número de errores (Actualizaciones fallidas)
 				$num_act = 0;  // Actualizaciones exitosas
 				$num_reg = 0;  // Registros exitosos
+				$captura_eventos = array();  // Captura de eventos e incidencias al actualizar precios
 				foreach($productos as $producto){
 					// Consultamos los detalles del producto
 					$datos_producto = $this->MProductos->obtenerProductos($producto->producto_id);  // Detalles del producto
@@ -97,7 +98,8 @@ Class CApis extends CI_Controller {
 							if($response_reg['httpCode'] == '201'){
 								$num_reg++;
 								// Registro de incidencia
-								$this->logs($producto->producto_id, $response_reg['body']->id, "Registrado...", $this->session->userdata['logged_in']['id'], $fecha);
+								//~ $this->logs($producto->producto_id, $response_reg['body']->id, "Registrado...", $this->session->userdata['logged_in']['id'], $fecha);
+								$captura_eventos[] = "[".date("r")."] Producto: ".$producto->producto_id.", Num Referencia: ".$response_reg['body']->id.", Evento: Registrado..., Usuario: ".$this->session->userdata['logged_in']['id']."\r\n";
 								//~ print_r($response_reg);
 								// Actualizamos el código de referencia en la tabla de asociaciones de productos con tiendas virtuales 'productos_tiendav'
 								$cod_ref = $response_reg['body']->id;
@@ -112,7 +114,8 @@ Class CApis extends CI_Controller {
 							}
 						}else{
 							// Registro de incidencia
-							$this->logs($producto->producto_id, $producto->referencia, $response['body']->error, $this->session->userdata['logged_in']['id'], $fecha);
+							//~ $this->logs($producto->producto_id, $producto->referencia, $response['body']->error, $this->session->userdata['logged_in']['id'], $fecha);
+							$captura_eventos[] = "[".date("r")."] Producto: ".$producto->producto_id.", Num Referencia: ".$producto->referencia.", Evento: ".$response['body']->error.", Usuario: ".$this->session->userdata['logged_in']['id']."\r\n";
 						}
 					}else{
 						// Si no hubo errores en el envío del precio y la cantidad, entonces enviamos la descripción
@@ -125,12 +128,16 @@ Class CApis extends CI_Controller {
 					if($response['httpCode'] == '200'){
 						$num_act++;
 						// Registro de incidencia
-						$this->logs($producto->producto_id, $response['body']->id, "Actualizado...", $this->session->userdata['logged_in']['id'], $fecha);
+						//~ $this->logs($producto->producto_id, $response['body']->id, "Actualizado...", $this->session->userdata['logged_in']['id'], $fecha);
+						$captura_eventos[] = "[".date("r")."] Producto: ".$producto->producto_id.", Num Referencia: ".$response['body']->id.", Evento: Actualizado..., Usuario: ".$this->session->userdata['logged_in']['id']."\r\n";
 					}
 					//~ echo "<br>";
 					//~ echo "<br>";
 					$i++;
 				}
+				// Generamos el log
+				$this->logs($captura_eventos, $fecha);
+				
 				$this->load->view('base');
 				$data['mensaje'] = "Ha actualizado los precios con exito!";
 				$data['num_act'] = $num_act;
@@ -179,6 +186,7 @@ Class CApis extends CI_Controller {
 						$errores = 0;  // Número de errores (Actualizaciones fallidas)
 						$num_act = 0;  // Actualizaciones exitosas
 						$num_reg = 0;  // Registros exitosos
+						$captura_eventos = array();  // Captura de eventos e incidencias al actualizar precios
 						foreach($productos as $producto){
 							// Consultamos los detalles del producto
 							$datos_producto = $this->MProductos->obtenerProductos($producto->producto_id);  // Detalles del producto
@@ -235,7 +243,8 @@ Class CApis extends CI_Controller {
 									if($response_reg['httpCode'] == '201'){
 										$num_reg++;
 										// Registro de incidencia
-										$this->logs($producto->producto_id, $response_reg['body']->id, "Registrado...", $this->session->userdata['logged_in']['id'], $fecha);
+										//~ $this->logs($producto->producto_id, $response_reg['body']->id, "Registrado...", $this->session->userdata['logged_in']['id'], $fecha);
+										$captura_eventos[] = "[".date("r")."] Producto: ".$producto->producto_id.", Num Referencia: ".$response_reg['body']->id.", Evento: Registrado..., Usuario: ".$this->session->userdata['logged_in']['id']."\r\n";
 										//~ print_r($response_reg);
 										// Actualizamos el código de referencia en la tabla de asociaciones de productos con tiendas virtuales 'productos_tiendav'
 										$cod_ref = $response_reg['body']->id;
@@ -250,7 +259,8 @@ Class CApis extends CI_Controller {
 									}
 								}else{
 									// Registro de incidencia
-									$this->logs($producto->producto_id, $producto->referencia, $response['body']->error, $this->session->userdata['logged_in']['id'], $fecha);
+									//~ $this->logs($producto->producto_id, $producto->referencia, $response['body']->error, $this->session->userdata['logged_in']['id'], $fecha);
+									$captura_eventos[] = "[".date("r")."] Producto: ".$producto->producto_id.", Num Referencia: ".$producto->referencia.", Evento: ".$response['body']->error.", Usuario: ".$this->session->userdata['logged_in']['id']."\r\n";
 								}
 							}else{
 								// Si no hubo errores en el envío del precio y la cantidad, entonces enviamos la descripción
@@ -263,12 +273,16 @@ Class CApis extends CI_Controller {
 							if($response['httpCode'] == '200'){
 								$num_act++;
 								// Registro de incidencia
-								$this->logs($producto->producto_id, $response['body']->id, "Actualizado...", $this->session->userdata['logged_in']['id'], $fecha);
+								//~ $this->logs($producto->producto_id, $response['body']->id, "Actualizado...", $this->session->userdata['logged_in']['id'], $fecha);
+								$captura_eventos[] = "[".date("r")."] Producto: ".$producto->producto_id.", Num Referencia: ".$response['body']->id.", Evento: Actualizado..., Usuario: ".$this->session->userdata['logged_in']['id']."\r\n";
 							}
 							//~ echo "<br>";
 							//~ echo "<br>";
 							$i++;
 						}
+						// Generamos el log
+						$this->logs($captura_eventos, $fecha);
+						
 						$this->load->view('base');
 						$data['mensaje'] = "Ha actualizado los precios con exito!";
 						$data['num_act'] = $num_act;
@@ -323,13 +337,14 @@ Class CApis extends CI_Controller {
     }
     
     // Método público para generar un registro de los eventos sucedidos durante una sincronización con la tienda virtual de Mercado Libre
-    function logs($producto_id, $referencia, $evento, $user_id, $fecha)
+    function logs($eventos, $fecha)
     {
 		$ruta = getcwd();  // Obtiene el directorio actual en donde se esta trabajando
 		
         $ddf = fopen($ruta.'/application/logs/logs_'.$fecha.'.log','a');
-	
-		fwrite($ddf,"[".date("r")."] Producto: $producto_id, Num Referencia: $referencia, Evento: $evento, Usuario: $user_id\r\n");
+		foreach($eventos as $evento){
+			fwrite($ddf, $evento);
+		}
 		
 		fclose($ddf);
 		
@@ -342,7 +357,7 @@ Class CApis extends CI_Controller {
         $ddf = fopen($ruta.'/application/logs/list_items_'.$fecha.'.log','a');
 		
 		foreach($list_items as $producto){
-			fwrite($ddf,"Producto id: ".$producto->producto_id.", Tienda id: ".$producto->tiendav_id."Num Referencia: ".$producto->referencia.", Precio: ".$producto->precio.", Cantidad: ".$producto->cantidad."\r\n");
+			fwrite($ddf,"Producto id: ".$producto->producto_id.", Tienda id: ".$producto->tiendav_id.", Num Referencia: ".$producto->referencia.", Precio: ".$producto->precio.", Cantidad: ".$producto->cantidad."\r\n");
 		}
 		
 		fclose($ddf);
