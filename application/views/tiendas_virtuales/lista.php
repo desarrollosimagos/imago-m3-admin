@@ -113,7 +113,7 @@
                                             <a class='borrar' id='<?php echo $tienda->id; ?>' style='color: #1ab394' title='Eliminar'><i class="fa fa-trash-o fa-2x"></i></a>
                                         </td>
                                         <td style='text-align: center'>
-                                            <a class='actualizar' href="<?php echo base_url().$tienda->ruta."?id=".$tienda->id; ?>"style='color: #1ab394' title='Actualizar precios'><i class="fa fa-refresh fa-2x"></i></a>
+                                            <a class='actualizar' id="<?php echo $tienda->ruta.";".$tienda->id; ?>" style='color: #1ab394' title='Actualizar precios'><i class="fa fa-refresh fa-2x"></i></a>
                                         </td>
                                     </tr>
                                     <?php $i++ ?>
@@ -258,14 +258,91 @@ $(document).ready(function(){
         });
     });
     
-    // Validacion para borrar
-    //~ $("#update_prices").on('click', function (e) {
-        //~ e.preventDefault();
-	//~ 
-		//~ $.post('<?php echo base_url(); ?>mercado/update', function (response) {
-			//~ 
-		//~ });
-	//~ });
+    // Validacion para actualizar tienda virtual
+    $("table#tab_tiendas").on('click', 'a.actualizar', function (e) {
+        e.preventDefault();
+        var id = this.getAttribute('id');
+		var ruta = id.split(";");
+		ruta = ruta[0];
+		id = id.split(";");
+		id = id[1];
+        
+        // Saber si la tienda tiene cola de envío y en qué estatus está
+        $.post('<?php echo base_url(); ?>mercado/cola/?id='+id, function (response) {
+
+			if (response == 2) {
+			   
+				 swal({ 
+				   title: "Disculpe,",
+					text: "Hay una sincronización en proceso...",
+					 type: "warning" 
+				   },
+				   function(){
+					 
+				 });
+				 
+			}else if(response == 3){
+				
+				swal({
+					title: "Cola pendiente",
+					text: "Tiene una cola pendiente, ¿desea procesarla?",
+					type: "warning",
+					showCancelButton: true,
+					confirmButtonColor: "#DD6B55",
+					confirmButtonText: "Procesar",
+					cancelButtonText: "Cancelar",
+					closeOnConfirm: false,
+					closeOnCancel: true
+				},
+				function(isConfirm){
+					
+					if (isConfirm) {
+					 
+						window.location.href = '<?php echo base_url(); ?>'+ruta+'?id='+id;
+						
+					}else{
+					
+						// Cancelar una cola según el id de la misma
+						$.post('<?php echo base_url(); ?>mercado/cancelar_cola/?id='+id, function (response2) {
+								
+								if(response2 == 1){
+									
+									swal({ 
+									   title: "Cancelado",
+										text: "Cola cancelada con exito",
+										 type: "success" 
+									},
+									function(){
+										 
+									});
+									
+								}else{
+									swal({ 
+									   title: "Error",
+										text: "La cola no pudo ser cancelada, consulte con su administrador...",
+										 type: "warning" 
+									},
+									function(){
+										 
+									});
+								}
+							
+						});
+					
+					}
+					
+				});
+				
+				 
+			}else{
+				
+				window.location.href = '<?php echo base_url(); ?>'+ruta+'?id='+id;
+				
+			}
+			
+		});
+        
+    });
 	
 });
         
