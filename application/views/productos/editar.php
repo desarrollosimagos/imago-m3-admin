@@ -151,6 +151,36 @@
 											<input type="file" class="form-control" name="imagen[]" onChange="valida_tipo($(this))">
 										</div>
 									</div>
+									<div class="form-group"><label class="col-sm-2 control-label" >Nueva Foto 5</label>
+										<div class="col-sm-10">
+											<input type="file" class="form-control" name="imagen[]" onChange="valida_tipo($(this))">
+										</div>
+									</div>
+									<div class="form-group"><label class="col-sm-2 control-label" >Nueva Foto 6</label>
+										<div class="col-sm-10">
+											<input type="file" class="form-control" name="imagen[]" onChange="valida_tipo($(this))">
+										</div>
+									</div>
+									<div class="form-group"><label class="col-sm-2 control-label" >Nueva Foto 7</label>
+										<div class="col-sm-10">
+											<input type="file" class="form-control" name="imagen[]" onChange="valida_tipo($(this))">
+										</div>
+									</div>
+									<div class="form-group"><label class="col-sm-2 control-label" >Nueva Foto 8</label>
+										<div class="col-sm-10">
+											<input type="file" class="form-control" name="imagen[]" onChange="valida_tipo($(this))">
+										</div>
+									</div>
+									<div class="form-group"><label class="col-sm-2 control-label" >Nueva Foto 9</label>
+										<div class="col-sm-10">
+											<input type="file" class="form-control" name="imagen[]" onChange="valida_tipo($(this))">
+										</div>
+									</div>
+									<div class="form-group"><label class="col-sm-2 control-label" >Nueva Foto 10</label>
+										<div class="col-sm-10">
+											<input type="file" class="form-control" name="imagen[]" onChange="valida_tipo($(this))">
+										</div>
+									</div>
 								</div>
 								<div class="col-lg-6">
 									<div class="form-group">
@@ -176,6 +206,42 @@
 											<?php if(count($fotos_asociadas) > 3){ ?>
 											<label class="col-sm-2 control-label" >Foto 4</label>
 											<img style="height:100px;width:100px;" src="<?php echo base_url(); ?>assets/img/productos/<?php echo $fotos_asociadas[3]->foto; ?>">
+											<?php } ?>
+										</div>
+										<div class="col-sm-3">
+											<?php if(count($fotos_asociadas) > 4){ ?>
+											<label class="col-sm-2 control-label" >Foto 5</label>
+											<img style="height:100px;width:100px;" src="<?php echo base_url(); ?>assets/img/productos/<?php echo $fotos_asociadas[4]->foto; ?>">
+											<?php } ?>
+										</div>
+										<div class="col-sm-3">
+											<?php if(count($fotos_asociadas) > 5){ ?>
+											<label class="col-sm-2 control-label" >Foto 6</label>
+											<img style="height:100px;width:100px;" src="<?php echo base_url(); ?>assets/img/productos/<?php echo $fotos_asociadas[5]->foto; ?>">
+											<?php } ?>
+										</div>
+										<div class="col-sm-3">
+											<?php if(count($fotos_asociadas) > 6){ ?>
+											<label class="col-sm-2 control-label" >Foto 7</label>
+											<img style="height:100px;width:100px;" src="<?php echo base_url(); ?>assets/img/productos/<?php echo $fotos_asociadas[6]->foto; ?>">
+											<?php } ?>
+										</div>
+										<div class="col-sm-3">
+											<?php if(count($fotos_asociadas) > 7){ ?>
+											<label class="col-sm-2 control-label" >Foto 8</label>
+											<img style="height:100px;width:100px;" src="<?php echo base_url(); ?>assets/img/productos/<?php echo $fotos_asociadas[7]->foto; ?>">
+											<?php } ?>
+										</div>
+										<div class="col-sm-3">
+											<?php if(count($fotos_asociadas) > 8){ ?>
+											<label class="col-sm-2 control-label" >Foto 9</label>
+											<img style="height:100px;width:100px;" src="<?php echo base_url(); ?>assets/img/productos/<?php echo $fotos_asociadas[8]->foto; ?>">
+											<?php } ?>
+										</div>
+										<div class="col-sm-3">
+											<?php if(count($fotos_asociadas) > 9){ ?>
+											<label class="col-sm-2 control-label" >Foto 10</label>
+											<img style="height:100px;width:100px;" src="<?php echo base_url(); ?>assets/img/productos/<?php echo $fotos_asociadas[9]->foto; ?>">
 											<?php } ?>
 										</div>
 									</div>
