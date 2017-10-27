@@ -172,6 +172,7 @@ class CProductos extends CI_Controller {
 					$datos = array(
 						'producto_id' => $id_producto,
 						'tiendav_id' => $tienda['id_tienda'],
+						'categoria_id' => $tienda['id_categoria'],
 						'referencia' => $tienda['referencia'],
 						'precio' => $tienda['precio'],
 						'cantidad' => $tienda['cantidad'],
@@ -207,6 +208,7 @@ class CProductos extends CI_Controller {
         $data['listar_tiendas_fisicas'] = $this->MProductos->obtener_tiendas_fisicas();
         $data['tiendas_asociadas'] = $this->MProductos->obtenerTiendas($data['id']);
         $data['fotos_asociadas'] = $this->MProductos->obtenerFotos($data['id']);
+        $data['listar_categorias'] = $this->MProductos->obtenerCategorias();
         $this->load->view('productos/editar', $data);
 		$this->load->view('footer');
     }
