@@ -356,10 +356,17 @@ class CProductos extends CI_Controller {
         $result2 = $this->MProductos->delete($id);  // Borramos el producto
     }
 	
-	public function ajax_service()
-    {                                          #Campo         #Tabla                #ID
-        $result = $this->MProductos->obtener();
+	// Método para listar las categorías según el id de la tienda virtual
+	public function ajax_categoria($tiendav_id)
+    {
+		
+		// Primero obtenemos el id de la aplicación asociada a la tienda virtual
+		$datos_tiendav = $this->MTiendasVirtuales->obtenerTiendas($tiendav_id);
+		
+		
+        $result = $this->MProductos->obtenerCategoriasByTv($datos_tiendav[0]->aplicacion_id);
         echo json_encode($result);
+        
     }
 	
 	

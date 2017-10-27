@@ -365,6 +365,36 @@ $(document).ready(function(){
 		]
 	});
 	
+	////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Al cambiar de opción en el combo de tiendas virtuales cargamos las categorías asociadas a su aplicación
+	////////////////////////////////////////////////////////////////////////////////////////////////////////
+	$('#tiendav_id').change(function () {
+
+		var id_tiendav = $('#tiendav_id').val();
+		
+		$('#categoria_id').find('option:gt(0)').remove().end().select2('val', '0');
+		
+		if (id_tiendav != "0") {
+			
+			$.get('<?php echo base_url(); ?>CProductos/ajax_categoria/' + id_tiendav + '', function (data) {
+				
+				var option = "";
+				
+				$.each(data, function (i) {
+
+					option += "<option value=" + data[i]['id'] + ">" + data[i]['categoria'] + "</option>";
+					
+				});
+				
+				$('#categoria_id').append(option);
+				
+			}, 'json');
+			
+		}
+		
+	});
+	
+	// Al hacer click en el botón de guardado
     $("#edit").click(function (e) {
 
         e.preventDefault();  // Para evitar que se envíe por defecto
