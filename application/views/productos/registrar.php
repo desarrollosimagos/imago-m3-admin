@@ -141,6 +141,38 @@
 											<input type="file" class="form-control" name="imagen[]" onChange="valida_tipo($(this))">
 										</div>
 									</div>
+									<div class="form-group"><label class="col-sm-2 control-label" >Foto 5</label>
+										<div class="col-sm-10">
+											<input type="file" class="form-control" name="imagen[]" onChange="valida_tipo($(this))">
+										</div>
+									</div>
+								</div>
+								<div class="col-lg-6">
+									<div class="form-group"><label class="col-sm-2 control-label" >Foto 6</label>
+										<div class="col-sm-10">
+											<input type="file" class="form-control" name="imagen[]" onChange="valida_tipo($(this))">
+										</div>
+									</div>
+									<div class="form-group"><label class="col-sm-2 control-label" >Foto 7</label>
+										<div class="col-sm-10">
+											<input type="file" class="form-control" name="imagen[]" onChange="valida_tipo($(this))">
+										</div>
+									</div>
+									<div class="form-group"><label class="col-sm-2 control-label" >Foto 8</label>
+										<div class="col-sm-10">
+											<input type="file" class="form-control" name="imagen[]" onChange="valida_tipo($(this))">
+										</div>
+									</div>
+									<div class="form-group"><label class="col-sm-2 control-label" >Foto 9</label>
+										<div class="col-sm-10">
+											<input type="file" class="form-control" name="imagen[]" onChange="valida_tipo($(this))">
+										</div>
+									</div>
+									<div class="form-group"><label class="col-sm-2 control-label" >Foto 10</label>
+										<div class="col-sm-10">
+											<input type="file" class="form-control" name="imagen[]" onChange="valida_tipo($(this))">
+										</div>
+									</div>
 								</div>
 							</div>
 						</div>
