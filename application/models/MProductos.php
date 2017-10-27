@@ -272,6 +272,29 @@ class MProductos extends CI_Model {
         else
             return $query->result();
     }
+    
+    // Public method to obtain the productos by id
+    public function obtenerCategorias() {
+		
+        $query = $this->db->get('categorias');
+        if ($query->num_rows() > 0)
+            return $query->result();
+        else
+            return $query->result();
+            
+    }
+    
+    // Public method to obtain the productos by id
+    public function obtenerCategoriasByTv($aplicacion_id) {
+		
+        $this->db->where('aplicacion_id', $aplicacion_id);
+        $query = $this->db->get('categorias');
+        if ($query->num_rows() > 0)
+            return $query->result();
+        else
+            return $query->result();
+            
+    }
 
     // Public method to update a record  
     public function update($datos) {

@@ -201,6 +201,15 @@
 										</select>
 									</div>
 									<div class="col-md-2">
+										<label class="control-label" >Categoría</label>
+										<select class="form-control" name="categoria_id" id="categoria_id">
+											<option value="0" selected="">Seleccione</option>
+											<?php foreach ($listar_categorias as $categoria) { ?>
+												<option value="<?php echo $categoria->id ?>"><?php echo $categoria->categoria; ?></option>
+											<?php } ?>
+										</select>
+									</div>
+									<div class="col-md-2">
 										<label class="control-label" >Referencia</label>
 										<input type="text" class="form-control input-sm" name="referencia_tienda" id="referencia_tienda">
 									</div>
@@ -227,6 +236,7 @@
 												<th>Tienda</th>
 												<!--<th>Precio</th>
 												<th>Impuesto</th>-->
+												<th>Catogoría</th>
 												<th>Referencia</th>
 												<th>Precio</th>
 												<th>Cantidad</th>
@@ -242,7 +252,15 @@
 														if ($tienda->tiendav_id == $tienda2->id){
 															echo $tienda2->nombre."<br>";
 														}
-													}?></td>
+													}?>
+													</td>
+													<td style='text-align: center' id="<?php echo $tienda->categoria_id; ?>">
+													<?php foreach ($listar_categorias as $categoria) {
+														if ($tienda->categoria_id == $categoria->id){
+															echo $categoria->categoria."<br>";
+														}
+													}?>
+													</td>
 													<td style='text-align: center'><?php echo $tienda->referencia; ?></td>
 													<td style='text-align: center' id="price_<?php echo $tienda->id;?>_column">
 													<?php echo $tienda->precio; ?>
@@ -339,6 +357,7 @@ $(document).ready(function(){
 			{"sWidth": "20%"},
 			{"sWidth": "20%"},
 			{"sWidth": "20%"},
+			{"sWidth": "20%"},
 			//~ {"sWidth": "8%"},
 			//~ {"sWidth": "4%", "bSortable": false, "sClass": "center sorting_false", "bSearchable": false},
 			{"sWidth": "10%", "bSortable": false, "sClass": "center sorting_false", "bSearchable": false},
@@ -406,30 +425,31 @@ $(document).ready(function(){
 					$("#tab_tiendas tbody tr").each(function () {
 						var id_tienda, tienda_text, referencia_t;
 						id_tienda = $(this).attr('id');  // id tienda
-						tienda_text = $(this).find('td').eq(0).attr('id'); //text tienda
-						referencia_t = $(this).find('td').eq(1).text();
+						tienda_text = $(this).find('td').eq(0).text(); //text tienda
+						id_categoria = $(this).find('td').eq(1).attr('id'); //id categoría
+						referencia_t = $(this).find('td').eq(2).text();
 						// Captura del precio verificando si está en un input o en texto plano
-						if($(this).find('td').eq(2).find('input').val() == undefined){
-							precio = $(this).find('td').eq(2).text().trim();
+						if($(this).find('td').eq(3).find('input').val() == undefined){
+							precio = $(this).find('td').eq(3).text().trim();
 							if(precio == ""){precio = 0;}
-						}else if($(this).find('td').eq(2).find('input').val() == ""){
+						}else if($(this).find('td').eq(3).find('input').val() == ""){
 							precio = 0;
 						}else{
-							precio = $(this).find('td').eq(2).find('input').val().trim();
+							precio = $(this).find('td').eq(3).find('input').val().trim();
 						}
 						//~ alert(precio);
 						// Captura de la cantidad verificando si está en un input o en texto plano
-						if($(this).find('td').eq(3).find('input').val() == undefined){
-							cantidad = $(this).find('td').eq(3).text().trim();
+						if($(this).find('td').eq(4).find('input').val() == undefined){
+							cantidad = $(this).find('td').eq(4).text().trim();
 							if(cantidad == ""){cantidad = 0;}
-						}else if($(this).find('td').eq(3).find('input').val() == ""){
+						}else if($(this).find('td').eq(4).find('input').val() == ""){
 							cantidad = 0;
 						}else{
-							cantidad = $(this).find('td').eq(3).find('input').val().trim();
+							cantidad = $(this).find('td').eq(4).find('input').val().trim();
 						}
 						//~ alert(cantidad);
 
-						campos = { "id_tienda" : id_tienda, "tienda" : tienda_text, "referencia" : referencia_t, "precio" : precio, "cantidad" : cantidad }
+						campos = { "id_tienda" : id_tienda, "id_categoria" : id_categoria, "referencia" : referencia_t, "precio" : precio, "cantidad" : cantidad }
 						data.push(campos);
 
 					});
@@ -518,6 +538,10 @@ $(document).ready(function(){
 			swal("Disculpe,", "para continuar debe seleccionar una tienda");
 			$('#tiendav_id').parent('div').addClass('has-error');
 			
+        } else if ($('#categoria_id').val().trim() == "0") {
+			swal("Disculpe,", "para continuar debe seleccionar una categoría");
+			$('#categoria_id').parent('div').addClass('has-error');
+			
         } else if ($('#referencia_tienda').val().trim() == "") {
 			swal("Disculpe,", "para continuar debe ingresar la referencia de la tienda");
 			$('#referencia_tienda').parent('div').addClass('has-error');
@@ -527,6 +551,8 @@ $(document).ready(function(){
 			var table = $('#tab_tiendas').DataTable();
 			var tienda = $("#tiendav_id").find('option').filter(':selected').text();
 			var tiendav_id = $("#tiendav_id").val();
+			var categoria = $("#categoria_id").find('option').filter(':selected').text();
+			var categoria_id = $("#categoria_id").val();
             var referencia_tienda = $("#referencia_tienda").val();
             var precio = $("#precio").val();
             if($("#precio").val().trim() == "" || $("#precio").val().trim() == 0){
@@ -549,13 +575,14 @@ $(document).ready(function(){
 				}
 			});
 			if(num_apariciones == 0){
-				var i = table.row.add([tienda, referencia_tienda, precio, cantidad, botonQuitar, checkboxActualizar]).draw();
+				var i = table.row.add([tienda, categoria, referencia_tienda, precio, cantidad, botonQuitar, checkboxActualizar]).draw();
 				table.rows(i).nodes().to$().attr("id", tiendav_id);  // Asignamos el id al tr de la fila agregada
 				//~ alert(table.rows(i).nodes().to$().find("td").eq(1).text());
 				// Asignamos un id a las celdas (columnas) correpondientes al precio y la cantidad de la fila agregada
 				// Estos ids serán para identificar el precio y la cantidad de una tienda recien añadida y sin guardar
-				table.rows(i).nodes().to$().find("td").eq(2).attr("id", 'price_'+tiendav_id+'x_column');
-				table.rows(i).nodes().to$().find("td").eq(3).attr("id", 'price_'+tiendav_id+'x_column_cantidad');
+				table.rows(i).nodes().to$().find("td").eq(1).attr("id", categoria_id);
+				table.rows(i).nodes().to$().find("td").eq(3).attr("id", 'price_'+tiendav_id+'x_column');
+				table.rows(i).nodes().to$().find("td").eq(4).attr("id", 'price_'+tiendav_id+'x_column_cantidad');
 			}else{
 				swal("Disculpe,", "la tienda ya se encuentra en la lista");
 			}
