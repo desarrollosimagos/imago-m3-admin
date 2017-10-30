@@ -62,6 +62,16 @@ class MApis extends CI_Model {
         else
             return $query->result();
     }
+    
+    // Método público para obtener datos de una categoría por id
+    public function obtenerCategoria($categoria_id) {
+        $this->db->where('id', $categoria_id);
+        $query = $this->db->get('categorias');
+        if ($query->num_rows() > 0)
+            return $query->result();
+        else
+            return $query->result();
+    }
 
     // Public method to insert the data
     public function insertCola($datos) {

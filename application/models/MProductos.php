@@ -186,6 +186,23 @@ class MProductos extends CI_Model {
         else
             return $query->result();
     }
+
+    // Método publico, para obtener las tiendas virtuales asociadas a las tiendas del usuario logueado
+    public function obtener_tiendas_fil_product($id_producto) {
+        //~ $query = $this->db->get('tienda_virtual');
+		$this->db->select('t_v.id, t_v.nombre');
+		$this->db->from('users_tiendas u_t');
+		$this->db->join('tiendas t', 't.id = u_t.tienda_id');
+		$this->db->join('tienda_virtual t_v', 't_v.tienda_id = t.id');
+		$this->db->join('productos_tiendav p_tv', 'p_tv.tiendav_id = t_v.id');
+		$this->db->where('p_tv.producto_id =', $id_producto);
+		$this->db->where('u_t.user_id =', $this->session->userdata['logged_in']['id']);
+		$query = $this->db->get();
+        if ($query->num_rows() > 0)
+            return $query->result();
+        else
+            return $query->result();
+    }
     
     // Método publico, para obtener las tiendas asociadas al producto
     public function obtenerTiendas($id) {
