@@ -154,6 +154,7 @@ $route['update_prices_m3'] = 'CUpdateM3/update_prices';
 $route['assets/(:any)'] = 'assets/$1';
 // APIs de tiendas virtuales
 $route['mercado/update'] = 'CApis/mlibre';
+$route['mercado/update_singles'] = 'CApis/mlibre_singles';
 $route['mercado/cola'] = 'CApis/cola_estatus';
 $route['mercado/cancelar_cola'] = 'CApis/cancelar_cola';
 $route['mercado/cola'] = 'CApis/cola_estatus';

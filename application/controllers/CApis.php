@@ -13,6 +13,7 @@ Class CApis extends CI_Controller {
         $this->load->model('MApis');
     }
 	
+	// Método para sincronizar los datos de los productos de la tienda virtual seleccionada
 	public function mlibre(){
 		
 		// Fecha
@@ -74,6 +75,7 @@ Class CApis extends CI_Controller {
 					// Datos del detalle a registrar
 					$datos_detalle = array(
 						'producto_id' => $datos_producto[0]->id,
+						'categoria_id' => $producto->categoria_id,
 						'nombre' => $datos_producto[0]->nombre,
 						'precio' => $producto->precio,
 						'cantidad' => $producto->cantidad,
@@ -117,8 +119,17 @@ Class CApis extends CI_Controller {
 					foreach($fotos_producto as $fotos){
 						$lista_fotos[] = array("source"=>base_url()."assets/img/productos/".$fotos->foto);
 					}
+							
+					// Consultamos los datos de la categoría del producto si ésta es diferente de 0 (cero)
+					$categoria_id = 0;
+					$categoria_referencia = "MLV1227";
+					if($producto->categoria_id != 0){
+						$data_categoria = $this->MApis->obtenerCategoria($producto->categoria_id);
+						$categoria_id = $data_categoria->id;
+						$categoria_referencia = $data_categoria->referencia;
+					}
 					
-					// Si la tienda virtual tiene fómula especificada le añadimos el cálculo de élla como comisión al precio del producto
+					// Si la tienda virtual tiene fórmula especificada le añadimos el cálculo de élla como comisión al precio del producto
 					if($datosb_tienda[0]->formula == ""){
 						$result = $producto->precio;
 						$body = array('price' => round($result, 2), 'available_quantity' => $producto->cantidad, 'pictures' => $lista_fotos);
@@ -146,7 +157,7 @@ Class CApis extends CI_Controller {
 							// Constriumos el item a enviar
 							$item = array(
 								"title" => $nombre_producto,
-								"category_id" => "MLV1227",
+								"category_id" => $categoria_referencia,
 								"price" => round($result, 2),
 								"currency_id" => "VEF",
 								"available_quantity" => $producto->cantidad,
@@ -294,7 +305,16 @@ Class CApis extends CI_Controller {
 								$lista_fotos[] = array("source"=>base_url()."assets/img/productos/".$fotos->foto);
 							}
 							
-							// Si la tienda virtual tiene fómula especificada le añadimos el cálculo de élla como comisión al precio del producto
+							// Consultamos los datos de la categoría del producto si ésta es diferente de 0 (cero)
+							$categoria_id = 0;
+							$categoria_referencia = "MLV1227";
+							if($producto->categoria_id != 0){
+								$data_categoria = $this->MApis->obtenerCategoria($producto->categoria_id);
+								$categoria_id = $data_categoria->id;
+								$categoria_referencia = $data_categoria->referencia;
+							}
+							
+							// Si la tienda virtual tiene fórmula especificada le añadimos el cálculo de élla como comisión al precio del producto
 							if($datosb_tienda[0]->formula == ""){
 								$result = $producto->precio;
 								$body = array('price' => round($result, 2), 'available_quantity' => $producto->cantidad, 'pictures' => $lista_fotos);
@@ -323,7 +343,7 @@ Class CApis extends CI_Controller {
 									// Constriumos el item a enviar
 									$item = array(
 										"title" => $nombre_producto,
-										"category_id" => "MLV1227",
+										"category_id" => $categoria_referencia,
 										"price" => round($result, 2),
 										"currency_id" => "VEF",
 										"available_quantity" => $producto->cantidad,
@@ -449,6 +469,327 @@ Class CApis extends CI_Controller {
 			);
 			
 			$result = $this->MApis->update_cola($data);
+			
+			$this->load->view('base');
+			$data['mensaje'] = "No hubo cambios!";
+			$this->load->view('price_update', $data);
+			$this->load->view('footer');
+		}
+		
+	}
+	
+	
+	// Método para sincronizar los datos de un producto específico con la tienda virtual seleccionada
+	public function mlibre_singles(){
+		
+		// Fecha
+		$fecha = date('Y-m-d H-i-s');
+		
+		// Consultamos los datos de la tienda y el producto, además de los de la aplicación asociada
+		$producto_id = $this->input->get('producto_id');
+		$tiendav_id = $this->input->get('tiendav_id');
+		
+		$datosb_tienda = $this->MTiendasVirtuales->obtenerTiendas($tiendav_id);  // Datos básicos de la tienda
+		
+		$datos_aplicacion = $this->MAplicaciones->obtenerAplicacion($datosb_tienda[0]->aplicacion_id);  // Datos de la aplicación asociada
+		
+		$producto = $this->MProductos->obtenerProductos($producto_id);  // Datos básicos del producto
+		
+		$producto_tiendav = $this->MTiendasVirtuales->obtenerProductosTienda2($producto_id, $tiendav_id);  // Datos de la asociación productos_tiendav 
+		
+		
+		// Si hay productos asociados
+		if(count($producto) > 0){
+			// Reasignamos los valores a una variable más corta ya usada
+			
+			$meli = new Meli($datosb_tienda[0]->app_id, $datosb_tienda[0]->secret_api);
+			if($datosb_tienda[0]->expires_in + time() + 1 < time()){
+				$params = array('access_token' => $datosb_tienda[0]->tokens);
+										
+				$i = 0;
+				$errores = 0;  // Número de errores (Actualizaciones fallidas)
+				$num_act = 0;  // Actualizaciones exitosas
+				$num_reg = 0;  // Registros exitosos
+				$captura_eventos = array();  // Captura de eventos e incidencias al actualizar precios
+				
+				// Consultamos las fotos del producto
+				$fotos_producto = $this->MProductos->obtenerFotos($producto[0]->id);  // Fotos del producto
+				$lista_fotos = array();
+				foreach($fotos_producto as $fotos){
+					$lista_fotos[] = array("source"=>base_url()."assets/img/productos/".$fotos->foto);
+				}
+						
+				// Consultamos los datos de la categoría del producto si ésta es diferente de 0 (cero)
+				$categoria_id = 0;
+				$categoria_referencia = "MLV1227";
+				if($producto_tiendav[0]->categoria_id != 0){
+					$data_categoria = $this->MApis->obtenerCategoria($producto_tiendav[0]->categoria_id);
+					$categoria_id = $data_categoria[0]->id;
+					$categoria_referencia = $data_categoria[0]->referencia;
+				}
+				
+				// Si la tienda virtual tiene fórmula especificada le añadimos el cálculo de élla como comisión al precio del producto
+				if($datosb_tienda[0]->formula == ""){
+					$result = $producto_tiendav[0]->precio;
+					$body = array('price' => round($result, 2), 'available_quantity' => $producto_tiendav[0]->cantidad, 'pictures' => $lista_fotos);
+				}else{
+					$precio = $datosb_tienda[0]->formula;
+					$p = $producto_tiendav[0]->precio;
+					$f_precio = str_replace('P',$p,$precio);
+					eval("\$result = $f_precio;");
+					$body = array('price' => round($result, 2), 'available_quantity' => $producto_tiendav[0]->cantidad, 'pictures' => $lista_fotos);
+				}
+				$response = $meli->put('/items/'.$producto_tiendav[0]->referencia, $body, $params);
+				// print_r($response);
+				// echo $response['httpCode'];
+				if(isset($response['body']->error)){
+					$errores++;
+					//~ print_r($response['body']->error);
+					if($response['body']->error == 'not_found'){
+						// Procedemos a registrar el nuevo producto en la tienda virtual de mercado libre
+						// Primero recortamos la cadena de nombre si su longitud supera los 60 caracteres
+						if(strlen($producto[0]->nombre) > 60){
+							$nombre_producto = substr($producto[0]->nombre, 0, 57)."...";
+						}else{
+							$nombre_producto = $producto[0]->nombre;
+						}
+						// Constriumos el item a enviar
+						$item = array(
+							"title" => $nombre_producto,
+							"category_id" => $categoria_referencia,
+							"price" => round($result, 2),
+							"currency_id" => "VEF",
+							"available_quantity" => $producto_tiendav[0]->cantidad,
+							"buying_mode" => "buy_it_now",
+							"listing_type_id" => "bronze",
+							"condition" => "new",
+							"description" => $producto[0]->descripcion,
+							"pictures" => $lista_fotos  // Arreglo con lista de fotos
+						);
+						
+						// Ejecutamos el método de envío de ítems
+						$response_reg = $meli->post('/items', $item, $params);
+						// Aumentamos el contador de registros si el ítem fue registrado correctamente
+						if($response_reg['httpCode'] == '201'){
+							$num_reg++;
+							// Registro de incidencia
+							$captura_eventos[] = "[".date("r")."] Producto: ".$producto[0]->id.", Num Referencia: ".$response_reg['body']->id.", Evento: Registrado..., Usuario: ".$this->session->userdata['logged_in']['id']."\r\n";
+							// Actualizamos el código de referencia en la tabla de asociaciones de productos con tiendas virtuales 'productos_tiendav'
+							$cod_ref = $response_reg['body']->id;
+							$data_referencia = array(
+								'producto_id' => $producto[0]->id, 
+								'tiendav_id' => $tiendav_id,
+								'referencia' => $cod_ref
+							);
+							$update_referencia = $this->MTiendasVirtuales->update_tp($data_referencia);
+							
+						}else{
+							echo $response_reg['httpCode'];
+							echo " - ";
+							print_r($response_reg['body']->error);
+							echo "<br>";
+							print_r($response_reg['body']);
+							echo "<br>";
+						}
+					}else if(strpos($response['body']->message, 'status:closed') !== false){
+						// Registro de incidencia
+						$captura_eventos[] = "[".date("r")."] Producto: ".$producto_tiendav[0]->producto_id.", Num Referencia: ".$producto_tiendav[0]->referencia.", Evento: ".$response['body']->error."1, Usuario: ".$this->session->userdata['logged_in']['id']."\r\n";
+						
+					}else{
+						// Registro de incidencia
+						$captura_eventos[] = "[".date("r")."] Producto: ".$producto_tiendav[0]->producto_id.", Num Referencia: ".$producto_tiendav[0]->referencia.", Evento: ".$response['body']->error."2, Usuario: ".$this->session->userdata['logged_in']['id']."\r\n";
+					}
+				}else{
+					// Si no hubo errores en el envío del precio y la cantidad, entonces enviamos la descripción
+					$body = array('text' => $producto[0]->descripcion);
+					$response_desc = $meli->put('/items/'.$producto_tiendav[0]->referencia.'/description', $body, $params);
+					if(isset($response_desc['body']->error)){
+						print_r($response_desc);
+					}
+				}
+				if($response['httpCode'] == '200'){
+					$num_act++;
+					// Registro de incidencia
+					$captura_eventos[] = "[".date("r")."] Producto: ".$producto_tiendav[0]->producto_id.", Num Referencia: ".$response['body']->id.", Evento: Actualizado..., Usuario: ".$this->session->userdata['logged_in']['id']."\r\n";
+					
+				}
+				$i++;
+				
+				// Generamos el log
+				$this->logs($captura_eventos, $fecha);
+				
+				$this->load->view('base');
+				$data['mensaje'] = "Ha actualizado los precios con exito!";
+				$data['num_act'] = $num_act;
+				$data['errores'] = $errores;
+				$data['registros'] = $num_reg;
+				$this->load->view('price_update', $data);
+				$this->load->view('footer');
+			}else{
+				if(isset($_GET['code'])) {
+					// If the code was in get parameter we authorize
+					$user = $meli->authorize($_GET['code'], base_url().'mercado/update_singles?producto_id='.$producto_id.'&tiendav_id='.$tiendav_id);
+					 
+					// Now we create the sessions with the authenticated user
+					if(isset($user['body']->access_token)){
+						$_SESSION['access_token'] = $user['body']->access_token;
+						$_SESSION['expires_in'] = $user['body']->expires_in;
+						
+						// Registramos el token y el tiempo en base de datos
+						$datos = array(
+							'id' => $tiendav_id,
+							'nombre' => $datosb_tienda[0]->nombre,
+							'tokens' => $user['body']->access_token,
+							'expires_in' => $user['body']->expires_in
+						);
+						
+						$result = $this->MTiendasVirtuales->update($datos);
+						
+						// We can check if the access token in invalid checking the time
+						if($_SESSION['expires_in'] + time() + 1 < time()) {
+							try {
+								print_r($meli->refreshAccessToken());
+							} catch (Exception $e) {
+								echo "Exception: ",  $e->getMessage(), "\n";
+							}
+						}
+						
+						$params = array('access_token' => $_SESSION['access_token']);
+						
+						// Generamos un archivo con la lista de productos
+						// $this->list_items($productos, $fecha);
+						
+						$i = 0;
+						$errores = 0;  // Número de errores (Actualizaciones fallidas)
+						$num_act = 0;  // Actualizaciones exitosas
+						$num_reg = 0;  // Registros exitosos
+						$captura_eventos = array();  // Captura de eventos e incidencias al actualizar precios
+						
+						// Consultamos las fotos del producto
+						$fotos_producto = $this->MProductos->obtenerFotos($producto[0]->id);  // Fotos del producto
+						$lista_fotos = array();
+						foreach($fotos_producto as $fotos){
+							$lista_fotos[] = array("source"=>base_url()."assets/img/productos/".$fotos->foto);
+						}
+						
+						// Consultamos los datos de la categoría del producto si ésta es diferente de 0 (cero)
+						$categoria_id = 0;
+						$categoria_referencia = "MLV1227";
+						if($producto_tiendav[0]->categoria_id != 0){
+							$data_categoria = $this->MApis->obtenerCategoria($producto_tiendav[0]->categoria_id);
+							$categoria_id = $data_categoria[0]->id;
+							$categoria_referencia = $data_categoria[0]->referencia;
+						}
+						
+						// Si la tienda virtual tiene fórmula especificada le añadimos el cálculo de élla como comisión al precio del producto
+						if($datosb_tienda[0]->formula == ""){
+							$result = $producto[0]->precio;
+							$body = array('price' => round($result, 2), 'available_quantity' => $producto_tiendav[0]->cantidad, 'pictures' => $lista_fotos);
+						}else{
+							$precio = $datosb_tienda[0]->formula;
+							$p = $producto_tiendav[0]->precio;
+							$f_precio = str_replace('P',$p,$precio);
+							eval("\$result = $f_precio;");
+							$body = array('price' => round($result, 2), 'available_quantity' => $producto_tiendav[0]->cantidad, 'pictures' => $lista_fotos);
+						}
+
+						$response = $meli->put('/items/'.$producto_tiendav[0]->referencia, $body, $params);
+						// print_r($response);
+						// echo $response['httpCode'];
+						if(isset($response['body']->error)){
+							$errores++;
+							//~ print_r($response['body']->error);
+							if($response['body']->error == 'not_found'){
+								// Procedemos a registrar el nuevo producto en la tienda virtual de mercado libre
+								// Primero recortamos la cadena de nombre si su longitud supera los 60 caracteres
+								if(strlen($producto[0]->nombre) > 60){
+									$nombre_producto = substr($producto[0]->nombre, 0, 57)."...";
+								}else{
+									$nombre_producto = $producto[0]->nombre;
+								}
+								// Constriumos el item a enviar
+								$item = array(
+									"title" => $nombre_producto,
+									"category_id" => $categoria_referencia,
+									"price" => round($result, 2),
+									"currency_id" => "VEF",
+									"available_quantity" => $producto_tiendav[0]->cantidad,
+									"buying_mode" => "buy_it_now",
+									"listing_type_id" => "bronze",
+									"condition" => "new",
+									"description" => $producto[0]->descripcion,
+									"pictures" => $lista_fotos  // Arreglo con lista de fotos
+								);
+								
+								// Ejecutamos el método de envío de items
+								$response_reg = $meli->post('/items', $item, $params);
+								// Aumentamos el contador de registros si el ítem fue registrado correctamente
+								if($response_reg['httpCode'] == '201'){
+									$num_reg++;
+									// Registro de incidencia
+									$captura_eventos[] = "[".date("r")."] Producto: ".$producto_tiendav[0]->producto_id.", Num Referencia: ".$response_reg['body']->id.", Evento: Registrado..., Usuario: ".$this->session->userdata['logged_in']['id']."\r\n";
+									// print_r($response_reg);
+									// Actualizamos el código de referencia en la tabla de asociaciones de productos con tiendas virtuales 'productos_tiendav'
+									$cod_ref = $response_reg['body']->id;
+									$data_referencia = array(
+										'producto_id' => $producto_tiendav[0]->producto_id, 
+										'tiendav_id' => $tiendav_id,
+										'referencia' => $cod_ref
+									);
+									$update_referencia = $this->MTiendasVirtuales->update_tp($data_referencia);
+									
+								}else{
+									echo $response_reg['httpCode'];
+									echo " - ";
+									print_r($response_reg['body']->error);
+									echo "<br>";
+									print_r($response_reg['body']);
+									echo "<br>";
+								}
+							}else if(strpos($response['body']->message, 'status:closed') !== false){
+								// Registro de incidencia
+								$captura_eventos[] = "[".date("r")."] Producto: ".$producto_tiendav[0]->producto_id.", Num Referencia: ".$producto_tiendav[0]->referencia.", Evento: ".$response['body']->error."1, Usuario: ".$this->session->userdata['logged_in']['id']."\r\n";
+								
+							}else{
+								// Registro de incidencia
+								$captura_eventos[] = "[".date("r")."] Producto: ".$producto_tiendav[0]->producto_id.", Num Referencia: ".$producto_tiendav[0]->referencia.", Evento: ".$response['body']->error."2, Usuario: ".$this->session->userdata['logged_in']['id']."\r\n";
+							}
+						}else{
+							// Si no hubo errores en el envío del precio y la cantidad, entonces enviamos la descripción
+							$body = array('text' => $producto[0]->descripcion);
+							$response_desc = $meli->put('/items/'.$producto_tiendav[0]->referencia.'/description', $body, $params);
+							if(isset($response_desc['body']->error)){
+								print_r($response_desc);
+							}
+						}
+						if($response['httpCode'] == '200'){
+							$num_act++;
+							// Registro de incidencia
+							$captura_eventos[] = "[".date("r")."] Producto: ".$producto_tiendav[0]->producto_id.", Num Referencia: ".$response['body']->id.", Evento: Actualizado..., Usuario: ".$this->session->userdata['logged_in']['id']."\r\n";
+							
+						}
+						$i++;
+						
+						// Generamos el log
+						$this->logs($captura_eventos, $fecha);
+						
+						$this->load->view('base');
+						$data['mensaje'] = "Ha actualizado los precios con exito!";
+						$data['num_act'] = $num_act;
+						$data['errores'] = $errores;
+						$data['registros'] = $num_reg;
+						$this->load->view('price_update', $data);
+						$this->load->view('footer');
+					}else{
+						$redirect = $meli->getAuthUrl(base_url().'mercado/update_singles?producto_id='.$producto_id.'&tiendav_id='.$tiendav_id, Meli::$AUTH_URL['MLV']);
+						redirect($redirect);
+					}
+				} else {
+					$redirect = $meli->getAuthUrl(base_url().'mercado/update_singles?producto_id='.$producto_id.'&tiendav_id='.$tiendav_id, Meli::$AUTH_URL['MLV']);
+					redirect($redirect);
+				}
+			}
+		}else{
 			
 			$this->load->view('base');
 			$data['mensaje'] = "No hubo cambios!";

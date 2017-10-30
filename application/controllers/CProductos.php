@@ -18,6 +18,7 @@ class CProductos extends CI_Controller {
 		$data['listar'] = $this->MProductos->obtenerByUser();
 		$data['listar_unidades'] = $this->MProductos->obtener_unidades();
 		$data['listar_tiendas'] = $this->MProductos->obtener_tiendas();
+		$data['listar_tiendas_fil'] = $this->MProductos->obtener_tiendas_fil();
 		$data['listar_tiendas_fisicas'] = $this->MProductos->obtener_tiendas_fisicas();
 		$this->load->view('productos/lista', $data);
 		$this->load->view('footer');
@@ -30,6 +31,7 @@ class CProductos extends CI_Controller {
 		//~ $data['listar_unidades'] = $this->MProductos->obtener_unidades();
 		//~ $data['listar_tiendas'] = $this->MProductos->obtener_tiendas();
 		//~ $data['listar_tiendas_fisicas'] = $this->MProductos->obtener_tiendas_fisicas();
+		//~ $data['listar_tiendas_fil'] = $this->MProductos->obtener_tiendas_fil_product();
 		$this->load->view('productos/lista');
 		$this->load->view('footer');
 	}
@@ -76,6 +78,7 @@ class CProductos extends CI_Controller {
 			$sub_array[] = $c_fabrica;
 			$sub_array[] = "<a href='".base_url()."productos/edit/".$row->id."' title='Editar' style='color: #1ab394'><i class='fa fa-edit fa-2x'></i></a>";
 			$sub_array[] = "<a class='borrar' id='".$row->id."' style='color: #1ab394' title='Eliminar'><i class='fa fa-trash-o fa-2x'></i></a>";
+			$sub_array[] = "<a class='actualizar' id='".$row->id."' style='color: #1ab394' title='Actualizar precio'><i class='fa fa-refresh fa-2x'></i></a>";
 			
 			$data[] = $sub_array;
 		}
@@ -365,6 +368,15 @@ class CProductos extends CI_Controller {
 		
 		
         $result = $this->MProductos->obtenerCategoriasByTv($datos_tiendav[0]->aplicacion_id);
+        echo json_encode($result);
+        
+    }
+	
+	// Método para listar las tiendas virtuales según el id del producto seleccionado
+	public function ajax_tiendasv($producto_id)
+    {		
+		
+        $result = $this->MProductos->obtener_tiendas_fil_product($producto_id);
         echo json_encode($result);
         
     }

@@ -84,6 +84,17 @@ class MTiendasVirtuales extends CI_Model {
         else
             return $query->result();
     }
+    
+    // Public method to obtain the productos by id
+    public function obtenerProductosTienda2($id_producto, $id_tiendav) {
+        $this->db->where('producto_id', $id_producto);
+        $this->db->where('tiendav_id', $id_tiendav);
+        $query = $this->db->get('productos_tiendav');
+        if ($query->num_rows() > 0)
+            return $query->result();
+        else
+            return $query->result();
+    }
 
     // Public method to update a record  
     public function update($datos) {
