@@ -38,6 +38,38 @@ class CProductos extends CI_Controller {
 	
 	public function ajax_productos()
 	{
+		//~ // Creación de una tabla si ésta no existe
+		//~ $tabla = "CREATE TABLE IF NOT EXISTS `categorias` (";
+		//~ $tabla .= "`id` int(11) NOT NULL AUTO_INCREMENT,";
+		//~ $tabla .= "`categoria` varchar(100) COLLATE utf8_unicode_ci NOT NULL,";
+		//~ $tabla .= "`categoria_padre` varchar(100) COLLATE utf8_unicode_ci NOT NULL,";
+		//~ $tabla .= "`referencia` varchar(50) COLLATE utf8_unicode_ci NOT NULL,";
+		//~ $tabla .= "`status` int(11) NOT NULL,";
+		//~ $tabla .= "`aplicacion_id` int(11) NOT NULL,";
+		//~ $tabla .= "`d_create` date NOT NULL,";
+		//~ $tabla .= "`d_update` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,";
+		//~ $tabla .= "PRIMARY KEY (`id`),";
+		//~ $tabla .= "KEY `aplicacion_id` (`aplicacion_id`)";
+		//~ $tabla .= ") ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1";
+		//~ $query = $this->db->query($tabla);
+		//~ 
+		//~ $consulta = "alter table productos_tiendav add categoria_id int not null default 0 after tiendav_id";
+		//~ $query2 = $this->db->query($consulta);
+		//~ 
+		//~ $consulta2 = "alter table productos_tiendav add KEY `categoria_id` (`categoria_id`)";
+		//~ $query3 = $this->db->query($consulta2);
+		//~ 
+		//~ $consulta3 = "INSERT INTO `categorias` (`id`, `categoria`, `categoria_padre`, `referencia`, `status`, `aplicacion_id`, `d_create`, `d_update`) VALUES";
+		//~ $consulta3 .= "(1, 'Categoría Uno', 'Categoría  Padre Uno', 'MLV1227', 1, 4, '0000-00-00', '2017-10-30 16:15:17'),";
+		//~ $consulta3 .= "(2, 'Categoría Dos', 'Categoría Padre Dos', 'MLV1227', 1, 4, '0000-00-00', '2017-10-30 16:15:17'),";
+		//~ $consulta3 .= "(3, 'Categoría Tres', 'Categoría Padre Tres', 'MLV1227', 1, 4, '0000-00-00', '2017-10-30 16:15:17'),";
+		//~ $consulta3 .= "(4, 'Categoría Cuatro', 'Categoría Padre Cuatro', 'MLV1227', 1, 4, '0000-00-00', '2017-10-30 16:15:17'),";
+		//~ $consulta3 .= "(5, 'Categoría Cinco', 'Categoría Padre Cinco', 'MLV1227', 1, 4, '0000-00-00', '2017-10-30 16:15:17'),";
+		//~ $consulta3 .= "(6, 'Categoría Seis', 'Categoría Padre Seis', 'MLV1227', 1, 5, '0000-00-00', '2017-10-30 16:15:17'),";
+		//~ $consulta3 .= "(7, 'Categoría Siete', 'Categoría Padre Siete', 'MLV1227', 1, 6, '0000-00-00', '2017-10-30 16:15:17')";
+		//~ 
+		//~ $query4 = $this->db->query($consulta3);
+		
 		$fetch_data = $this->MProductos->make_datatables();
 		//~ $consulta_ejecutada = $this->db->last_query();
 		//~ echo $consulta_ejecutada;
