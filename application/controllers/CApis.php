@@ -125,8 +125,8 @@ Class CApis extends CI_Controller {
 					$categoria_referencia = "MLV1227";
 					if($producto->categoria_id != 0){
 						$data_categoria = $this->MApis->obtenerCategoria($producto->categoria_id);
-						$categoria_id = $data_categoria->id;
-						$categoria_referencia = $data_categoria->referencia;
+						$categoria_id = $data_categoria[0]->id;
+						$categoria_referencia = $data_categoria[0]->referencia;
 					}
 					
 					// Si la tienda virtual tiene fórmula especificada le añadimos el cálculo de élla como comisión al precio del producto
@@ -310,8 +310,8 @@ Class CApis extends CI_Controller {
 							$categoria_referencia = "MLV1227";
 							if($producto->categoria_id != 0){
 								$data_categoria = $this->MApis->obtenerCategoria($producto->categoria_id);
-								$categoria_id = $data_categoria->id;
-								$categoria_referencia = $data_categoria->referencia;
+								$categoria_id = $data_categoria[0]->id;
+								$categoria_referencia = $data_categoria[0]->referencia;
 							}
 							
 							// Si la tienda virtual tiene fórmula especificada le añadimos el cálculo de élla como comisión al precio del producto
@@ -619,11 +619,11 @@ Class CApis extends CI_Controller {
 				$this->logs($captura_eventos, $fecha);
 				
 				$this->load->view('base');
-				$data['mensaje'] = "Ha actualizado los precios con exito!";
+				$data['mensaje'] = "Ha actualizado el precio con exito!";
 				$data['num_act'] = $num_act;
 				$data['errores'] = $errores;
 				$data['registros'] = $num_reg;
-				$this->load->view('price_update', $data);
+				$this->load->view('price_update_singles', $data);
 				$this->load->view('footer');
 			}else{
 				if(isset($_GET['code'])) {
@@ -774,11 +774,11 @@ Class CApis extends CI_Controller {
 						$this->logs($captura_eventos, $fecha);
 						
 						$this->load->view('base');
-						$data['mensaje'] = "Ha actualizado los precios con exito!";
+						$data['mensaje'] = "Ha actualizado el precio con exito!";
 						$data['num_act'] = $num_act;
 						$data['errores'] = $errores;
 						$data['registros'] = $num_reg;
-						$this->load->view('price_update', $data);
+						$this->load->view('price_update_singles', $data);
 						$this->load->view('footer');
 					}else{
 						$redirect = $meli->getAuthUrl(base_url().'mercado/update_singles?producto_id='.$producto_id.'&tiendav_id='.$tiendav_id, Meli::$AUTH_URL['MLV']);
