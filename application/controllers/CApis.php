@@ -37,6 +37,15 @@ Class CApis extends CI_Controller {
 			
 			$productos = $this->MApis->obtenerDetallesEstatus($id_cola, 2);  // Lista de productos asociados a la cola de sincronización pendiente
 			
+			// Pasamos la cola al status 2 (En proceso...)
+			// Armamos los datos a actualizar
+			$data = array(
+				'id' => $id_cola,
+				'status' => $st
+			);
+			
+			$result = $this->MApis->update_cola($data);
+						
 			//~ echo count($productos);
 			//~ echo " (Para actualizar)";
 			
@@ -129,13 +138,20 @@ Class CApis extends CI_Controller {
 						$categoria_referencia = $data_categoria[0]->referencia;
 					}
 					
+					// Si el precio en bolívares del producto está en cero, lo pasamos a 1
+					if($producto->precio == 0){
+						$precio_bolivares = 1;
+					}else{
+						$precio_bolivares = $producto->precio;
+					}
+					
 					// Si la tienda virtual tiene fórmula especificada le añadimos el cálculo de élla como comisión al precio del producto
 					if($datosb_tienda[0]->formula == ""){
-						$result = $producto->precio;
+						$result = $precio_bolivares;
 						$body = array('price' => round($result, 2), 'available_quantity' => $producto->cantidad, 'pictures' => $lista_fotos);
 					}else{
 						$precio = $datosb_tienda[0]->formula;
-						$p = $producto->precio;
+						$p = $precio_bolivares;
 						$f_precio = str_replace('P',$p,$precio);
 						eval("\$result = $f_precio;");
 						$body = array('price' => round($result, 2), 'available_quantity' => $producto->cantidad, 'pictures' => $lista_fotos);
@@ -197,6 +213,10 @@ Class CApis extends CI_Controller {
 								echo "<br>";
 								print_r($response_reg['body']);
 								echo "<br>";
+								echo "Producto: ".$producto->producto_id;
+								echo "<br>";
+								echo "Precio: ".$result;
+								echo "<br>";
 							}
 						}else if(strpos($response['body']->message, 'status:closed') !== false){
 							// Registro de incidencia
@@ -242,7 +262,7 @@ Class CApis extends CI_Controller {
 				}
 				// Armamos los datos a actualizar
 				$data = array(
-					'id' => $id,
+					'id' => $id_cola,
 					'status' => $st
 				);
 				
@@ -314,13 +334,20 @@ Class CApis extends CI_Controller {
 								$categoria_referencia = $data_categoria[0]->referencia;
 							}
 							
+							// Si el precio en bolívares del producto está en cero, lo pasamos a 1
+							if($producto->precio == 0){
+								$precio_bolivares = 1;
+							}else{
+								$precio_bolivares = $producto->precio;
+							}
+							
 							// Si la tienda virtual tiene fórmula especificada le añadimos el cálculo de élla como comisión al precio del producto
 							if($datosb_tienda[0]->formula == ""){
-								$result = $producto->precio;
+								$result = $precio_bolivares;
 								$body = array('price' => round($result, 2), 'available_quantity' => $producto->cantidad, 'pictures' => $lista_fotos);
 							}else{
 								$precio = $datosb_tienda[0]->formula;
-								$p = $producto->precio;
+								$p = $precio_bolivares;
 								$f_precio = str_replace('P',$p,$precio);
 								eval("\$result = $f_precio;");
 								$body = array('price' => round($result, 2), 'available_quantity' => $producto->cantidad, 'pictures' => $lista_fotos);
@@ -383,6 +410,10 @@ Class CApis extends CI_Controller {
 										print_r($response_reg['body']->error);
 										echo "<br>";
 										print_r($response_reg['body']);
+										echo "<br>";
+										echo "Producto: ".$producto->producto_id;
+										echo "<br>";
+										echo "Precio: ".$result;
 										echo "<br>";
 									}
 								}else if(strpos($response['body']->message, 'status:closed') !== false){
@@ -455,7 +486,7 @@ Class CApis extends CI_Controller {
 				}
 			}
 		}else{
-			// Proceso de actualización final de la cola, si quedan detalles pendientes el estatus de la cola pasa a 3, 
+			// Proceso de actualización final de la cola; si quedan detalles pendientes el estatus de la cola pasa a 3, 
 			// si no, pasa a 1
 			$detalles_pendientes = $this->MApis->obtenerDetallesEstatus($id_cola, 2);
 			$st = 1;
