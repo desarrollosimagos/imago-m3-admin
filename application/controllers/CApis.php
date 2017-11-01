@@ -41,7 +41,7 @@ Class CApis extends CI_Controller {
 			// Armamos los datos a actualizar
 			$data = array(
 				'id' => $id_cola,
-				'status' => $st
+				'status' => 2
 			);
 			
 			$result = $this->MApis->update_cola($data);
