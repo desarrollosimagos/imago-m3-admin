@@ -125,6 +125,169 @@ class CProductos extends CI_Controller {
 		echo json_encode($output);
 	}
 	
+	// Método alternativo para listar sólo los productos sin imágenes
+	public function ajax_productos2()
+	{		
+		$fetch_data = $this->MProductos->make_datatables();
+		
+		$data = array();
+		foreach($fetch_data as $row){
+			
+			$sub_array = array();
+			
+			// Proceso de busqueda de fotos asociadas al producto
+			$num_fotos = $this->MProductos->buscar_fotos($row->id);
+			$num_fotos = count($num_fotos);
+			// Proceso de busqueda de tiendas virtuales asociadas al producto
+			$lista_tiendasv = "";
+			$tiendasv = $this->MProductos->obtenerTiendas($row->id);
+			if(count($tiendasv) > 0){
+				foreach($tiendasv as $tiendav){
+					$t_v = $this->MTiendasVirtuales->obtenerTiendas($tiendav->tiendav_id);
+					$lista_tiendasv .= $t_v[0]->nombre.", ";
+				}
+				$lista_tiendasv = substr($lista_tiendasv, 0, -2);
+			}
+			
+			if($num_fotos == 0){			
+				$sub_array[] = "<input type='checkbox' id='checkbox_".$row->id."' class='check'>";
+				$sub_array[] = $row->nombre;
+				$sub_array[] = $row->referencia;
+				$sub_array[] = "<span id='checkbox_".$row->id."_column_dl'>".$row->costo_dolar."</span>";
+				$sub_array[] = "<span id='checkbox_".$row->id."_column'>".$row->costo_bolivar."</span>";
+				$sub_array[] = $row->name;
+				$sub_array[] = $row->modificado;
+				$sub_array[] = $row->descripcion;
+				$sub_array[] = $lista_tiendasv;
+				$sub_array[] = $num_fotos;
+				$c_compra; $c_vende; $c_fabrica;
+				if($row->c_compra == 0){$c_compra = "No";}else{$c_compra = "Sí";}
+				if($row->c_vende == 0){$c_vende = "No";}else{$c_vende = "Sí";}
+				if($row->c_fabrica == 0){$c_fabrica = "No";}else{$c_fabrica = "Sí";}
+				$sub_array[] = $c_compra;
+				$sub_array[] = $c_vende;
+				$sub_array[] = $c_fabrica;
+				$sub_array[] = "<a href='".base_url()."productos/edit/".$row->id."' title='Editar' style='color: #1ab394'><i class='fa fa-edit fa-2x'></i></a>";
+				$sub_array[] = "<a class='borrar' id='".$row->id."' style='color: #1ab394' title='Eliminar'><i class='fa fa-trash-o fa-2x'></i></a>";
+				$sub_array[] = "<a class='actualizar' id='".$row->id."' style='color: #1ab394' title='Actualizar precio'><i class='fa fa-refresh fa-2x'></i></a>";
+				
+				$data[] = $sub_array;
+			}
+		}
+		
+		$output = array(
+			"draw" => intval($_POST["draw"]),
+			"recordsTotal" => $this->MProductos->get_all_data(),
+			"recordsFiltered" => count($data),
+			"data" => $data
+		);
+		
+		echo json_encode($output);
+	}
+	
+	// Método alternativo para listar sólo los productos sin tiendas virtuales asociadas
+	public function ajax_productos3()
+	{		
+		$fetch_data = $this->MProductos->make_datatables();
+		
+		$data = array();
+		foreach($fetch_data as $row){
+			
+			$sub_array = array();
+			
+			// Proceso de busqueda de fotos asociadas al producto
+			$num_fotos = $this->MProductos->buscar_fotos($row->id);
+			$num_fotos = count($num_fotos);
+			// Proceso de busqueda de tiendas virtuales asociadas al producto
+			$tiendasv = $this->MProductos->obtenerTiendas($row->id);
+			
+			if(count($tiendasv) == 0){		
+				$sub_array[] = "<input type='checkbox' id='checkbox_".$row->id."' class='check'>";
+				$sub_array[] = $row->nombre;
+				$sub_array[] = $row->referencia;
+				$sub_array[] = "<span id='checkbox_".$row->id."_column_dl'>".$row->costo_dolar."</span>";
+				$sub_array[] = "<span id='checkbox_".$row->id."_column'>".$row->costo_bolivar."</span>";
+				$sub_array[] = $row->name;
+				$sub_array[] = $row->modificado;
+				$sub_array[] = $row->descripcion;
+				$sub_array[] = "";
+				$sub_array[] = $num_fotos;
+				$c_compra; $c_vende; $c_fabrica;
+				if($row->c_compra == 0){$c_compra = "No";}else{$c_compra = "Sí";}
+				if($row->c_vende == 0){$c_vende = "No";}else{$c_vende = "Sí";}
+				if($row->c_fabrica == 0){$c_fabrica = "No";}else{$c_fabrica = "Sí";}
+				$sub_array[] = $c_compra;
+				$sub_array[] = $c_vende;
+				$sub_array[] = $c_fabrica;
+				$sub_array[] = "<a href='".base_url()."productos/edit/".$row->id."' title='Editar' style='color: #1ab394'><i class='fa fa-edit fa-2x'></i></a>";
+				$sub_array[] = "<a class='borrar' id='".$row->id."' style='color: #1ab394' title='Eliminar'><i class='fa fa-trash-o fa-2x'></i></a>";
+				$sub_array[] = "<a class='actualizar' id='".$row->id."' style='color: #1ab394' title='Actualizar precio'><i class='fa fa-refresh fa-2x'></i></a>";
+				
+				$data[] = $sub_array;
+			}
+		}
+		
+		$output = array(
+			"draw" => intval($_POST["draw"]),
+			"recordsTotal" => $this->MProductos->get_all_data(),
+			"recordsFiltered" => count($data),
+			"data" => $data
+		);
+		
+		echo json_encode($output);
+	}
+	
+	// Método alternativo para listar sólo los productos sin tiendas virtuales asociadas ni imágenes
+	public function ajax_productos4()
+	{		
+		$fetch_data = $this->MProductos->make_datatables();
+		
+		$data = array();
+		foreach($fetch_data as $row){
+			
+			$sub_array = array();
+			// Proceso de busqueda de fotos asociadas al producto
+			$num_fotos = $this->MProductos->buscar_fotos($row->id);
+			$num_fotos = count($num_fotos);
+			// Proceso de busqueda de tiendas virtuales asociadas al producto
+			$tiendasv = $this->MProductos->obtenerTiendas($row->id);
+			
+			if(count($tiendasv) == 0 && $num_fotos == 0){		
+				$sub_array[] = "<input type='checkbox' id='checkbox_".$row->id."' class='check'>";
+				$sub_array[] = $row->nombre;
+				$sub_array[] = $row->referencia;
+				$sub_array[] = "<span id='checkbox_".$row->id."_column_dl'>".$row->costo_dolar."</span>";
+				$sub_array[] = "<span id='checkbox_".$row->id."_column'>".$row->costo_bolivar."</span>";
+				$sub_array[] = $row->name;
+				$sub_array[] = $row->modificado;
+				$sub_array[] = $row->descripcion;
+				$sub_array[] = "";
+				$sub_array[] = $num_fotos;
+				$c_compra; $c_vende; $c_fabrica;
+				if($row->c_compra == 0){$c_compra = "No";}else{$c_compra = "Sí";}
+				if($row->c_vende == 0){$c_vende = "No";}else{$c_vende = "Sí";}
+				if($row->c_fabrica == 0){$c_fabrica = "No";}else{$c_fabrica = "Sí";}
+				$sub_array[] = $c_compra;
+				$sub_array[] = $c_vende;
+				$sub_array[] = $c_fabrica;
+				$sub_array[] = "<a href='".base_url()."productos/edit/".$row->id."' title='Editar' style='color: #1ab394'><i class='fa fa-edit fa-2x'></i></a>";
+				$sub_array[] = "<a class='borrar' id='".$row->id."' style='color: #1ab394' title='Eliminar'><i class='fa fa-trash-o fa-2x'></i></a>";
+				$sub_array[] = "<a class='actualizar' id='".$row->id."' style='color: #1ab394' title='Actualizar precio'><i class='fa fa-refresh fa-2x'></i></a>";
+				
+				$data[] = $sub_array;
+			}
+		}
+		
+		$output = array(
+			"draw" => intval($_POST["draw"]),
+			"recordsTotal" => $this->MProductos->get_all_data(),
+			"recordsFiltered" => count($data),
+			"data" => $data
+		);
+		
+		echo json_encode($output);
+	}
+	
 	public function register()
 	{
 		$this->load->view('base');
