@@ -147,6 +147,11 @@ $route['aplicaciones'] = 'CAplicaciones';
 $route['aplicaciones/register'] = 'CAplicaciones/register';
 $route['aplicaciones/edit/(:num)'] = 'CAplicaciones/edit/$1';
 $route['aplicaciones/delete/(:num)'] = 'CAplicaciones/delete/$1';
+/*   Colas */
+$route['colas'] = 'CColas';
+$route['colas/register'] = 'CColas/register';
+$route['colas/edit/(:num)'] = 'CColas/edit/$1';
+$route['colas/delete/(:num)'] = 'CColas/delete/$1';
 /*   Update prices M3 */
 $route['update_prices'] = 'CUpdateM3';
 $route['update_prices_m3'] = 'CUpdateM3/update_prices';
