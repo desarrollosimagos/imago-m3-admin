@@ -129,6 +129,9 @@ $route['acciones/delete/(:num)'] = 'CAcciones/delete/$1';
 /*   Productos */
 $route['productos'] = 'CProductos/index2';
 $route['productos_json'] = 'CProductos/ajax_productos';
+$route['productos_json2'] = 'CProductos/ajax_productos2';
+$route['productos_json3'] = 'CProductos/ajax_productos3';
+$route['productos_json4'] = 'CProductos/ajax_productos4';
 $route['productos/register'] = 'CProductos/register';
 $route['productos/edit/(:num)'] = 'CProductos/edit/$1';
 $route['productos/delete/(:num)'] = 'CProductos/delete/$1';

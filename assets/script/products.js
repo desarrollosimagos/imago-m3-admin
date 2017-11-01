@@ -2,7 +2,7 @@ $(document).ready(function(){
 	// Capturamos la base_url
     var base_url = $("#base_url").val();
 	
-	$('#tab_productos').DataTable({
+	var tabProducts = $('#tab_productos').DataTable({
         //~ "paging": true,
         //~ "lengthChange": false,
         "autoWidth": false,
@@ -59,15 +59,50 @@ $(document).ready(function(){
         ]
     });
     
-    // Lectura de elementos del paginador
-    //~ $(".pagination").ready(function(){
-		//~ $('.pagination li').each(function(){
-			//~ if($(this).attr("id")){		
-				//~ alert($(this).attr("id"));
-			//~ }
-			//~ alert($(this).text());
-		//~ });
-	//~ });    
+    // Activando/Desactivando filtro de registros sin imágenes
+    $("#sin_imagenes").on('click', function (e) {
+		var check = $(this);
+		
+		var accion = '';
+		if (check.is(':checked')) {
+            // "Activando filtro de registros sin imágenes"
+            if($("#sin_tiendasv").is(':checked')){
+				tabProducts.ajax.url( base_url+"productos_json4" ).load();
+			}else{
+				tabProducts.ajax.url( base_url+"productos_json2" ).load();
+			}
+        }else{
+			// "Desactivando filtro de registros sin imágenes"
+			if($("#sin_tiendasv").is(':checked')){
+				tabProducts.ajax.url( base_url+"productos_json3" ).load();
+			}else{
+				tabProducts.ajax.url( base_url+"productos_json" ).load();
+			}
+		}
+	});
+    
+    // Activando/Desactivando filtro de registros sin tiendas virtuales
+    $("#sin_tiendasv").on('click', function (e) {
+		var check = $(this);
+		
+		var accion = '';
+		if (check.is(':checked')) {
+            // "Activando filtro de registros sin tiendas virtuales"
+            if($("#sin_imagenes").is(':checked')){
+				tabProducts.ajax.url( base_url+"productos_json4" ).load();
+			}else{
+				tabProducts.ajax.url( base_url+"productos_json3" ).load();
+			}
+        }else{
+			// "Desactivando filtro de registros sin tiendas virtuales"
+			if($("#sin_imagenes").is(':checked')){
+				tabProducts.ajax.url( base_url+"productos_json2" ).load();
+			}else{
+				tabProducts.ajax.url( base_url+"productos_json" ).load();
+			}
+		}
+	});
+    
     
     // Cargamos el precio actual del dólar en el campo oculto 'precio_dolar'
     $.get('https://s3.amazonaws.com/dolartoday/data.json', function (response) {  // Se produce un error si usamos $.post en vez de $.get

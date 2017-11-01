@@ -57,6 +57,15 @@
 							
                         </table>
                         
+						<!--Filtros extra-->
+						<div class="ibox-title">
+							<input type="checkbox" id="sin_imagenes"> <span style="font-weight:bold;">Productos sin imágenes</span>
+						</div>
+						<div class="ibox-title">
+							<input type="checkbox" id="sin_tiendasv"> <span style="font-weight:bold;">Productos sin tiendas virtuales</span>
+						</div>
+						<!--Cierre filtros extra-->
+                        
                         <!-- Campo oculto de base_url -->
                         <input type="hidden" name="base_url" id="base_url" value="<?php echo base_url() ?>"/>
                         
