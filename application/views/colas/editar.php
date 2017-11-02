@@ -1,17 +1,17 @@
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-10">
-        <h2>Servicios </h2>
+        <h2>Detalles </h2>
         <ol class="breadcrumb">
             <li>
-                <a href="index.html">Inicio</a>
+                <a href="<?php echo base_url() ?>home">Inicio</a>
             </li>
             
             <li>
-                <a href="<?php echo base_url() ?>services">Servicios</a>
+                <a href="<?php echo base_url() ?>colas">Colas</a>
             </li>
            
             <li class="active">
-                <strong>Editar Servicio</strong>
+                <strong>Detalles</strong>
             </li>
         </ol>
     </div>
@@ -20,144 +20,75 @@
 	<div class="row">
         <div class="col-lg-12">
 			<div class="ibox float-e-margins">
+					
 				<div class="ibox-title">
-					<h5>Editar Servicio <small></small></h5>
+					<h5>Asociación de Productos</h5>
 				</div>
+				
+				<!-- Start ibox-content-->
 				<div class="ibox-content">
-					<form id="form_services" method="post" accept-charset="utf-8" class="form-horizontal">
-						<div class="form-group">
-							<label class="col-sm-2 control-label" >Nombre *</label>
-							<div class="col-sm-10">
-								<input type="text" class="form-control"   name="name" id="name" maxlength="150" value="<?php echo $editar[0]->name ?>">
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-sm-2 control-label" >Descripción *</label>
-							<div class="col-sm-10">
-								<input type="text" class="form-control"  name="description" maxlength="200" id="description" value="<?php echo $editar[0]->description ?>">
-							</div>
-						</div>
-						<div class="form-group"><label class="col-sm-2 control-label" >Imagen *</label>
-							<label class="col-sm-2 control-label" >
-								<img src="<?php echo base_url().'assets/public/img/demos/medical/'.$editar[0]->icon ?>" style="width:100px;height:100px;"/> 
-							</label>
-							<div class="col-sm-8">
-								<input type="file" class="form-control"  name="icon" maxlength="200" id="icon">
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-sm-2 control-label" >Precio *</label>
-							<div class="col-sm-10">
-								<input type="text" class="form-control"  name="price" maxlength="11" id="price" value="<?php echo $editar[0]->price ?>">
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-sm-2 control-label" >Estatus *</label>
-							<div class="col-sm-10">
-								<select class="form-control m-b" name="status" id="status">
-									<option value="1" selected="">Activo</option>
-									<option value="0">Inactivo</option>
-
-								</select>
-							</div>
-						</div>
-						<div class="form-group">
-							<div class="col-sm-4 col-sm-offset-2">
-								 <input id="id_status" type="hidden" value="<?php echo $editar[0]->status ?>"/>
-								 <input class="form-control"  type='hidden' id="id" name="id" value="<?php echo $id ?>"/>
-								<button class="btn btn-white" id="volver" type="button">Volver</button>
-								<button class="btn btn-primary" id="edit" type="submit">Guardar</button>
-							</div>
-						</div>
-					</form>
+					
+					<div class="table-responsive">
+						
+                        <!-- Campo oculto de base_url -->
+						<input type="hidden" name="base_url" id="base_url" value="<?php echo base_url() ?>"/>
+						
+						<table class="table table-striped table-bordered dt-responsive table-hover dataTables-example" id="tab_productos">
+							<thead>
+								<tr>
+									<th>#</th>
+									<th>Nombre</th>
+									<th>Categoría</th>
+									<th>Precio</th>
+									<th>Cantidad</th>
+									<th>Descripción</th>
+									<th>Referencia</th>
+									<th>Eliminar</th>
+									<th>Actualizar</th>
+								</tr>
+							</thead>
+							<tbody>
+								<?php 
+								$i = 1;
+								foreach ($detalles_cola as $detalle) { ?>
+									<tr id="<?php echo $detalle->producto_id; ?>">
+										<td style='text-align: center'>
+										<?php echo $i;?>
+										</td>
+										<td style='text-align: center' id="<?php echo $detalle->id; ?>">
+										<?php echo $detalle->nombre; ?>
+										</td>
+										<td style='text-align: center' id="<?php echo $detalle->categoria_id; ?>">
+										<?php foreach ($listar_categorias as $categoria) {
+											if ($detalle->categoria_id == $categoria->id){
+												echo $categoria->categoria."<br>";
+											}
+										}?>
+										</td>
+										<td style='text-align: center' id="price_<?php echo $detalle->id;?>_column">
+										<?php echo $detalle->precio; ?>
+										</td>
+										<td style='text-align: center' id="price_<?php echo $detalle->id;?>_column_cantidad">
+										<?php echo $detalle->cantidad; ?>
+										</td>
+										<td style='text-align: center'><?php echo $detalle->descripcion; ?></td>
+										<td style='text-align: center'><?php echo $detalle->referencia; ?></td>
+										<td style='text-align: center'><a  style="color: #1ab394" class='quitar' id="<?php echo $detalle->id; ?>"><i class='fa fa-trash fa-2x'></i></a></td>
+										<td>
+											<input type="checkbox" id="price_<?php echo $detalle->id;?>" class="check">
+										</td>
+									</tr>
+								<?php $i++; }?>
+							</tbody>
+						</table>
+                        
+                    </div>
+					
 				</div>
+				<!-- End ibox-content-->
+				
 			</div>
         </div>
     </div>
 </div>
-<script>
-$(document).ready(function(){
-
-    $('input').on({
-        keypress: function () {
-            $(this).parent('div').removeClass('has-error');
-        }
-    });
-
-    $('#volver').click(function () {
-        url = '<?php echo base_url() ?>services/';
-        window.location = url;
-    });
-	
-	$("#status").val($("#id_status").val());
-
-    $("#edit").click(function (e) {
-
-        e.preventDefault();  // Para evitar que se envíe por defecto
-
-        if ($('#name').val().trim() === "") {
-			swal("Disculpe,", "para continuar debe ingresar nombre");
-			$('#name').parent('div').addClass('has-error');
-			
-        } else if ($('#description').val().trim() === "") {
-			swal("Disculpe,", "para continuar debe ingresar la descripción");
-			$('#description').parent('div').addClass('has-error');
-			
-        } else if ($('#price').val().trim() === "") {
-			swal("Disculpe,", "para continuar debe ingresar el precio");
-			$('#price').parent('div').addClass('has-error');
-			
-        }   else {
-
-            //~ $.post('<?php echo base_url(); ?>CServices/update', $('#form_services').serialize(), function (response) {
-				//~ if (response[0] == '1') {
-                    //~ swal("Disculpe,", "este nombre se encuentra registrado");
-                //~ }else{
-					//~ swal({ 
-						//~ title: "Actualizar",
-						 //~ text: "Guardado con exito",
-						  //~ type: "success" 
-						//~ },
-					//~ function(){
-					  //~ window.location.href = '<?php echo base_url(); ?>services';
-					//~ });
-				//~ }
-            //~ });
-            
-            var formData = new FormData(document.getElementById("form_services"));  // Forma de capturar todos los datos del formulario
-			
-			$.ajax({
-				//~ method: "POST",
-				type: "post",
-				dataType: "html",
-				url: '<?php echo base_url(); ?>CServices/update',
-				data: formData,
-				cache: false,
-				contentType: false,
-				processData: false
-			})
-			.done(function(data) {
-				if(data.error){
-					console.log(data.error);
-				} else {
-					if (data[0] == '1') {
-						swal("Disculpe,", "este servicio se encuentra registrado");
-					}else{
-						swal({ 
-							title: "Registro",
-							 text: "Guardado con exito",
-							  type: "success" 
-							},
-						function(){
-						  window.location.href = '<?php echo base_url(); ?>services';
-						});
-					}
-				}				
-			}).fail(function() {
-				console.log("error ajax");
-			});
-        }
-    });
-});
-
-</script>
+<script src="<?php echo assets_url(); ?>script/edit_cola.js"></script>
