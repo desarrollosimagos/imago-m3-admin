@@ -34,7 +34,7 @@
                                     <th>Tienda Virtual</th>
                                     <th>Tienda Física</th>
                                     <th>Estatus</th>
-                                    <th>Editar</th>
+                                    <th>Detalles</th>
                                     <th>Cambiar</th>
                                 </tr>
                             </thead>
@@ -70,11 +70,11 @@
 											<?php
 											if($cola->status == 1 || $cola->status == 4){
 											?>
-                                            <a style='color: #808284;cursor:default' disabled="disabled"><i class="fa fa-edit fa-2x"></i></a>
+                                            <a style='color: #808284;cursor:default' disabled="disabled"><i class="fa fa-list fa-2x"></i></a>
                                             <?php
 											}else{
 											?>
-											<a href="<?php echo base_url() ?>colas/edit/<?php echo $cola->id; ?>" title="Editar" style='color: #1ab394'><i class="fa fa-edit fa-2x"></i></a>
+											<a href="<?php echo base_url() ?>colas/edit/<?php echo $cola->id; ?>" title="Ver detalles" style='color: #1ab394'><i class="fa fa-list fa-2x"></i></a>
 											<?php
 											}
 											?>
