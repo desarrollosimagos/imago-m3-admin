@@ -92,7 +92,7 @@
 											<?php
 											}else if($cola->status == 2){
 											?>
-											<select class="form-control cambiar" style="width:100%" id="<?php echo $cola->id; ?>">
+											<select class="form-control cambiar" style="width:100%" id="<?php echo $cola->id.";".$cola->status; ?>">
 												<option value="1" <?php if($cola->status == 1){echo "selected='selected'";}?>>Procesado</option>
 												<option value="2" <?php if($cola->status == 2){echo "selected='selected'";}?>>En proceso</option>
 												<option value="3" <?php if($cola->status == 3){echo "selected='selected'";}?>>Pendiente</option>
@@ -101,7 +101,7 @@
 											<?php
 											}else if($cola->status == 3){
 											?>
-											<select class="form-control cambiar" style="width:100%" id="<?php echo $cola->id; ?>">
+											<select class="form-control cambiar" style="width:100%" id="<?php echo $cola->id.";".$cola->status; ?>">
 												<option value="1" <?php if($cola->status == 1){echo "selected='selected'";}?>>Procesado</option>
 												<option value="3" <?php if($cola->status == 3){echo "selected='selected'";}?>>Pendiente</option>
 												<option value="4" <?php if($cola->status == 4){echo "selected='selected'";}?>>Cancelado</option>
