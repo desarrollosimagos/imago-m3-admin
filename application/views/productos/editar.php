@@ -302,7 +302,7 @@
 												<th>Tienda</th>
 												<!--<th>Precio</th>
 												<th>Impuesto</th>-->
-												<th>Catogoría</th>
+												<th>Categoría</th>
 												<th>Referencia</th>
 												<th>Precio</th>
 												<th>Cantidad</th>

@@ -14,11 +14,16 @@
 <div class="wrapper wrapper-content animated fadeInRight">
     <div class="row">
         <div class="col-lg-12">
-            <a href="<?php echo base_url() ?>colas/register">
-            <button class="btn btn-outline btn-primary dim" type="button"><i class="fa fa-plus"></i> Agregar</button></a>
+            <!--<a href="<?php echo base_url() ?>colas/register">
+				<button class="btn btn-outline btn-primary dim" type="button">
+					<i class="fa fa-plus"></i> Agregar
+				</button>
+            </a>-->
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
                     <h5>Listado de Colas </h5>
+                    <!-- Campo oculto de base_url -->
+					<input type="hidden" name="base_url" id="base_url" value="<?php echo base_url() ?>"/>
                 </div>
                 <div class="ibox-content">
                     <div class="table-responsive">
@@ -87,7 +92,7 @@
 											<?php
 											}else if($cola->status == 2){
 											?>
-											<select class="form-control" style="width:100%" class="cambiar" id="<?php echo $cola->id; ?>">
+											<select class="form-control cambiar" style="width:100%" id="<?php echo $cola->id; ?>">
 												<option value="1" <?php if($cola->status == 1){echo "selected='selected'";}?>>Procesado</option>
 												<option value="2" <?php if($cola->status == 2){echo "selected='selected'";}?>>En proceso</option>
 												<option value="3" <?php if($cola->status == 3){echo "selected='selected'";}?>>Pendiente</option>
@@ -96,8 +101,8 @@
 											<?php
 											}else if($cola->status == 3){
 											?>
-											<select class="form-control" style="width:100%" class="cambiar" id="<?php echo $cola->id; ?>">
-												<option value="2" <?php if($cola->status == 2){echo "selected='selected'";}?>>En proceso</option>
+											<select class="form-control cambiar" style="width:100%" id="<?php echo $cola->id; ?>">
+												<option value="1" <?php if($cola->status == 1){echo "selected='selected'";}?>>Procesado</option>
 												<option value="3" <?php if($cola->status == 3){echo "selected='selected'";}?>>Pendiente</option>
 												<option value="4" <?php if($cola->status == 4){echo "selected='selected'";}?>>Cancelado</option>
 											</select>
@@ -119,37 +124,4 @@
 
 
  <!-- Page-Level Scripts -->
-<script>
-$(document).ready(function(){
-     $('#tab_colas').DataTable({
-        "paging": true,
-        "lengthChange": false,
-        "autoWidth": false,
-        "searching": true,
-        "ordering": true,
-        "info": true,
-        "iDisplayLength": 5,
-        "iDisplayStart": 0,
-        "sPaginationType": "full_numbers",
-        "aLengthMenu": [5, 10, 15],
-        "oLanguage": {"sUrl": "<?= assets_url() ?>js/es.txt"},
-        "aoColumns": [
-            {"sClass": "registro center", "sWidth": "5%"},
-            {"sClass": "registro center", "sWidth": "20%"},
-            {"sClass": "registro center", "sWidth": "20%"},
-            {"sClass": "registro center", "sWidth": "20%"},
-            {"sWidth": "3%", "bSortable": false, "sClass": "center sorting_false", "bSearchable": false},
-            {"sWidth": "3%", "bSortable": false, "sClass": "center sorting_false", "bSearchable": false}
-        ]
-    });
-             
-    // Función para cambiar el status de una cola según la opción seleccionada en su respectivo combo
-	$("table#tab_colas").on('change', 'select.cambiar', function (e) {
-		e.preventDefault();
-		var id = this.getAttribute('id');
-		alert(id)
-	});       
-	
-});
-        
-</script>
+<script src="<?php echo assets_url(); ?>script/colas.js"></script>

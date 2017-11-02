@@ -10,6 +10,7 @@ class CColas extends CI_Controller {
        
 		// Load database
         $this->load->model('MColas');
+        $this->load->model('MProductos');
 		
     }
 	
@@ -57,7 +58,9 @@ class CColas extends CI_Controller {
 		
 		$this->load->view('base');
         $data['id'] = $this->uri->segment(3);
-        $data['editar'] = $this->MColas->obtenerServices($data['id']);
+        $data['listar_categorias'] = $this->MProductos->obtenerCategorias();
+        $data['listar_productos'] = $this->MProductos->obtenerByUser();
+        $data['detalles_cola'] = $this->MColas->obtenerDetalles($data['id']);
         $this->load->view('colas/editar', $data);
 		$this->load->view('footer');
     }

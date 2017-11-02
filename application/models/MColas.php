@@ -40,14 +40,25 @@ class MColas extends CI_Model {
         }
     }
 
-    // Public method to obtain the services by id
-    public function obtenerServices($id) {
-        $this->db->where('id', $id);
-        $query = $this->db->get('services');
+    // Public method to obtain the details by id
+    public function obtenerDetalles($cola_id) {
+        $this->db->where('cola_id', $cola_id);
+        $query = $this->db->get('cola_detalle');
         if ($query->num_rows() > 0)
             return $query->result();
         else
             return $query->result();
+    }
+
+    // Public method to obtain the categories by id
+    public function obtenerCategoriasGen() {
+		
+        $query = $this->db->get('categorias');
+        if ($query->num_rows() > 0)
+            return $query->result();
+        else
+            return $query->result();
+            
     }
 
     // Public method to update a record  
