@@ -22,7 +22,7 @@
 			<div class="ibox float-e-margins">
 					
 				<div class="ibox-title">
-					<h5>Asociación de Productos</h5>
+					<h5>Productos Asociados</h5>
 				</div>
 				
 				<!-- Start ibox-content-->
@@ -43,8 +43,9 @@
 									<th>Cantidad</th>
 									<th>Descripción</th>
 									<th>Referencia</th>
-									<th>Eliminar</th>
-									<th>Actualizar</th>
+									<th>Estatus</th>
+									<!--<th>Eliminar</th>
+									<th>Actualizar</th>-->
 								</tr>
 							</thead>
 							<tbody>
@@ -73,10 +74,21 @@
 										</td>
 										<td style='text-align: center'><?php echo $detalle->descripcion; ?></td>
 										<td style='text-align: center'><?php echo $detalle->referencia; ?></td>
-										<td style='text-align: center'><a  style="color: #1ab394" class='quitar' id="<?php echo $detalle->id; ?>"><i class='fa fa-trash fa-2x'></i></a></td>
+										<td style='text-align: center'>
+											<?php
+											if($detalle->status == 1){
+												echo "<span style='color:#1ab394'>Procesado</span>"; 
+											}else if($detalle->status == 2){
+												echo "<span style='color:#F7A54A'>Pendiente</span>";
+											}else{
+												echo "";
+											}
+                                            ?>
+										</td>
+										<!--<td style='text-align: center'><a  style="color: #1ab394" class='quitar' id="<?php echo $detalle->id; ?>"><i class='fa fa-trash fa-2x'></i></a></td>
 										<td>
 											<input type="checkbox" id="price_<?php echo $detalle->id;?>" class="check">
-										</td>
+										</td>-->
 									</tr>
 								<?php $i++; }?>
 							</tbody>
