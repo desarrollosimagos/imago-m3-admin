@@ -40,6 +40,16 @@ class MColas extends CI_Model {
         }
     }
 
+    // Public method to obtain the data by id
+    public function obtenerCola($cola_id) {
+        $this->db->where('id', $cola_id);
+        $query = $this->db->get('cola');
+        if ($query->num_rows() > 0)
+            return $query->result();
+        else
+            return $query->result();
+    }
+
     // Public method to obtain the details by id
     public function obtenerDetalles($cola_id) {
         $this->db->where('cola_id', $cola_id);
@@ -74,6 +84,15 @@ class MColas extends CI_Model {
             $result = $this->db->update('services', $datos);
             return $result;
         }
+    }
+
+    // Public method to update a record  
+    public function update_status($datos) {
+		
+		$result = $this->db->where('id', $datos['id']);
+		$result = $this->db->update('cola', $datos);
+		return $result;
+		
     }
 
 

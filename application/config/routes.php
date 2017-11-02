@@ -152,6 +152,7 @@ $route['aplicaciones/edit/(:num)'] = 'CAplicaciones/edit/$1';
 $route['aplicaciones/delete/(:num)'] = 'CAplicaciones/delete/$1';
 /*   Colas */
 $route['colas'] = 'CColas';
+$route['colas/update_status'] = 'CColas/update_status';
 $route['colas/register'] = 'CColas/register';
 $route['colas/edit/(:num)'] = 'CColas/edit/$1';
 $route['colas/delete/(:num)'] = 'CColas/delete/$1';

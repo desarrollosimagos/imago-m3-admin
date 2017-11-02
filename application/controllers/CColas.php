@@ -11,6 +11,7 @@ class CColas extends CI_Controller {
 		// Load database
         $this->load->model('MColas');
         $this->load->model('MProductos');
+        $this->load->model('MApis');
 		
     }
 	
@@ -98,6 +99,64 @@ class CColas extends CI_Controller {
 			}     
         }
     }
+    
+    // Método para actualizar el status de una cola según su id
+    public function update_status() {
+		
+		$id = $this->input->post('id');
+		$nuevo_status = $this->input->post('new_status');
+		
+		// Primero buscamos los datos básicos de la cola
+		$datos_cola = $this->MColas->obtenerCola($id);
+		
+		/* Si la cola está en proceso y la queremos pasar a procesado, verificamos si no tiene detalles pendientes antes de actualizar.
+		 * Si la cola está en proceso y la queremos cancelar o pasar a pendiente, actualizamos sin validaciones extra. 
+		   Si es una cola pendiente, actualizamos sin validaciones extra. */
+		if($datos_cola[0]->status == 2 && $nuevo_status == 1){
+			
+			$detalles_cola = $this->MApis->obtenerDetallesEstatus($id, 2);
+			
+			if(count($detalles_cola) > 0){
+			
+				echo '{"response":"detalles pendientes"}';
+			
+			}else{
+				
+				// Datos para la actualización
+				$datos = array(
+					'id' => $id,
+					'status' => $nuevo_status
+				);
+				
+				$result = $this->MColas->update_status($datos);
+				
+				if($result){
+					
+					echo '{"response":"ok"}';
+					
+				}
+				
+			}
+			
+		}else{
+			
+			// Datos para la actualización
+			$datos = array(
+				'id' => $id,
+				'status' => $nuevo_status
+			);
+			
+			$result = $this->MColas->update_status($datos);
+			
+			if($result){
+				
+				echo '{"response":"ok"}';
+				
+			}
+			
+		}
+		
+	}
     
 	// Método para eliminar
 	function delete($id) {
