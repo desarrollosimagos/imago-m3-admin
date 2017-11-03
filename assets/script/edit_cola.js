@@ -21,7 +21,7 @@ $(document).ready(function(){
 		"paging": true,
         "lengthChange": false,
         "autoWidth": false,
-		"searching": false,
+		"searching": true,
 		"pagingType": "full_numbers",
 		"language": {"url": base_url+"assets/js/es.txt"},
 		"aoColumns": [
@@ -30,6 +30,7 @@ $(document).ready(function(){
 			{"sClass": "registro center", "sWidth": "20%"},
 			{"sClass": "registro center", "sWidth": "10%"},
 			{"sClass": "registro center", "sWidth": "5%"},
+			{"sClass": "none", "sWidth": "20%"},
 			{"sClass": "none", "sWidth": "20%"},
 			{"sClass": "registro center", "sWidth": "10%"},
 			{"sClass": "registro center", "sWidth": "10%"},
