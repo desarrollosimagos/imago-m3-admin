@@ -42,6 +42,7 @@
 									<th>Precio</th>
 									<th>Cantidad</th>
 									<th>Descripción</th>
+									<th>Detalles</th>
 									<th>Referencia</th>
 									<th>Estatus</th>
 									<!--<th>Eliminar</th>
@@ -73,6 +74,7 @@
 										<?php echo $detalle->cantidad; ?>
 										</td>
 										<td style='text-align: center'><?php echo $detalle->descripcion; ?></td>
+										<td style='text-align: center'><?php echo $detalle->detalles; ?></td>
 										<td style='text-align: center'><?php echo $detalle->referencia; ?></td>
 										<td style='text-align: center'>
 											<?php

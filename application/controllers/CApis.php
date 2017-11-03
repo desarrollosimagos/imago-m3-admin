@@ -138,12 +138,13 @@ Class CApis extends CI_Controller {
 						$categoria_referencia = $data_categoria[0]->referencia;
 					}
 					
-					// Si el precio en bolívares del producto está en cero, lo pasamos a 1
-					if($producto->precio == 0){
-						$precio_bolivares = 1;
-					}else{
-						$precio_bolivares = $producto->precio;
-					}
+					//~ // Si el precio en bolívares del producto está en cero, lo pasamos a 1
+					//~ if($producto->precio == 0){
+						//~ $precio_bolivares = 1;
+					//~ }else{
+						//~ $precio_bolivares = $producto->precio;
+					//~ }
+					$precio_bolivares = $producto->precio;
 					
 					// Si la tienda virtual tiene fórmula especificada le añadimos el cálculo de élla como comisión al precio del producto
 					if($datosb_tienda[0]->formula == ""){
@@ -161,7 +162,7 @@ Class CApis extends CI_Controller {
 					// echo $response['httpCode'];
 					if(isset($response['body']->error)){
 						$errores++;
-						//~ print_r($response['body']->error);
+						//~ print_r($response['body']);
 						if($response['body']->error == 'not_found'){
 							// Procedemos a registrar el nuevo producto en la tienda virtual de mercado libre
 							// Primero recortamos la cadena de nombre si su longitud supera los 60 caracteres
@@ -203,33 +204,48 @@ Class CApis extends CI_Controller {
 								// Actualizamos el estatus del detalle a 1 (Procesado)
 								$data_up = array(
 									'id' => $producto->id,
+									'detalles' => $response_reg['httpCode']." - Registrado...",
 									'status' => 1
 								);
 								$update_detalle = $this->MApis->update_detalle_cola($data_up);
 							}else{
-								echo $response_reg['httpCode'];
-								echo " - ";
-								print_r($response_reg['body']->error);
-								echo "<br>";
-								print_r($response_reg['body']);
-								echo "<br>";
-								echo "Producto: ".$producto->producto_id;
-								echo "<br>";
-								echo "Precio: ".$result;
-								echo "<br>";
+								// Actualizamos el campo 'detalles' del detalle con la información devuelta por la API
+								$data_up = array(
+									'id' => $producto->id,
+									'detalles' => $response_reg['httpCode']." - ".$response_reg['body']->error." - ".$response_reg['body']->message
+								);
+								$update_detalle = $this->MApis->update_detalle_cola($data_up);
+								
+								//~ echo $response_reg['httpCode'];
+								//~ echo " - ";
+								//~ print_r($response_reg['body']->error);
+								//~ echo "<br>";
+								//~ print_r($response_reg['body']);
+								//~ echo "<br>";
+								//~ echo "Producto: ".$producto->producto_id;
+								//~ echo "<br>";
+								//~ echo "Precio: ".$result;
+								//~ echo "<br>";
 							}
 						}else if(strpos($response['body']->message, 'status:closed') !== false){
 							// Registro de incidencia
 							$captura_eventos[] = "[".date("r")."] Producto: ".$producto->producto_id.", Num Referencia: ".$producto->referencia.", Evento: ".$response['body']->error."1, Usuario: ".$this->session->userdata['logged_in']['id']."\r\n";
-							// Actualizamos el estatus del detalle a 1 (Procesado)
+							// Actualizamos el estatus del detalle a 1 y registramos el detalle del error
 							$data_up = array(
 								'id' => $producto->id,
+								'detalles' => $response['httpCode']." - ".$response['body']->error." - ".$response['body']->message,
 								'status' => 1
 							);
-							$update_detalle = $this->MApis->update_detalle_cola($data_up);
+							$update_detalle = $this->MApis->update_detalle_cola($data_up);							
 						}else{
 							// Registro de incidencia
 							$captura_eventos[] = "[".date("r")."] Producto: ".$producto->producto_id.", Num Referencia: ".$producto->referencia.", Evento: ".$response['body']->error."2, Usuario: ".$this->session->userdata['logged_in']['id']."\r\n";
+							// Registramos el detalle del error
+							$data_up = array(
+								'id' => $producto->id,
+								'detalles' => $response['httpCode']." - ".$response['body']->error." - ".$response['body']->message
+							);
+							$update_detalle = $this->MApis->update_detalle_cola($data_up);
 						}
 					}else{
 						// Si no hubo errores en el envío del precio y la cantidad, entonces enviamos la descripción
@@ -237,6 +253,12 @@ Class CApis extends CI_Controller {
 						$response_desc = $meli->put('/items/'.$producto->referencia.'/description', $body, $params);
 						if(isset($response_desc['body']->error)){
 							print_r($response_desc);
+							// Registramos el detalle del error
+							$data_up = array(
+								'id' => $producto->id,
+								'detalles' => $response_desc['httpCode']." - ".$response_desc['body']->error." - ".$response_desc['body']->message
+							);
+							$update_detalle = $this->MApis->update_detalle_cola($data_up);
 						}
 					}
 					if($response['httpCode'] == '200'){
@@ -247,6 +269,7 @@ Class CApis extends CI_Controller {
 						// Actualizamos el estatus del detalle a 1 (Procesado)
 						$data_up = array(
 							'id' => $producto->id,
+							'detalles' => $response['httpCode']." - Actualizado...",
 							'status' => 1
 						);
 						$update_detalle = $this->MApis->update_detalle_cola($data_up);
@@ -334,12 +357,13 @@ Class CApis extends CI_Controller {
 								$categoria_referencia = $data_categoria[0]->referencia;
 							}
 							
-							// Si el precio en bolívares del producto está en cero, lo pasamos a 1
-							if($producto->precio == 0){
-								$precio_bolivares = 1;
-							}else{
-								$precio_bolivares = $producto->precio;
-							}
+							//~ // Si el precio en bolívares del producto está en cero, lo pasamos a 1
+							//~ if($producto->precio == 0){
+								//~ $precio_bolivares = 1;
+							//~ }else{
+								//~ $precio_bolivares = $producto->precio;
+							//~ }
+							$precio_bolivares = $producto->precio;
 							
 							// Si la tienda virtual tiene fórmula especificada le añadimos el cálculo de élla como comisión al precio del producto
 							if($datosb_tienda[0]->formula == ""){
@@ -358,7 +382,7 @@ Class CApis extends CI_Controller {
 							// echo $response['httpCode'];
 							if(isset($response['body']->error)){
 								$errores++;
-								//~ print_r($response['body']->error);
+								//~ print_r($response['body']);
 								if($response['body']->error == 'not_found'){
 									// Procedemos a registrar el nuevo producto en la tienda virtual de mercado libre
 									// Primero recortamos la cadena de nombre si su longitud supera los 60 caracteres
@@ -401,33 +425,48 @@ Class CApis extends CI_Controller {
 										// Actualizamos el estatus del detalle a 1 (Procesado)
 										$data_up = array(
 											'id' => $producto->id,
+											'detalles' => $response_reg['httpCode']." - Registrado...",
 											'status' => 1
 										);
 										$update_detalle = $this->MApis->update_detalle_cola($data_up);
 									}else{
-										echo $response_reg['httpCode'];
-										echo " - ";
-										print_r($response_reg['body']->error);
-										echo "<br>";
-										print_r($response_reg['body']);
-										echo "<br>";
-										echo "Producto: ".$producto->producto_id;
-										echo "<br>";
-										echo "Precio: ".$result;
-										echo "<br>";
+										// Actualizamos el campo 'detalles' del detalle con la información devuelta por la API
+										$data_up = array(
+											'id' => $producto->id,
+											'detalles' => $response_reg['httpCode']." - ".$response_reg['body']->error." - ".$response_reg['body']->message
+										);
+										$update_detalle = $this->MApis->update_detalle_cola($data_up);
+										
+										//~ echo $response_reg['httpCode'];
+										//~ echo " - ";
+										//~ print_r($response_reg['body']->error);
+										//~ echo "<br>";
+										//~ print_r($response_reg['body']);
+										//~ echo "<br>";
+										//~ echo "Producto: ".$producto->producto_id;
+										//~ echo "<br>";
+										//~ echo "Precio: ".$result;
+										//~ echo "<br>";
 									}
 								}else if(strpos($response['body']->message, 'status:closed') !== false){
 									// Registro de incidencia
 									$captura_eventos[] = "[".date("r")."] Producto: ".$producto->producto_id.", Num Referencia: ".$producto->referencia.", Evento: ".$response['body']->error."1, Usuario: ".$this->session->userdata['logged_in']['id']."\r\n";
-									// Actualizamos el estatus del detalle a 1 (Procesado)
+									// Actualizamos el estatus del detalle a 1 y registramos el detalle del error
 									$data_up = array(
 										'id' => $producto->id,
+										'detalles' => $response['httpCode']." - ".$response['body']->error." - ".$response['body']->message,
 										'status' => 1
 									);
 									$update_detalle = $this->MApis->update_detalle_cola($data_up);
 								}else{
 									// Registro de incidencia
 									$captura_eventos[] = "[".date("r")."] Producto: ".$producto->producto_id.", Num Referencia: ".$producto->referencia.", Evento: ".$response['body']->error."2, Usuario: ".$this->session->userdata['logged_in']['id']."\r\n";
+									// Registramos el detalle del error
+									$data_up = array(
+										'id' => $producto->id,
+										'detalles' => $response['httpCode']." - ".$response['body']->error." - ".$response['body']->message
+									);
+									$update_detalle = $this->MApis->update_detalle_cola($data_up);
 								}
 							}else{
 								// Si no hubo errores en el envío del precio y la cantidad, entonces enviamos la descripción
@@ -435,6 +474,12 @@ Class CApis extends CI_Controller {
 								$response_desc = $meli->put('/items/'.$producto->referencia.'/description', $body, $params);
 								if(isset($response_desc['body']->error)){
 									print_r($response_desc);
+									// Registramos el detalle del error
+									$data_up = array(
+										'id' => $producto->id,
+										'detalles' => $response_desc['httpCode']." - ".$response_desc['body']->error." - ".$response_desc['body']->message
+									);
+									$update_detalle = $this->MApis->update_detalle_cola($data_up);
 								}
 							}
 							if($response['httpCode'] == '200'){
@@ -445,6 +490,7 @@ Class CApis extends CI_Controller {
 								// Actualizamos el estatus del detalle a 1 (Procesado)
 								$data_up = array(
 									'id' => $producto->id,
+									'detalles' => $response['httpCode']." - Actualizado...",
 									'status' => 1
 								);
 								$update_detalle = $this->MApis->update_detalle_cola($data_up);

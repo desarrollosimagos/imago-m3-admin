@@ -31,6 +31,18 @@
                 </div>
                 <div class="ibox-content">
                     <div class="table-responsive">
+						
+						<!--Filtros extra-->
+						<div class="ibox-title">
+							<input type="checkbox" id="sin_imagenes"> <span style="font-weight:bold;">Productos sin imágenes</span>
+						</div>
+						<div class="ibox-title">
+							<input type="checkbox" id="sin_tiendasv"> <span style="font-weight:bold;">Productos sin tiendas virtuales</span>
+						</div>
+						<!--Cierre filtros extra-->
+						
+						<br>
+						
                         <table id="tab_productos" class="table table-striped table-bordered dt-responsive table-hover dataTables-example" >
                             <thead>
                                 <tr>
@@ -56,15 +68,6 @@
                             </thead>
 							
                         </table>
-                        
-						<!--Filtros extra-->
-						<div class="ibox-title">
-							<input type="checkbox" id="sin_imagenes"> <span style="font-weight:bold;">Productos sin imágenes</span>
-						</div>
-						<div class="ibox-title">
-							<input type="checkbox" id="sin_tiendasv"> <span style="font-weight:bold;">Productos sin tiendas virtuales</span>
-						</div>
-						<!--Cierre filtros extra-->
                         
                         <!-- Campo oculto de base_url -->
                         <input type="hidden" name="base_url" id="base_url" value="<?php echo base_url() ?>"/>
