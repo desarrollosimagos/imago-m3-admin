@@ -12,7 +12,7 @@ class MColas extends CI_Model {
         $this->load->database();
     }
 
-    //Public method to obtain the services
+    //Public method to obtain the lines
     public function obtener() {
 		$this->db->select('c.id, c.user_id, t_v.nombre, t.name, c.fecha, c.hora, c.status');
 		$this->db->from('cola c');

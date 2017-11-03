@@ -15,10 +15,46 @@ class CColas extends CI_Controller {
 		
     }
 	
+	// Listado estándar de colas
 	public function index()
 	{
 		$this->load->view('base');
 		$data['listar'] = $this->MColas->obtener();
+		$this->load->view('colas/lista', $data);
+		$this->load->view('footer');
+	}
+	
+	// Listado alternativo de colas
+	public function index_detalles()
+	{
+		$this->load->view('base');
+		
+		// Construcción del listado
+		$fetch_data = $this->MColas->obtener();
+		$lista = array();
+		foreach($fetch_data as $row){
+			$sub_array = array();
+			// Proceso de busqueda de detalles (productos) pendientes asociados a la cola
+			$num_pendientes = $this->MApis->obtenerDetallesEstatus($row->id, 2);
+			$num_pendientes = count($num_pendientes);
+			// Proceso de busqueda de detalles (productos) procesados asociados a la cola
+			$num_procesados = $this->MApis->obtenerDetallesEstatus($row->id, 1);
+			$num_procesados = count($num_procesados);
+						
+			$sub_array['id'] = $row->id;
+			$sub_array['user_id'] = $row->user_id;
+			$sub_array['nombre'] = $row->nombre;
+			$sub_array['name'] = $row->name;
+			$sub_array['fecha'] = $row->fecha;
+			$sub_array['hora'] = $row->hora;
+			$sub_array['status'] = $row->status;
+			$sub_array['num_pendientes'] = $num_pendientes;
+			$sub_array['num_procesados'] = $num_procesados;
+			
+			$lista[] = (object)$sub_array;  // Incluimos cada registro con un objeto, ya queasí lo requiere la vista
+		}
+		
+		$data['listar'] = $lista;
 		$this->load->view('colas/lista', $data);
 		$this->load->view('footer');
 	}
