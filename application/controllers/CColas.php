@@ -148,7 +148,7 @@ class CColas extends CI_Controller {
 		/* Si la cola está en proceso y la queremos pasar a procesado, verificamos si no tiene detalles pendientes antes de actualizar.
 		 * Si la cola está en proceso y la queremos cancelar o pasar a pendiente, actualizamos sin validaciones extra. 
 		   Si es una cola pendiente, actualizamos sin validaciones extra. */
-		if($datos_cola[0]->status == 2 && $nuevo_status == 1){
+		if($nuevo_status == 1){
 			
 			$detalles_cola = $this->MApis->obtenerDetallesEstatus($id, 2);
 			
