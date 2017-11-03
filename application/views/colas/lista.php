@@ -27,13 +27,15 @@
                 </div>
                 <div class="ibox-content">
                     <div class="table-responsive">
-                        <table id="tab_colas" class="table table-striped table-bordered table-hover dataTables-example" >
+                        <table id="tab_colas" class="table table-striped table-bordered dt-responsive table-hover dataTables-example" >
                             <thead>
                                 <tr style="text-align: center">
                                     <th>#</th>
                                     <th>Tienda Virtual</th>
                                     <th>Tienda Física</th>
                                     <th>Estatus</th>
+                                    <th>Pendientes</th>
+                                    <th>Procesados</th>
                                     <th>Detalles</th>
                                     <th>Cambiar</th>
                                 </tr>
@@ -65,6 +67,12 @@
 												echo "";
 											}
                                             ?>
+                                        </td>
+                                        <td>
+                                            <?php echo "<span style='color:#F7A54A'>$cola->num_pendientes</span>"; ?>
+                                        </td>
+                                        <td>
+											<?php echo "<span style='color:#1ab394'>$cola->num_procesados</span>"; ?>
                                         </td>
                                         <td style='text-align: center'>
 											<?php

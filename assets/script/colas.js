@@ -19,6 +19,8 @@ $(document).ready(function(){
             {"sClass": "registro center", "sWidth": "20%"},
             {"sClass": "registro center", "sWidth": "20%"},
             {"sClass": "registro center", "sWidth": "20%"},
+            {"sClass": "none", "sWidth": "20%"},
+            {"sClass": "none", "sWidth": "20%"},
             {"sWidth": "3%", "bSortable": false, "sClass": "center sorting_false", "bSearchable": false},
             {"sWidth": "3%", "bSortable": false, "sClass": "center sorting_false", "bSearchable": false}
         ]
