@@ -54,6 +54,7 @@ class MApis extends CI_Model {
     
     // Método público para obtener detalles (productos) por cola_id y status
     public function obtenerDetallesEstatus($cola_id, $estatus) {
+		
         $this->db->where('cola_id', $cola_id);
         $this->db->where('status', $estatus);
         $query = $this->db->get('cola_detalle');
@@ -61,6 +62,7 @@ class MApis extends CI_Model {
             return $query->result();
         else
             return $query->result();
+            
     }
     
     // Método público para obtener datos de una categoría por id

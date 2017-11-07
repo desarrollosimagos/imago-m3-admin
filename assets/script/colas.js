@@ -22,6 +22,7 @@ $(document).ready(function(){
             {"sClass": "none", "sWidth": "20%"},
             {"sClass": "none", "sWidth": "20%"},
             {"sWidth": "3%", "bSortable": false, "sClass": "center sorting_false", "bSearchable": false},
+            {"sWidth": "3%", "bSortable": false, "sClass": "center sorting_false", "bSearchable": false},
             {"sWidth": "3%", "bSortable": false, "sClass": "center sorting_false", "bSearchable": false}
         ]
     });
@@ -89,6 +90,41 @@ $(document).ready(function(){
 			} 
         });
 		
-	});       
+	});
+	
+	
+	// Validacion para procesar la cola sincronizando los detalles de la misma con la tienda virtual
+    $("table#tab_colas").on('click', 'a.actualizar', function (e) {
+        e.preventDefault();
+        var id = this.getAttribute('id');
+		var ruta = id.split(";");
+		ruta = ruta[0];
+		var status = id.split(";");
+		status = status[2];
+		id = id.split(";");
+		id = id[1];
+		
+		/* Primero verificamos el estatus de la cola.
+		 * Si está pendiente hacemos la sincronización, si no, indicamos que la cola sea colocada en ese estatus.
+		 * */
+		if(status == '2'){
+			
+			swal({ 
+			   title: "Disculpe",
+				text: "Debe pasar la cola al estatus pendiente antes de procesarla...",
+				 type: "warning" 
+			},
+			function(){
+				 
+			});
+			
+		}else{
+			
+			// Sincronizamos con la tienda virtual
+			window.location.href = base_url+ruta+'?id='+id;
+			
+		}
+        
+    });
 	
 });
