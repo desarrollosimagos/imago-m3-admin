@@ -146,16 +146,23 @@ Class CApis extends CI_Controller {
 					//~ }
 					$precio_bolivares = $producto->precio;
 					
+					// Primero recortamos la cadena de nombre si su longitud supera los 60 caracteres
+					if(strlen($producto->nombre) > 60){
+						$nombre_producto = substr($producto->nombre, 0, 57)."...";
+					}else{
+						$nombre_producto = $producto->nombre;
+					}
+					
 					// Si la tienda virtual tiene fórmula especificada le añadimos el cálculo de élla como comisión al precio del producto
 					if($datosb_tienda[0]->formula == ""){
 						$result = $precio_bolivares;
-						$body = array('title' => $producto->nombre, 'price' => round($result, 2), 'available_quantity' => $producto->cantidad, 'pictures' => $lista_fotos);
+						$body = array('title' => $nombre_producto, 'price' => round($result, 2), 'available_quantity' => $producto->cantidad, 'pictures' => $lista_fotos);
 					}else{
 						$precio = $datosb_tienda[0]->formula;
 						$p = $precio_bolivares;
 						$f_precio = str_replace('P',$p,$precio);
 						eval("\$result = $f_precio;");
-						$body = array('title' => $producto->nombre, 'price' => round($result, 2), 'available_quantity' => $producto->cantidad, 'pictures' => $lista_fotos);
+						$body = array('title' => $nombre_producto, 'price' => round($result, 2), 'available_quantity' => $producto->cantidad, 'pictures' => $lista_fotos);
 					}
 					$response = $meli->put('/items/'.$producto->referencia, $body, $params);
 					// print_r($response);
@@ -165,12 +172,7 @@ Class CApis extends CI_Controller {
 						//~ print_r($response['body']);
 						if($response['body']->error == 'not_found'){
 							// Procedemos a registrar el nuevo producto en la tienda virtual de mercado libre
-							// Primero recortamos la cadena de nombre si su longitud supera los 60 caracteres
-							if(strlen($producto->nombre) > 60){
-								$nombre_producto = substr($producto->nombre, 0, 57)."...";
-							}else{
-								$nombre_producto = $producto->nombre;
-							}
+							
 							// Constriumos el item a enviar
 							$item = array(
 								"title" => $nombre_producto,
@@ -365,16 +367,23 @@ Class CApis extends CI_Controller {
 							//~ }
 							$precio_bolivares = $producto->precio;
 							
+							// Primero recortamos la cadena de nombre si su longitud supera los 60 caracteres
+							if(strlen($producto->nombre) > 60){
+								$nombre_producto = substr($producto->nombre, 0, 57)."...";
+							}else{
+								$nombre_producto = $producto->nombre;
+							}
+							
 							// Si la tienda virtual tiene fórmula especificada le añadimos el cálculo de élla como comisión al precio del producto
 							if($datosb_tienda[0]->formula == ""){
 								$result = $precio_bolivares;
-								$body = array('title' => $producto->nombre, 'price' => round($result, 2), 'available_quantity' => $producto->cantidad, 'pictures' => $lista_fotos);
+								$body = array('title' => $nombre_producto, 'price' => round($result, 2), 'available_quantity' => $producto->cantidad, 'pictures' => $lista_fotos);
 							}else{
 								$precio = $datosb_tienda[0]->formula;
 								$p = $precio_bolivares;
 								$f_precio = str_replace('P',$p,$precio);
 								eval("\$result = $f_precio;");
-								$body = array('title' => $producto->nombre, 'price' => round($result, 2), 'available_quantity' => $producto->cantidad, 'pictures' => $lista_fotos);
+								$body = array('title' => $nombre_producto, 'price' => round($result, 2), 'available_quantity' => $producto->cantidad, 'pictures' => $lista_fotos);
 							}
 
 							$response = $meli->put('/items/'.$producto->referencia, $body, $params);
@@ -385,12 +394,7 @@ Class CApis extends CI_Controller {
 								//~ print_r($response['body']);
 								if($response['body']->error == 'not_found'){
 									// Procedemos a registrar el nuevo producto en la tienda virtual de mercado libre
-									// Primero recortamos la cadena de nombre si su longitud supera los 60 caracteres
-									if(strlen($producto->nombre) > 60){
-										$nombre_producto = substr($producto->nombre, 0, 57)."...";
-									}else{
-										$nombre_producto = $producto->nombre;
-									}
+									
 									// Constriumos el item a enviar
 									$item = array(
 										"title" => $nombre_producto,
@@ -459,6 +463,7 @@ Class CApis extends CI_Controller {
 									);
 									$update_detalle = $this->MApis->update_detalle_cola($data_up);
 								}else{
+									//~ print_r($response['body']);
 									// Registro de incidencia
 									$captura_eventos[] = "[".date("r")."] Producto: ".$producto->producto_id.", Num Referencia: ".$producto->referencia.", Evento: ".$response['body']->error."2, Usuario: ".$this->session->userdata['logged_in']['id']."\r\n";
 									// Registramos el detalle del error
@@ -605,16 +610,23 @@ Class CApis extends CI_Controller {
 					$categoria_referencia = $data_categoria[0]->referencia;
 				}
 				
+				// Primero recortamos la cadena de nombre si su longitud supera los 60 caracteres
+				if(strlen($producto[0]->nombre) > 60){
+					$nombre_producto = substr($producto[0]->nombre, 0, 57)."...";
+				}else{
+					$nombre_producto = $producto[0]->nombre;
+				}
+				
 				// Si la tienda virtual tiene fórmula especificada le añadimos el cálculo de élla como comisión al precio del producto
 				if($datosb_tienda[0]->formula == ""){
 					$result = $producto_tiendav[0]->precio;
-					$body = array('title' => $producto[0]->nombre, 'price' => round($result, 2), 'available_quantity' => $producto_tiendav[0]->cantidad, 'pictures' => $lista_fotos);
+					$body = array('title' => $nombre_producto, 'price' => round($result, 2), 'available_quantity' => $producto_tiendav[0]->cantidad, 'pictures' => $lista_fotos);
 				}else{
 					$precio = $datosb_tienda[0]->formula;
 					$p = $producto_tiendav[0]->precio;
 					$f_precio = str_replace('P',$p,$precio);
 					eval("\$result = $f_precio;");
-					$body = array('title' => $producto[0]->nombre, 'price' => round($result, 2), 'available_quantity' => $producto_tiendav[0]->cantidad, 'pictures' => $lista_fotos);
+					$body = array('title' => $nombre_producto, 'price' => round($result, 2), 'available_quantity' => $producto_tiendav[0]->cantidad, 'pictures' => $lista_fotos);
 				}
 				$response = $meli->put('/items/'.$producto_tiendav[0]->referencia, $body, $params);
 				// print_r($response);
@@ -624,12 +636,7 @@ Class CApis extends CI_Controller {
 					//~ print_r($response['body']->error);
 					if($response['body']->error == 'not_found'){
 						// Procedemos a registrar el nuevo producto en la tienda virtual de mercado libre
-						// Primero recortamos la cadena de nombre si su longitud supera los 60 caracteres
-						if(strlen($producto[0]->nombre) > 60){
-							$nombre_producto = substr($producto[0]->nombre, 0, 57)."...";
-						}else{
-							$nombre_producto = $producto[0]->nombre;
-						}
+						
 						// Constriumos el item a enviar
 						$item = array(
 							"title" => $nombre_producto,
@@ -758,16 +765,23 @@ Class CApis extends CI_Controller {
 							$categoria_referencia = $data_categoria[0]->referencia;
 						}
 						
+						// Primero recortamos la cadena de nombre si su longitud supera los 60 caracteres
+						if(strlen($producto[0]->nombre) > 60){
+							$nombre_producto = substr($producto[0]->nombre, 0, 57)."...";
+						}else{
+							$nombre_producto = $producto[0]->nombre;
+						}
+						
 						// Si la tienda virtual tiene fórmula especificada le añadimos el cálculo de élla como comisión al precio del producto
 						if($datosb_tienda[0]->formula == ""){
 							$result = $producto[0]->precio;
-							$body = array('title' => $producto[0]->nombre, 'price' => round($result, 2), 'available_quantity' => $producto_tiendav[0]->cantidad, 'pictures' => $lista_fotos);
+							$body = array('title' => $nombre_producto, 'price' => round($result, 2), 'available_quantity' => $producto_tiendav[0]->cantidad, 'pictures' => $lista_fotos);
 						}else{
 							$precio = $datosb_tienda[0]->formula;
 							$p = $producto_tiendav[0]->precio;
 							$f_precio = str_replace('P',$p,$precio);
 							eval("\$result = $f_precio;");
-							$body = array('title' => $producto[0]->nombre, 'price' => round($result, 2), 'available_quantity' => $producto_tiendav[0]->cantidad, 'pictures' => $lista_fotos);
+							$body = array('title' => $nombre_producto, 'price' => round($result, 2), 'available_quantity' => $producto_tiendav[0]->cantidad, 'pictures' => $lista_fotos);
 						}
 
 						$response = $meli->put('/items/'.$producto_tiendav[0]->referencia, $body, $params);
@@ -778,12 +792,7 @@ Class CApis extends CI_Controller {
 							//~ print_r($response['body']->error);
 							if($response['body']->error == 'not_found'){
 								// Procedemos a registrar el nuevo producto en la tienda virtual de mercado libre
-								// Primero recortamos la cadena de nombre si su longitud supera los 60 caracteres
-								if(strlen($producto[0]->nombre) > 60){
-									$nombre_producto = substr($producto[0]->nombre, 0, 57)."...";
-								}else{
-									$nombre_producto = $producto[0]->nombre;
-								}
+								
 								// Constriumos el item a enviar
 								$item = array(
 									"title" => $nombre_producto,
