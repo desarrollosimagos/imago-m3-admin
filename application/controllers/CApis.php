@@ -149,13 +149,13 @@ Class CApis extends CI_Controller {
 					// Si la tienda virtual tiene fórmula especificada le añadimos el cálculo de élla como comisión al precio del producto
 					if($datosb_tienda[0]->formula == ""){
 						$result = $precio_bolivares;
-						$body = array('price' => round($result, 2), 'available_quantity' => $producto->cantidad, 'pictures' => $lista_fotos);
+						$body = array('title' => $producto->nombre, 'price' => round($result, 2), 'available_quantity' => $producto->cantidad, 'pictures' => $lista_fotos);
 					}else{
 						$precio = $datosb_tienda[0]->formula;
 						$p = $precio_bolivares;
 						$f_precio = str_replace('P',$p,$precio);
 						eval("\$result = $f_precio;");
-						$body = array('price' => round($result, 2), 'available_quantity' => $producto->cantidad, 'pictures' => $lista_fotos);
+						$body = array('title' => $producto->nombre, 'price' => round($result, 2), 'available_quantity' => $producto->cantidad, 'pictures' => $lista_fotos);
 					}
 					$response = $meli->put('/items/'.$producto->referencia, $body, $params);
 					// print_r($response);
@@ -368,13 +368,13 @@ Class CApis extends CI_Controller {
 							// Si la tienda virtual tiene fórmula especificada le añadimos el cálculo de élla como comisión al precio del producto
 							if($datosb_tienda[0]->formula == ""){
 								$result = $precio_bolivares;
-								$body = array('price' => round($result, 2), 'available_quantity' => $producto->cantidad, 'pictures' => $lista_fotos);
+								$body = array('title' => $producto->nombre, 'price' => round($result, 2), 'available_quantity' => $producto->cantidad, 'pictures' => $lista_fotos);
 							}else{
 								$precio = $datosb_tienda[0]->formula;
 								$p = $precio_bolivares;
 								$f_precio = str_replace('P',$p,$precio);
 								eval("\$result = $f_precio;");
-								$body = array('price' => round($result, 2), 'available_quantity' => $producto->cantidad, 'pictures' => $lista_fotos);
+								$body = array('title' => $producto->nombre, 'price' => round($result, 2), 'available_quantity' => $producto->cantidad, 'pictures' => $lista_fotos);
 							}
 
 							$response = $meli->put('/items/'.$producto->referencia, $body, $params);
@@ -608,13 +608,13 @@ Class CApis extends CI_Controller {
 				// Si la tienda virtual tiene fórmula especificada le añadimos el cálculo de élla como comisión al precio del producto
 				if($datosb_tienda[0]->formula == ""){
 					$result = $producto_tiendav[0]->precio;
-					$body = array('price' => round($result, 2), 'available_quantity' => $producto_tiendav[0]->cantidad, 'pictures' => $lista_fotos);
+					$body = array('title' => $producto[0]->nombre, 'price' => round($result, 2), 'available_quantity' => $producto_tiendav[0]->cantidad, 'pictures' => $lista_fotos);
 				}else{
 					$precio = $datosb_tienda[0]->formula;
 					$p = $producto_tiendav[0]->precio;
 					$f_precio = str_replace('P',$p,$precio);
 					eval("\$result = $f_precio;");
-					$body = array('price' => round($result, 2), 'available_quantity' => $producto_tiendav[0]->cantidad, 'pictures' => $lista_fotos);
+					$body = array('title' => $producto[0]->nombre, 'price' => round($result, 2), 'available_quantity' => $producto_tiendav[0]->cantidad, 'pictures' => $lista_fotos);
 				}
 				$response = $meli->put('/items/'.$producto_tiendav[0]->referencia, $body, $params);
 				// print_r($response);
@@ -761,13 +761,13 @@ Class CApis extends CI_Controller {
 						// Si la tienda virtual tiene fórmula especificada le añadimos el cálculo de élla como comisión al precio del producto
 						if($datosb_tienda[0]->formula == ""){
 							$result = $producto[0]->precio;
-							$body = array('price' => round($result, 2), 'available_quantity' => $producto_tiendav[0]->cantidad, 'pictures' => $lista_fotos);
+							$body = array('title' => $producto[0]->nombre, 'price' => round($result, 2), 'available_quantity' => $producto_tiendav[0]->cantidad, 'pictures' => $lista_fotos);
 						}else{
 							$precio = $datosb_tienda[0]->formula;
 							$p = $producto_tiendav[0]->precio;
 							$f_precio = str_replace('P',$p,$precio);
 							eval("\$result = $f_precio;");
-							$body = array('price' => round($result, 2), 'available_quantity' => $producto_tiendav[0]->cantidad, 'pictures' => $lista_fotos);
+							$body = array('title' => $producto[0]->nombre, 'price' => round($result, 2), 'available_quantity' => $producto_tiendav[0]->cantidad, 'pictures' => $lista_fotos);
 						}
 
 						$response = $meli->put('/items/'.$producto_tiendav[0]->referencia, $body, $params);
