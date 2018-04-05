@@ -268,18 +268,45 @@ $(document).ready(function(){
 		}
 	});
 	
-	// Proceso de referenciación de montos según el precio actual del dólar 
+	// Proceso de referenciación del precio actual o fijado del dólar
 	$("#referenciar").on('click', function (e) {
 		var num_checked = 0;  // Contador de checkbox marcados
-		var precio_dolar = $("#precio_dolar").val();  // Capturamos el precio del dólar previamente cargado en el campo oculto 'precio_dolar'
 		
-		// Recorremos la tabla para verificar que campos están editables y proceder a referenciarles el monto
+		// Recorremos la tabla para verificar que campos están editables y proceder a mostrar la ventana modal
 		$("#tab_productos tbody tr").each(function () {
 			var checkbox;
 			checkbox = $(this).find('td').eq(0).find('input');
 			
 			if (checkbox.is(':checked')) {
 				num_checked += 1;
+			}
+		});
+		
+		if (num_checked == 0) {
+			swal("Disculpe,", "no ha marcado ningún elemento de la lista");
+        }else{	
+			// Mostramos la modal de captura manual del precio del dólar
+			$("#modal_price_dolar").modal('show');
+			$("#ejecutar_referencia").show();
+			$("#ejecutar_referencia_general").hide();
+		}
+	});
+	
+	
+	$("#precio_manual").numeric(".");  // Sólo números para el precio manual
+	
+	
+	// Proceso de referenciación de montos según el precio actual del dólar
+	$("#ejecutar_referencia").on('click', function (e) {
+		var num_checked = 0;  // Contador de checkbox marcados
+		var precio_dolar = $("#precio_dolar").val();  // Capturamos el precio del dólar previamente cargado en el campo oculto 'precio_dolar'
+		
+		if($("#precio_manual").val().trim() != "" && $("#precio_manual").val().trim() > 0){
+			
+			precio_dolar = $("#precio_manual").val().trim();
+			
+			// Recorremos la tabla para verificar que campos están editables y proceder a referenciarles el monto
+			$("#tab_productos tbody tr").each(function () {
 				// Captura del costo del material en dólares teniendo en cuenta si está en un input o es texto plano
 				if($(this).find('span').eq(0).find('input').val().trim() == undefined){
 					var costo_mat_dolar = $(this).find('span').eq(0).text();
@@ -289,14 +316,44 @@ $(document).ready(function(){
 				var valor_referencial = parseFloat(costo_mat_dolar) * precio_dolar;
 				// Indicamos el monto referencial
 				$(this).find('span').eq(1).find('input').val(valor_referencial.toFixed(2));
-			}
-		});
+			});
+			
+			$("#modal_price_dolar").modal('hide');  // Cerramos la ventana modal
+			$("#precio_manual").val("");  // Vaciamos el campo de precio manual
+		}else{
+			swal({
+				title: "Ejecutar referencia",
+				text: "El campo de precio manual está vacío ¿Desea usar el valor automático de Dólar Today?",
+				type: "warning",
+				showCancelButton: true,
+				confirmButtonColor: "#DD6B55",
+				confirmButtonText: "Referenciar",
+				cancelButtonText: "Cancelar",
+				closeOnConfirm: true,
+				closeOnCancel: true
+			},
+			function(isConfirm){
+				if (isConfirm) {
+				 
+					// Recorremos la tabla para verificar que campos están editables y proceder a referenciarles el monto
+					$("#tab_productos tbody tr").each(function () {
+						// Captura del costo del material en dólares teniendo en cuenta si está en un input o es texto plano
+						if($(this).find('span').eq(0).find('input').val().trim() == undefined){
+							var costo_mat_dolar = $(this).find('span').eq(0).text();
+						}else{
+							var costo_mat_dolar = $(this).find('span').eq(0).find('input').val();
+						}
+						var valor_referencial = parseFloat(costo_mat_dolar) * precio_dolar;
+						// Indicamos el monto referencial
+						$(this).find('span').eq(1).find('input').val(valor_referencial.toFixed(2));
+					});
+					
+					$("#modal_price_dolar").modal('hide');  // Cerramos la ventana modal
+					$("#precio_manual").val("");  // Vaciamos el campo de precio manual
+				} 
+			});
+		}
 		
-		//~ alert(num_checked);
-		
-		if (num_checked == 0) {
-			swal("Disculpe,", "no ha marcado ningún elemento de la lista");			
-        }
 	});
 	
 	
@@ -409,35 +466,102 @@ $(document).ready(function(){
 	
 	// Referenciación y actualización general de precios
 	$("#actualizar_montos_general").on('click', function (e) {
+		
+		// Mostramos la modal de captura manual del precio del dólar
+		$("#modal_price_dolar").modal('show');
+		$("#ejecutar_referencia").hide();
+		$("#ejecutar_referencia_general").show();
+		
+	});
+	
+	// Referenciación y actualización general de precios
+	$("#ejecutar_referencia_general").on('click', function (e) {
 		var precio_dolar = $("#precio_dolar").val();  // Capturamos el precio del dólar previamente cargado en el campo oculto 'precio_dolar'
 		
-		$.ajax({
-			url : base_url+'CProductos/update_list2',
-			type : 'POST',
-			async: false,  // Para que no proceda con las siguientes instrucciones hasta terminar la petición
-			//~ dataType : 'json',
-			data : {'precio_dolar' : precio_dolar},
-			beforeSend:function(objeto){
-				$('#resultado').css({display:'block'});
-				$('#actualizar_montos').css({display:'none'});
+		if($("#precio_manual").val().trim() != "" && $("#precio_manual").val().trim() > 0){
+			
+			precio_dolar = $("#precio_manual").val().trim();
+			
+			$.ajax({
+				url : base_url+'CProductos/update_list2',
+				type : 'POST',
+				async: false,  // Para que no proceda con las siguientes instrucciones hasta terminar la petición
+				//~ dataType : 'json',
+				data : {'precio_dolar' : precio_dolar},
+				beforeSend:function(objeto){
+					$('#resultado').css({display:'block'});
+					$('#actualizar_montos').css({display:'none'});
+				},
+				success : function(response) {
+					
+					$('#resultado').css({display:'none'});
+					$('#actualizar_montos').css({display:'block'});
+					
+					$("#modal_price_dolar").modal('hide');  // Cerramos la ventana modal
+					$("#precio_manual").val("");  // Vaciamos el campo de precio manual
+					
+					swal({
+						title: "Actualización",
+						 text: "Actualizado con exito",
+						  type: "success" 
+						},
+					function(){
+						// Reiniciamos
+						window.location.href = base_url+'productos';
+					});
+													
+				},
+			});
+			
+		}else{
+			swal({
+				title: "Ejecutar referencia",
+				text: "El campo de precio manual está vacío ¿Desea usar el valor automático de Dólar Today?",
+				type: "warning",
+				showCancelButton: true,
+				confirmButtonColor: "#DD6B55",
+				confirmButtonText: "Referenciar",
+				cancelButtonText: "Cancelar",
+				closeOnConfirm: true,
+				closeOnCancel: true
 			},
-			success : function(response) {
-				
-				$('#resultado').css({display:'none'});
-				$('#actualizar_montos').css({display:'block'});
-				
-				swal({
-					title: "Actualización",
-					 text: "Actualizado con exito",
-					  type: "success" 
-					},
-				function(){
-					// Reiniciamos
-					window.location.href = base_url+'productos';
-				});
-												
-			},
-		});
+			function(isConfirm){
+				if (isConfirm) {
+				 
+					$.ajax({
+						url : base_url+'CProductos/update_list2',
+						type : 'POST',
+						async: false,  // Para que no proceda con las siguientes instrucciones hasta terminar la petición
+						//~ dataType : 'json',
+						data : {'precio_dolar' : precio_dolar},
+						beforeSend:function(objeto){
+							$('#resultado').css({display:'block'});
+							$('#actualizar_montos').css({display:'none'});
+						},
+						success : function(response) {
+							
+							$('#resultado').css({display:'none'});
+							$('#actualizar_montos').css({display:'block'});
+							
+							$("#modal_price_dolar").modal('hide');  // Cerramos la ventana modal
+							$("#precio_manual").val("");  // Vaciamos el campo de precio manual
+							
+							swal({
+								title: "Actualización",
+								 text: "Actualizado con exito",
+								  type: "success" 
+								},
+							function(){
+								// Reiniciamos
+								window.location.href = base_url+'productos';
+							});
+															
+						},
+					});
+				} 
+			});
+		}
+		
 	});
 	
 	// Mostrar la modal de selección de tienda virtual
