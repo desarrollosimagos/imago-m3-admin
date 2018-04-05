@@ -98,7 +98,7 @@
 </div>
 
 <!-- Modal para selección de tienda virtual -->
-<div class="modal fade" id="modal_tiendav">
+<div class="modal fade" id="modal_price_dolar">
    <div class="modal-dialog">
 	  <div class="modal-content">
 		 <div class="modal-header" style="background-color:#1ab394">
@@ -106,30 +106,27 @@
 			<h4 class="modal-title" style="color:#ffffff">
 			   <center>
 				<span class="glyphicon glyphicon-search"></span>
-				&nbsp;Seleccione la tienda virtual con la cual sincronizar 
+				&nbsp;Indique el precio o tasa del dólar a referenciar
 			   </center>
 			</h4>
 		 </div>
 		 <div class="modal-body">
-			<form id="f_tiendav" name="f_tiendav" action="" method="post">
+			<form id="f_preciom" name="f_preciom" action="" method="post">
 			   <div class="form-group">
 					<div class="col-sm-12">
 						<div class="form-group">
-							<label style="font-weight:bold;">Tiendas Virtuales</label>
-							<select class="form-control" id="tiendav_id"  name="tiendav_id" >
-								<option value="0">Seleccione</option>
-								<?php foreach ($listar_tiendas_fil as $tiendav) { ?>
-									<option value="<?php echo $tiendav->id ?>"><?php echo $tiendav->nombre; ?></option>
-								<?php } ?>
-							</select>
-							<input type="hidden" id="producto_id">
+							<label style="font-weight:bold;">Precio</label>
+							<input type="text" id="precio_manual" class="form-control">
 						</div>
 					</div>
 					</br></br>
 					<div class="col-sm-12" align="right">
 						<span class="input-btn">
-							<button class="btn btn-primary" type="button" id="sincronizar">
-								Sincronizar&nbsp;<span class="glyphicon glyphicon-share-alt"></span>
+							<button class="btn btn-primary" type="button" id="ejecutar_referencia">
+								Referenciar&nbsp;<span class="glyphicon glyphicon-share-alt"></span>
+							</button>
+							<button class="btn btn-primary" type="button" id="ejecutar_referencia_general">
+								Referenciar&nbsp;<span class="glyphicon glyphicon-share-alt"></span>
 							</button>
 						</span>
 					</div>
