@@ -106,8 +106,8 @@ $(document).ready(function(){
     
     // Cargamos el precio actual del dólar en el campo oculto 'precio_dolar'
     $.get('https://s3.amazonaws.com/dolartoday/data.json', function (response) {  // Se produce un error si usamos $.post en vez de $.get
-		//~ alert(response['USD']['transferencia']);
-		var precio_dolar = response['USD']['transferencia'];
+		//~ alert(response['USD']['localbitcoin_ref']);
+		var precio_dolar = response['USD']['localbitcoin_ref'];
 		$("#precio_dolar").val(precio_dolar);
 		$("#label_precio_dolar").text("**Precio actual del dólar("+precio_dolar+")");
 	}, 'json');
