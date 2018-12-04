@@ -208,8 +208,8 @@ $(document).ready(function(){
     
     // Indicamos el precio actual del dólar en la etiqueta informativa debajo del campo de Precio en Dólares
     $.get('https://s3.amazonaws.com/dolartoday/data.json', function (response) {  // Se produce un error si usamos $.post en vez de $.get
-		//~ alert(response['USD']['transferencia']);
-		var precio_dolar = response['USD']['transferencia'];
+		//~ alert(response['USD']['localbitcoin_ref']);
+		var precio_dolar = response['USD']['localbitcoin_ref'];
 		$("#label_precio_dolar").text("**Precio actual del dólar("+precio_dolar+")");
 	}, 'json');
 
@@ -218,8 +218,8 @@ $(document).ready(function(){
 		e.preventDefault();  // Para evitar que se envíe por defecto
 		
 		$.get('https://s3.amazonaws.com/dolartoday/data.json', function (response) {  // Se produce un error si usamos $.post en vez de $.get
-			//~ alert(response['USD']['transferencia']);
-			var dolar_bolivar = parseFloat($("#costo_dolar").val()) * response['USD']['transferencia'];
+			//~ alert(response['USD']['localbitcoin_ref']);
+			var dolar_bolivar = parseFloat($("#costo_dolar").val()) * response['USD']['localbitcoin_ref'];
 			$("#costo_bolivar").val(dolar_bolivar.toFixed(2));
 		}, 'json');
 	});
