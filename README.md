@@ -1,2 +1,2 @@
 # Octopus
-Produts Management
+Products Management
