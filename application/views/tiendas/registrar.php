@@ -29,32 +29,37 @@
 						<div class="form-group">
 							<label class="col-sm-2 control-label" >Rif *</label>
 							<div class="col-sm-4">
-								<input type="text" class="form-control"  maxlength="20" name="rif" id="rif">
+								<input type="text" class="form-control" maxlength="20" name="rif" id="rif">
 							</div>
 						</div>
 						<div class="form-group"><label class="col-sm-2 control-label" >Nombre</label>
 							<div class="col-sm-8">
-								<input type="text" class="form-control"  name="name" maxlength="100" id="name">
+								<input type="text" class="form-control" name="name" maxlength="100" id="name">
 							</div>
 						</div>
 						<div class="form-group"><label class="col-sm-2 control-label" >Dirección</label>
 							<div class="col-sm-8">
-								<input type="text" class="form-control"  name="address" maxlength="250" id="address">
+								<input type="text" class="form-control" name="address" maxlength="250" id="address">
 							</div>
 						</div>
 						<div class="form-group"><label class="col-sm-2 control-label" >Referencia Externa</label>
 							<div class="col-sm-8">
-								<input type="text" class="form-control"  name="referencia" maxlength="250" id="referencia">
+								<input type="text" class="form-control" name="referencia" maxlength="250" id="referencia">
+							</div>
+						</div>
+						<div class="form-group"><label class="col-sm-2 control-label" >BD Prefijo</label>
+							<div class="col-sm-8">
+								<input type="text" class="form-control" placeholder="No usar guión (-) ni guión bajo (_)" name="bd_prefijo" maxlength="5" id="bd_prefijo">
 							</div>
 						</div>
 						<div class="form-group"><label class="col-sm-2 control-label" >BD Externa</label>
 							<div class="col-sm-8">
-								<input type="text" class="form-control"  name="bd_externa" maxlength="250" id="bd_externa">
+								<input type="text" class="form-control" name="bd_externa" maxlength="250" id="bd_externa">
 							</div>
 						</div>
 						<div class="form-group"><label class="col-sm-2 control-label" >Campo Externo</label>
 							<div class="col-sm-8">
-								<input type="text" class="form-control"  name="cp_externo" maxlength="250" id="cp_externo">
+								<input type="text" class="form-control" name="cp_externo" maxlength="250" id="cp_externo">
 							</div>
 						</div>
 						<div class="form-group">

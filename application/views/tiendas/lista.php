@@ -35,6 +35,7 @@
                                     <th>status</th>
                                     <th>Dirección</th>
                                     <th>Referencia</th>
+                                    <th>Prefijo</th>
                                     <th>BD Externa</th>
                                     <th>Campo Externo</th>
                                     <th>Teléfono</th>
@@ -72,6 +73,9 @@
                                         </td>
                                         <td>
                                             <?php echo $tienda->referencia; ?>
+                                        </td>
+                                        <td>
+                                            <?php echo $tienda->bd_prefijo; ?>
                                         </td>
                                         <td>
                                             <?php echo $tienda->bd_externa; ?>
@@ -146,6 +150,7 @@ $(document).ready(function(){
             {"sClass": "registro center", "sWidth": "30%"},
             {"sClass": "registro center", "sWidth": "30%"},
             {"sClass": "registro center", "sWidth": "10%"},
+            {"sClass": "none", "sWidth": "10%"},
             {"sClass": "none", "sWidth": "10%"},
             {"sClass": "none", "sWidth": "10%"},
             {"sClass": "none", "sWidth": "10%"},

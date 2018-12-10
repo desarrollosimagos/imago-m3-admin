@@ -32,12 +32,20 @@ class CTiendas extends CI_Controller {
 	
 	// Método para guardar un nuevo registro
     public function add() {
+		
+		$bd_externa = $_POST['bd_externa'];
+		
+		if($_POST['bd_prefijo'] != ''){
+			$bd_externa = $_POST['bd_prefijo'] . "_" . $bd_externa;
+		}
+		
 		$datos = array(
             'rif' => $_POST['rif'],
             'name' => $_POST['name'],
             'address' => $_POST['address'],
             'referencia' => $_POST['referencia'],
-            'bd_externa' => $_POST['bd_externa'],
+            'bd_prefijo' => $_POST['bd_prefijo'],
+            'bd_externa' => $bd_externa,
             'cp_externo' => $_POST['cp_externo'],
             'phone' => $_POST['phone'],
             'status' => 1
@@ -161,13 +169,31 @@ class CTiendas extends CI_Controller {
 	
 	// Método para actualizar
     public function update() {
+		
+		$bd_externa = explode("_", $_POST['bd_externa']);
+		
+		if($_POST['bd_prefijo'] != ''){
+			if(count($bd_externa) > 1){
+				$bd_externa = $_POST['bd_prefijo'] . "_" . $bd_externa[1];
+			}else{
+				$bd_externa = $_POST['bd_prefijo'] . "_" . $bd_externa[0];
+			}
+		}else{
+			if(count($bd_externa) > 1){
+				$bd_externa = $bd_externa[1];
+			}else{
+				$bd_externa = $bd_externa[0];
+			}
+		}
+		
 		$datos = array(
 			'id' => $_POST['id'],
             'rif' => $_POST['rif'],
             'name' => $_POST['name'],
             'address' => $_POST['address'],
             'referencia' => $_POST['referencia'],
-            'bd_externa' => $_POST['bd_externa'],
+            'bd_prefijo' => $_POST['bd_prefijo'],
+            'bd_externa' => $bd_externa,
             'cp_externo' => $_POST['cp_externo'],
             'phone' => $_POST['phone'],
             'status' => 1,
