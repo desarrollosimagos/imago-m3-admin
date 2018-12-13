@@ -88,7 +88,7 @@ if (!function_exists('menu')) {
 					foreach($ci->session->userdata('logged_in')['submenus'] as $submenus){
 						foreach($submenus as $submenu){
 							if($submenu->menu_id == $menu->id){
-								echo "<li><a href='".base_url().$submenu->route."'>".$submenu->name."</a></li>";
+								echo "<li><a class='li-submenu' href='".base_url().$submenu->route."'>".$submenu->name."</a></li>";
 							}
 						}
 					}
