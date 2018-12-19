@@ -11,6 +11,7 @@ class CUser extends CI_Controller {
 		$this->load->model('MPerfil');
         $this->load->model('MAcciones');
         $this->load->model('MTiendas');
+        $this->load->model('MMails');
 		
     }
 	
@@ -36,9 +37,150 @@ class CUser extends CI_Controller {
 		$this->load->view('user/registrar',$data);
 		$this->load->view('footer');
 	}
-	
+
+	// Método para el registro de nuevos usuarios desde el login
+	public function register_user()
+	{
+		
+		$this->load->view('register');
+		
+	}
+
 	// Método para guardar un nuevo registro
     public function add() {
+		
+		$data = array();
+		$this->form_validation->set_rules('name', 'Name', 'required|trim');
+		$this->form_validation->set_rules('username', 'Username', 'required|trim');
+		$this->form_validation->set_rules('password', 'Password', 'required|trim');
+		
+		if($this->form_validation->run()==FALSE){
+			$data['error'] = "Datos inválidos.";
+			$this->load->view('register', $data);
+		}else{
+			
+			// Armamos el registro
+			$data = array(
+				'username' => $this->input->post('username'),
+				'name' => $this->input->post('name'),
+				#'lastname' => $this->input->post('lastname'),
+				'profile_id' => 2,
+				'admin' => 0,
+				'password' => 'pbkdf2_sha256$12000$' . hash("sha256", $this->input->post('password')),
+				'status' => 0,
+				'd_create' => date('Y-m-d H:i:s'),
+				'd_update' => date('Y-m-d H:i:s'),
+			);
+			
+			// Realizamos el registro
+			if ($result = $this->MUser->insert($data)){
+				// echo $result;
+				
+				// Registramos un token del nuevo usuario para la posterior confirmación
+				$data_token = array(
+					'user_id' => $result, 
+					'token' => hash("sha256", $result),
+					'status' => 1,
+					'd_create' => date('Y-m-d H:i:s')
+				);
+				$reg_token = $this->MUser->insert_token($data_token);
+				
+				// Enviamos un correo de validación a la dirección correspondiente al usuario, pasando el id encriptado
+				$this->MMails->enviarMail(hash("sha256", $result), $this->input->post('username'));
+				
+				// Cargamos los plugins necesarios para las alertas con estilos optimizados
+				if($this->load->view('plugins')){
+					echo "<script>
+						setTimeout(newAlert, 3000);  // Retrasamos la ejecución de las alertas por tres segundos
+						function newAlert(){
+							swal({ 
+								title: 'Registro exitoso',
+								text: 'Usuario creado satisfactoriamente. Por favor revise su correo y confirme el registro.',
+								type: 'success' 
+							}, function(){
+								window.location.href = '".base_url()."login';
+							});
+						}
+					</script>";
+				}
+					   
+			}else{
+				
+				$data['error'] = "El usuario ya existe.";
+				$this->load->view('register', $data);
+				
+			}
+			
+		}
+		
+		
+    }
+
+	// Método para en enviar un email con el enlace al formulario de cambio de contraseña.
+    public function send_mail_change() {
+		
+		$data = array();
+		$this->form_validation->set_rules('username', 'Username', 'required|trim');
+		
+		if($this->form_validation->run()==FALSE){
+			$data['error'] = "Datos inválidos.";
+			$this->load->view('new_password', $data);
+		}else{
+			
+			// Buscamos el usuario proveniente del formulario
+			$result = $this->MUser->obtenerUserName($this->input->post('username'));
+			
+			// Realizamos el envío
+			if (count($result) > 0){
+				// echo $result;
+				
+				// Registramos un token del usuario al que se le cambiará la contraseña para la posterior confirmación
+				$data_token = array(
+					'user_id' => $result[0]->id, 
+					'token' => hash("sha256", $result[0]->id),
+					'status' => 1,
+					'd_create' => date('Y-m-d H:i:s')
+				);
+				$reg_token = $this->MUser->insert_token($data_token);
+				
+				// Enviamos un correo de validación a la dirección correspondiente al usuario
+				$this->MMails->enviarMailCambio(hash("sha256", $result[0]->id), $this->input->post('username'));
+				
+				// Cargamos los plugins necesarios para las alertas con estilos optimizados
+				if($this->load->view('plugins')){
+					echo "<script>
+						setTimeout(newAlert, 3000);  // Retrasamos la ejecución de las alertas por tres segundos
+						function newAlert(){
+							swal({ 
+								title: 'Correo enviado',
+								text: 'Por favor revise su correo y confirme que desea cambiar su contraseña.',
+								type: 'success' 
+							}, function(){
+								window.location.href = '".base_url()."login';
+							});
+						}
+					</script>";
+				}
+					   
+			}else{
+				
+				$data['error'] = "El usuario que ingresó no existe.";
+				$this->load->view('new_password', $data);
+				
+			}	
+		}
+    }
+
+	// Método para mostrar el formulario donde se indica el usuario a cambiar la contraseña
+	public function new_password()
+	{
+		
+		$this->load->view('new_password');
+		
+	}
+	
+	// Método para guardar un nuevo registro
+    /*public function add() {
 		
 		$data = array(
 			'username' => $this->input->post('username'),
@@ -75,7 +217,7 @@ class CUser extends CI_Controller {
 			}
 			       
         }
-    }
+    }*/
 	
 	// Método para editar
     public function edit() {
