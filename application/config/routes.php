@@ -77,10 +77,10 @@ $route['profile_edit/(:num)'] = 'CPerfil/edit/$1';
 $route['profile_delete/(:num)'] = 'CPerfil/delete/$1';
 /*   Users */
 $route['users'] = 'CUser';
-$route['users/users_register'] = 'CUser/register_user';
-$route['users/new_passwd'] = 'CUser/new_password';
-$route['users/add'] = 'CUser/add';
-$route['users/send_mail_change'] = 'CUser/send_mail_change';
+$route['users/users_register'] = 'CUserPublic/register_user';
+$route['users/new_passwd'] = 'CUserPublic/new_password';
+$route['users/add'] = 'CUserPublic/add';
+$route['users/send_mail_change'] = 'CUserPublic/send_mail_change';
 $route['users_edit/(:num)'] = 'CUser/edit/$1';
 /*   Franchises */
 $route['franchises'] = 'CFranchises';
