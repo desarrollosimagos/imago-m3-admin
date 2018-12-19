@@ -49,7 +49,7 @@ class MMails extends CI_Model {
         $this->load->database();
         
         // Asignamos la dirección de correo de envío por defecto
-        $this->configGmail['smtp_user'] = $this->config->item('email_send');
+        #$this->configGmail['smtp_user'] = $this->config->item('email_send');
         
         //cargamos la librería email de ci
 		$this->load->library("email");
