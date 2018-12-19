@@ -894,13 +894,218 @@ Class CApis extends CI_Controller {
 		echo count($productos);
 	}
 	
-	public function prestashop($id){
+	public function prestashop(){
+		
+		// Fecha
+		$fecha = date('Y-m-d H-i-s');
+		
+		// Consultamos los datos de la tienda
 		$id = $this->input->get('id');
-		$productos = $this->MTiendasVirtuales->obtenerProductosTienda($id);
 		
-		print_r($productos);
+		$datosb_tienda = $this->MTiendasVirtuales->obtenerTiendas($id);  // Datos básicos de la tienda
 		
-		echo count($productos);
+		$datos_aplicacion = $this->MAplicaciones->obtenerAplicacion($datosb_tienda[0]->aplicacion_id);  // Datos de la aplicación asociada
+		
+					
+		// Verificamos si hay una cola pendiente de la tienda elegida
+		$pendiente = $this->MApis->obtenerByTiendavEstatus($id, 3);
+		
+		if(count($pendiente) > 0){
+			
+			// Buscamos los detalles (productos) asociados a la cola pendiente
+			$id_cola = $pendiente[0]->id;
+			
+			$productos = $this->MApis->obtenerDetallesEstatus($id_cola, 2);  // Lista de productos asociados a la cola de sincronización pendiente
+			
+			// Pasamos la cola al status 2 (En proceso...)
+			// Armamos los datos a actualizar
+			$data = array(
+				'id' => $id_cola,
+				'status' => 2
+			);
+			
+			$result = $this->MApis->update_cola($data);
+			
+		}else{
+			
+			// Primero buscamos si hay cola en proceso (status=2)
+			$en_proceso = $this->MApis->obtenerByTiendavEstatus($id, 2);
+			
+			// Si hay cola en proceso, buscamos los detalles pendientes asociados a élla, si no, creamos una cola nueva con sus detalles pendientes
+			if(count($en_proceso) > 0){
+				
+				$id_cola = $en_proceso[0]->id;
+				$productos = $this->MApis->obtenerDetallesEstatus($id_cola, 2);  // Lista de productos pendientes asociados a la cola de sincronización en proceso...
+				
+			}else{
+				
+				// Registramos la nueva cola
+				$datos_cola = array(
+					'user_id' => $this->session->userdata['logged_in']['id'],
+					'tiendav_id' => $id,
+					'tienda_id' => $datosb_tienda[0]->tienda_id,
+					'fecha' => date('Y-m-d'),
+					'hora' => date('H:i:s'),
+					'status' => 2,
+				);
+				$id_cola = $this->MApis->insertCola($datos_cola);
+				
+				// Buscamos los productos asociados a la tienda virtual
+				$productos = $this->MTiendasVirtuales->obtenerProductosTienda($id);  // Lista de productos asociados
+				
+				// Registramos en la tabla cola_detalle los detalles de los productos a sincronizar
+				foreach($productos as $producto){
+					
+					$datos_producto = $this->MProductos->obtenerProductos($producto->producto_id);  // Detalles del producto
+					
+					// Datos del detalle a registrar
+					$datos_detalle = array(
+						'producto_id' => $datos_producto[0]->id,
+						'categoria_id' => $producto->categoria_id,
+						'nombre' => $datos_producto[0]->nombre,
+						'precio' => $producto->precio,
+						'cantidad' => $producto->cantidad,
+						'descripcion' => $datos_producto[0]->descripcion,
+						'referencia' => $producto->referencia,
+						'cola_id' => $id_cola,
+						'status' => 2
+					);
+					$reg_detalle = $this->MApis->insertColaDetalle($datos_detalle);  // Registro de detalles del producto
+					
+				}
+				
+				// Buscamos los productos asociados a la cola
+				$productos = $this->MApis->obtenerDetalles($id_cola);  // Lista de productos asociados a la cola de sincronización
+				
+			}
+			
+		}
+		
+		// Si hay productos asociados
+		if(count($productos) > 0){
+			
+			// Constantes de conexión al web service de prestashop
+			define('DEBUG', false);
+			define('PS_SHOP_PATH', $datosb_tienda[0]->url);
+			define('PS_WS_AUTH_KEY', $datosb_tienda[0]->secret_api);
+			
+			// Actualizamos los precios de los productos resultantes en la tienda de m3 Uniformes
+			try {
+			
+				$webService = new PrestaShopWebservice(PS_SHOP_PATH, PS_WS_AUTH_KEY, DEBUG);
+				
+				$num_act = 0;
+				$errores = 0;
+				
+				foreach($productos as $producto){
+					
+					try {
+						
+						$opt = array('resource' => 'products');
+						$opt['id']=$producto->referencia;
+						$xml = $webService->get($opt);
+						//~ echo "Successfully recived data.";
+							 /* Lista de nodos que no pueden modificarse.
+							 *
+							 *  - "manufacturer_name"
+							 *  - "position_in_category"
+							 *  - "quantity"
+							 *  - "type"
+							 */
+							unset($xml->children()->children()->manufacturer_name);
+							unset($xml->children()->children()->position_in_category);
+							unset($xml->children()->children()->quantity);
+							unset($xml->children()->children()->type);
+						   $xml->children()->children()->price = $producto->precio; // <-- nuevo precio!
+						// Cargar nuevos datos al generador de consultas.
+						$opt['putXml']=$xml->asXML();
+						$xml = $webService->edit($opt);
+						
+						$num_act += 1;
+						
+						// Actualizamos el estatus del detalle a 1 (Procesado)
+						$data_up = array(
+							'id' => $producto->id,
+							'detalles' => "Actualizado...",
+							'status' => 1
+						);
+						
+						$update_detalle = $this->MApis->update_detalle_cola($data_up);
+						
+					}catch (Exception $ex) {
+					
+						$errores += 1;
+						
+						// Registramos la incidencia
+						$data_up = array(
+							'id' => $producto->id,
+							'detalles' => "Falló... ".$ex->getMessage()
+						);
+						
+						$update_detalle = $this->MApis->update_detalle_cola($data_up);
+					
+					}
+				
+				}
+				
+				// Proceso de actualización final de la cola; si quedan detalles pendientes el estatus de la cola pasa a 3, 
+				// si no, pasa a 1
+				$detalles_pendientes = $this->MApis->obtenerDetallesEstatus($id_cola, 2);
+				$st = 1;
+				if(count($detalles_pendientes) > 0){
+					$st = 3;
+				}
+				// Armamos los datos a actualizar
+				$data = array(
+					'id' => $id_cola,
+					'status' => $st
+				);
+				
+				$result = $this->MApis->update_cola($data);
+				
+				// Si el Servicio Web no lanza una excepción, la acción funcionó bien y no mostramos el siguiente mensaje
+				$this->load->view('base');
+				$data['mensaje'] = "Ha actualizado los precios con exito!";
+				$data['num_act'] = $num_act;
+				$data['errores'] = $errores;
+				$data['registros'] = 0;
+				$this->load->view('price_update', $data);
+				$this->load->view('footer');
+				
+			} catch (Exception $ex) {
+				
+				// Aquí nos ocupamos de los errores.
+				$trace = $ex->getTrace();
+				if ($trace[0]['args'][0] == 404) echo 'Bad ID';
+				else if ($trace[0]['args'][0] == 401) echo 'Bad auth key';
+				else echo 'Otro error<br />'.$ex->getMessage();
+				
+			}
+			
+		}else{
+			
+			// Proceso de actualización final de la cola; si quedan detalles pendientes el estatus de la cola pasa a 3, 
+			// si no, pasa a 1
+			$detalles_pendientes = $this->MApis->obtenerDetallesEstatus($id_cola, 2);
+			$st = 1;
+			if(count($detalles_pendientes) > 0){
+				$st = 3;
+			}
+			// Armamos los datos a actualizar
+			$data = array(
+				'id' => $id_cola,
+				'status' => $st
+			);
+			
+			$result = $this->MApis->update_cola($data);
+			
+			$this->load->view('base');
+			$data['mensaje'] = "No hubo cambios!";
+			$this->load->view('price_update', $data);
+			$this->load->view('footer');
+			
+		}
+		
 	}
 	
 	// Genera un json con los datos de un producto por id dado

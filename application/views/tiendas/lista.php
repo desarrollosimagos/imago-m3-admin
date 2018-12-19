@@ -41,7 +41,7 @@
                                     <th>Teléfono</th>
                                     <th>Editar</th>
                                     <th>Eliminar</th>
-                                    <th>Update Precios</th>
+                                    <!--<th>Update Precios</th>-->
                                 </tr>
                             </thead>
                             <tbody>
@@ -92,9 +92,9 @@
                                         <td style='text-align: center'>
                                             <a class='borrar' id='<?php echo $tienda->id; ?>' style='color: #1ab394' title='Eliminar'><i class="fa fa-trash-o fa-2x"></i></a>
                                         </td>
-                                        <td style='text-align: center'>
+                                        <!--<td style='text-align: center'>
                                             <a class='actualizar' href="<?php echo base_url()."update_prices_m3?id=".$tienda->id; ?>"style='color: #1ab394' title='Actualizar precios'><i class="fa fa-upload fa-2x"></i></a>
-                                        </td>
+                                        </td>-->
                                     </tr>
                                     <?php $i++ ?>
                                 <?php } ?>
@@ -157,8 +157,8 @@ $(document).ready(function(){
             {"sClass": "none", "sWidth": "10%"},
             {"sClass": "none", "sWidth": "10%"},
             {"sWidth": "3%", "bSortable": false, "sClass": "center sorting_false", "bSearchable": false},
-            {"sWidth": "3%", "bSortable": false, "sClass": "center sorting_false", "bSearchable": false},
             {"sWidth": "3%", "bSortable": false, "sClass": "center sorting_false", "bSearchable": false}
+            //~ {"sWidth": "3%", "bSortable": false, "sClass": "center sorting_false", "bSearchable": false}
         ]
     });
              

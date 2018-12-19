@@ -168,7 +168,7 @@ $route['mercado/cola'] = 'CApis/cola_estatus';
 $route['mercado/cancelar_cola'] = 'CApis/cancelar_cola';
 $route['mercado/cola'] = 'CApis/cola_estatus';
 $route['olx/update'] = 'CApis/mlibre';
-$route['prestashop/update'] = 'CApis/mlibre';
+$route['prestashop/update'] = 'CApis/prestashop';
 $route['product/get_json/(:num)'] = 'CApis/product/$1';
 
 // Pruebas
