@@ -22,6 +22,14 @@ class MUser extends CI_Model {
             return $query->result();
     }
     
+    // Public method to obtain the users by id
+    public function getToken($token) {
+        $this->db->where('token', $token);
+        $query = $this->db->get('user_tokens');
+        
+        return $query->result();
+    }
+    
     // Public method to obtain the permissions asociated
     public function obtener_permisos() {
         $query = $this->db->get('permissions');
