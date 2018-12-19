@@ -137,6 +137,12 @@ class MUser extends CI_Model {
         return $query->result();
     }
 
+    // Public method to insert the action associated
+    public function insert_token($datos) {
+        $result = $this->db->insert("user_tokens", $datos);
+        return $result;
+    }
+
     // Public method to update a record 
     public function update($datos) {
         $result = $this->db->where('username =', $datos['username']);
