@@ -97,8 +97,8 @@ class CUserPublic extends CI_Controller {
     public function validar_mail() {
 		// Primero consultamos el id del usuario correspondiente al token
 		$data_token = $this->MUser->getToken($this->input->get('hash'));
-		$profile_user = $this->MUser->profile_user($id_user);
 		$id_user = $data_token[0]->user_id;
+		$profile_user = $this->MUser->profile_user($id_user);
 		$datos_update = array('id'=>$id_user, 'status'=>1);
 		// Activamos el usuario
         $result = $this->MUser->update_status($datos_update);
