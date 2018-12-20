@@ -1,8 +1,4 @@
 <?php
-
-/* PÁGINA DE CAMBIO DE CONTRASEÑAS */
-
-// Cabecera de título
 $lang['heading_title_changepass'] = 'Change Password';
 $lang['heading_home_changepass'] = 'Home';
 $lang['heading_subtitle_changepass'] = 'Change Password';

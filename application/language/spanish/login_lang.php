@@ -7,3 +7,4 @@ $lang['button_value'] = 'Iniciar sesión';
 $lang['recover_passwd'] = '¿Olvidó su contraseña?';
 $lang['question_account'] = '¿No tiene una cuenta?';
 $lang['add_account'] = 'Cree una cuenta';
+$lang['user_login'] = 'Iniciar sesión';
