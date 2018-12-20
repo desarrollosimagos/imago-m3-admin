@@ -34,7 +34,6 @@
             <div>
 
                 <!--<img src="<?php echo assets_url('img/logos/'.$this->config->item('logo_login')); ?>">-->
-                Crear nueva cuenta
 
             </div>
             
@@ -52,19 +51,16 @@
                     <input type="password" class="form-control" placeholder="<?php echo $this->lang->line('register_placeholder_password'); ?>" name="password" id="password" required="" oninvalid="this.setCustomValidity('Ingrese su contraseña')" oninput="this.setCustomValidity('')">
                 </div>
                 <button type="submit" class="btn btn-primary block full-width m-b">
-                    <?php //echo $this->lang->line('register_button_value'); ?>
-                    Crear
+                    <?php echo $this->lang->line('register_button_value'); ?>
                 </button>
 
                 <p class="text-muted text-center">
                     <small>
-                        <?php //echo $this->lang->line('register_question_account'); ?>
-                        Cuestionario de preguntas
+                        <?php echo $this->lang->line('register_question_account'); ?>
                     </small>
                 </p>
                 <a class="btn btn-sm btn-white btn-block" href="<?php echo base_url()."login"?>">
-                    <?php //echo $this->lang->line('register_login_account'); ?>
-                    Regresar
+                    <?php echo $this->lang->line('register_login_account'); ?>
                 </a>
             </form>
             <p class="m-t"> <small><?php echo $this->lang->line('name_app'); ?> &copy; 2018</small> </p>

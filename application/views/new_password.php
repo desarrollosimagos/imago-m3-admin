@@ -27,8 +27,6 @@
 
 </head>
 
-<?php ?>
-
 <body class="gray-bg">
 
     <div class="middle-box text-center loginscreen animated fadeInDown">
@@ -36,7 +34,6 @@
             <div>
 
                 <!--<img src="<?php echo assets_url('img/logos/'.$this->config->item('logo_login')); ?>">-->
-                Restablecer contraseña
 
             </div>
             
@@ -48,22 +45,18 @@
                     <input type="text" autofocus="" class="form-control" placeholder="<?php echo $this->lang->line('new_passwd_placeholder_user'); ?>" name="username" id="username" required="" oninvalid="this.setCustomValidity('Ingrese su correo electrónico')" oninput="this.setCustomValidity('')" pattern="[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*@[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*[.][a-zA-Z]{1,5}">
                 </div>
                 <button type="submit" class="btn btn-primary block full-width m-b">
-                    <?php //echo $this->lang->line('new_passwd_button_value'); ?>
-                    Enviar
+                    <?php echo $this->lang->line('new_passwd_button_value'); ?>
                 </button>
 
                 <p class="text-muted text-center"><small>
-                    <?php //echo $this->lang->line('new_passwd_question_account'); ?></small>
-                    Quieres volver
+                    <?php echo $this->lang->line('new_passwd_question_account'); ?></small>
                 </p>
                 <a class="btn btn-sm btn-white btn-block" href="<?php echo base_url()."login"?>">
-                    <?php //echo $this->lang->line('new_passwd_login_account'); ?>
-                    Iniciar sesión
+                    <?php echo $this->lang->line('new_passwd_login_account'); ?>
                 </a>
             </form>
             <p class="m-t"> <small>
-                <?php //echo $this->lang->line('name_app'); ?>
-                OCTOPUS
+                <?php echo $this->lang->line('name_app'); ?>
                  &copy; 2018</small> </p>
         </div>
     </div>
