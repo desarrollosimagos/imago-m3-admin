@@ -18,11 +18,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	<link href="<?php echo assets_url('css/plugins/select2/select2.min.css');?>" rel="stylesheet">
 	<link href="<?php echo assets_url('js/datatables.net-bs/css/dataTables.bootstrap.css'); ?>" rel="stylesheet" />
     <link rel="stylesheet" href="<?php echo assets_url('css/dataTables.responsive.css'); ?>">
-    <link href="<?php echo assets_url('js/datatables.net-responsive-bs/css/responsive.bootstrap.min.css'); ?>"
+    <link href="<?php echo assets_url('js/datatables.net-responsive-bs/css/responsive.bootstrap.min.css'); ?>">
 	<link href="<?php echo assets_url('css/animate.css');?>" rel="stylesheet">
     <link href="<?php echo assets_url('css/style.css');?>" rel="stylesheet">
     <!-- Personalizacion de estilos -->
-    <!-- <link href="<?php echo assets_url('css/custom.css');?>" rel="stylesheet"> -->
+    <link href="<?php echo assets_url('css/custom.css');?>" rel="stylesheet">
 	<link href="<?php echo assets_url('css/plugins/datapicker/datepicker3.css');?>" rel="stylesheet">
 	 <!-- Sweet Alert -->
     <link href="<?php echo assets_url('css/plugins/sweetalert/sweetalert.css');?>" rel="stylesheet">

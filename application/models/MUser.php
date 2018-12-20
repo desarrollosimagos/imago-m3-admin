@@ -172,6 +172,13 @@ class MUser extends CI_Model {
 		$result = $this->db->update('users', $datos);
 		return $result;
 	}
+	
+	// Public method to update a record 
+    public function update_passwd($datos) {
+		$result = $this->db->where('username', $datos['username']);
+		$result = $this->db->update('users', $datos);
+		return $result;
+	}
 
     // Public method to delete a record
      public function delete($id) {
