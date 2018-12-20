@@ -29,6 +29,16 @@ class MUser extends CI_Model {
         
         return $query->result();
     }
+
+    public function profile_user($id)
+    {
+        $this->db->select('b.name');
+        $this->db->from('users a');
+        $this->db->where('a.id', $id);
+        $this->db->join('profile AS b', 'b.id = a.profile_id');
+        $query = $this->db->get();
+        return $query->row();
+    }
     
     // Public method to obtain the permissions asociated
     public function obtener_permisos() {
