@@ -36,49 +36,35 @@ class LanguageLoader
             $ci->lang->load('profileuser',$siteLang);
             $ci->lang->load('payments',$siteLang);
         } else {
-            $ci->lang->load('header','english');
-            $ci->lang->load('login','english');
-            $ci->lang->load('footer','english');
-            $ci->lang->load('menus','english');
-            $ci->lang->load('submenus','english');
-            $ci->lang->load('summary','english');
-            $ci->lang->load('transactions','english');
-            $ci->lang->load('coins','english');
-            $ci->lang->load('accounts','english');
-            $ci->lang->load('projects','english');
-            $ci->lang->load('profiles','english');
-            $ci->lang->load('users','english');
-            $ci->lang->load('associations','english');
-            $ci->lang->load('investor_groups','english');
-            $ci->lang->load('menus_module','english');
-            $ci->lang->load('submenus_module','english');
-            $ci->lang->load('actions','english');
-            $ci->lang->load('change_passwd','english');
-            $ci->lang->load('public_projects','english');
-            $ci->lang->load('public_home','english');
-            $ci->lang->load('share_profit','english');
-            $ci->lang->load('import','english');
-            $ci->lang->load('register_public','english');
-            $ci->lang->load('new_password','english');
-            $ci->lang->load('change_password','english');
-            $ci->lang->load('inscription_module','english');
-            $ci->lang->load('profileuser','english');
-            $ci->lang->load('payments','english');
+            $ci->lang->load('header','spanish');
+            $ci->lang->load('login','spanish');
+            $ci->lang->load('footer','spanish');
+            $ci->lang->load('menus','spanish');
+            $ci->lang->load('submenus','spanish');
+            $ci->lang->load('summary','spanish');
+            $ci->lang->load('transactions','spanish');
+            $ci->lang->load('coins','spanish');
+            $ci->lang->load('accounts','spanish');
+            $ci->lang->load('projects','spanish');
+            $ci->lang->load('profiles','spanish');
+            $ci->lang->load('users','spanish');
+            $ci->lang->load('associations','spanish');
+            $ci->lang->load('investor_groups','spanish');
+            $ci->lang->load('menus_module','spanish');
+            $ci->lang->load('submenus_module','spanish');
+            $ci->lang->load('actions','spanish');
+            $ci->lang->load('change_passwd','spanish');
+            $ci->lang->load('public_projects','spanish');
+            $ci->lang->load('public_home','spanish');
+            $ci->lang->load('share_profit','spanish');
+            $ci->lang->load('import','spanish');
+            $ci->lang->load('register_public','spanish');
+            $ci->lang->load('new_password','spanish');
+            $ci->lang->load('change_password','spanish');
+            $ci->lang->load('inscription_module','spanish');
+            $ci->lang->load('profileuser','spanish');
+            $ci->lang->load('payments','spanish');
         }
         
-        // Área de carga de idiomas disponibles en la tabla 'lang'
-        // Si no existe la tabla 'lang' cargamos los idiomas por defecto de forma manual(inglés y español)
-        if($ci->db->table_exists('lang') == FALSE){
-            $languages = array(
-                array('id' => 1, 'name' => 'english', 'route' => null, 'status' => 1, 'd_create' => '2018-08-15 14:03:29', 'd_update' => '2018-08-15 14:03:29'),
-                array('id' => 2, 'name' => 'spanish', 'route' => null, 'status' => 1, 'd_create' => '2018-08-15 14:03:29', 'd_update' => '2018-08-15 14:03:29')
-            );
-            $languages = json_decode(json_encode($languages), false);
-            $ci->session->set_userdata('languages', $languages);
-        }else{
-            $query = $ci->db->get('lang');
-            $languages = $query->result();
-            $ci->session->set_userdata('languages', $languages);
-        }
     }
 }
