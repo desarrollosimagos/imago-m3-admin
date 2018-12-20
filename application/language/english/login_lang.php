@@ -7,3 +7,4 @@ $lang['button_value'] = 'Login';
 $lang['recover_passwd'] = 'Forgot password?';
 $lang['question_account'] = 'Do not have an account?';
 $lang['add_account'] = 'Create an account';
+$lang['user_login'] = 'Login';

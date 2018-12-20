@@ -5,3 +5,4 @@ $lang['register_placeholder_password'] = 'Password';
 $lang['register_button_value'] = 'Register';
 $lang['register_question_account'] = 'Already have an account?';
 $lang['register_login_account'] = 'Login';
+$lang['register_user'] = 'Register user';

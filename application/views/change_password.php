@@ -36,7 +36,7 @@
                 <img src="<?php echo assets_url('img/logos/'.$this->config->item('logo_login')); ?>">
 
             </div>
-            
+            <h3><?php echo $this->lang->line('recover_password'); ?></h3>
             <?php echo validation_errors('<div class="error" style="color:#D33333;">','</div>');?>
             <?php if(isset($error)) echo "<div class='error' style='color:#D33333;'>$error</div>";?>
             <p></p>
