@@ -45,7 +45,7 @@
                     <input type="text" class="form-control" placeholder="<?php echo $this->lang->line('register_placeholder_name'); ?>" name="name" id="name" required="" oninvalid="this.setCustomValidity('Ingrese su nombre')" oninput="this.setCustomValidity('')">
                 </div>
                 <div class="form-group">
-                    <input type="text" autofocus="" class="form-control" placeholder="<?php echo $this->lang->line('register_placeholder_user'); ?>" name="username" id="username" required="" oninvalid="this.setCustomValidity('Ingrese su correo electrónico')" oninput="this.setCustomValidity('')" pattern="[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*@[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*[.][a-zA-Z]{1,5}">
+                    <input type="text" autofocus="" class="form-control" placeholder="<?php echo $this->lang->line('register_placeholder_user'); ?>" name="username" id="username" required="" oninvalid="this.setCustomValidity('Ingrese su correo electrónico')" oninput="this.setCustomValidity('')" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$">
                 </div>
                 <div class="form-group">
                     <input type="password" class="form-control" placeholder="<?php echo $this->lang->line('register_placeholder_password'); ?>" name="password" id="password" required="" oninvalid="this.setCustomValidity('Ingrese su contraseña')" oninput="this.setCustomValidity('')">
