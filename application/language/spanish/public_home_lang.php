@@ -3,6 +3,7 @@
 /* PÁGINA PÚBLICA DE INICIO */
 
 // Contenido de publicidad
+$lang['welcome_home'] = 'Bienvenido a OCTOPUS.';
 $lang['public_home_content_title1'] = 'INVERTIR EN COMS';
 $lang['public_home_content_title2'] = 'CON UNA GARANTÍA DE ÉXITO';
 $lang['public_home_content_subtitle1'] = 'Transparencia y alta rentabilidad a corto plazo';
