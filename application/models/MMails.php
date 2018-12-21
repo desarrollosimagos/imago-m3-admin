@@ -61,9 +61,10 @@ class MMails extends CI_Model {
         // Varios destinatarios
 		//~ $para = 'jasolorzano18@hotmail.com' . ', '; // atención a la coma
 		$para = $username;
+		$tile_app = $this->lang->line('name_app');
 
 		// título
-		$título = 'COMS: Por favor confirme su correo';
+		$título = $tile_app.': Por favor confirme su correo';
 
 		// mensaje
 		$mensaje = '
@@ -151,11 +152,11 @@ class MMails extends CI_Model {
 					  <tr>
 						<td class="wrapper" style="font-family:sans-serif;font-size:14px;vertical-align:top;box-sizing:border-box;padding:20px;">
 						  <table border="0" cellpadding="0" cellspacing="0" style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;width:100%;">
-							<tr>
+							<!--<tr>
 							  <td>
 								<img src="'.assets_url().'img/logos/logotipo_320x130.png" alt="No se pudo mostrar" width="80px;" height="50px;">
 							  </td>
-							</tr>
+							</tr>-->
 							<tr>
 							  <td style="font-family:sans-serif;font-size:14px;vertical-align:top;">
 								<p style="font-family:sans-serif;font-size:14px;font-weight:normal;margin:0;Margin-bottom:15px;">Hola,</p>
@@ -176,7 +177,7 @@ class MMails extends CI_Model {
 								  </tbody>
 								</table>
 								<p style="font-family:sans-serif;font-size:14px;font-weight:normal;margin:0;Margin-bottom:15px;">Si ha recibido este correo electrónico por error, basta con eliminarlo. No se suscribirá si no hace clic en el botón de confirmación de arriba.</p>
-								<p style="font-family:sans-serif;font-size:14px;font-weight:normal;margin:0;Margin-bottom:15px;">Para más información puede contactar a: contacto@lubricardelivery.com.</p>
+								<p style="font-family:sans-serif;font-size:14px;font-weight:normal;margin:0;Margin-bottom:15px;">Para más información puede contactar a: jesusgerard2008@gmail.com.</p>
 							  </td>
 							</tr>
 						  </table>
@@ -189,7 +190,7 @@ class MMails extends CI_Model {
 					  <table border="0" cellpadding="0" cellspacing="0" style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;width:100%;">
 						<tr>
 						  <td class="content-block" style="font-family:sans-serif;font-size:14px;vertical-align:top;color:#999999;font-size:12px;text-align:center;">
-							<span class="apple-link" style="color:#999999;font-size:12px;text-align:center;">Lubricar Delibery, 3 Abbey Road, San Francisco CA 94102</span>
+							<!--<span class="apple-link" style="color:#999999;font-size:12px;text-align:center;">Lubricar Delibery, 3 Abbey Road, San Francisco CA 94102</span>-->
 							<br>
 							 <!--Don\'t like these emails? <a href="http://i.imgur.com/CScmqnj.gif" style="color:#3498db;text-decoration:underline;color:#999999;font-size:12px;text-align:center;">Unsubscribe</a>.-->
 						  </td>
@@ -359,7 +360,7 @@ class MMails extends CI_Model {
 					  <table border="0" cellpadding="0" cellspacing="0" style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;width:100%;">
 						<tr>
 						  <td class="content-block" style="font-family:sans-serif;font-size:14px;vertical-align:top;color:#999999;font-size:12px;text-align:center;">
-							<span class="apple-link" style="color:#999999;font-size:12px;text-align:center;">Lubricar Delibery, 3 Abbey Road, San Francisco CA 94102</span>
+							<!--<span class="apple-link" style="color:#999999;font-size:12px;text-align:center;">Lubricar Delibery, 3 Abbey Road, San Francisco CA 94102</span>-->
 							<br>
 							 <!--Don\'t like these emails? <a href="http://i.imgur.com/CScmqnj.gif" style="color:#3498db;text-decoration:underline;color:#999999;font-size:12px;text-align:center;">Unsubscribe</a>.-->
 						  </td>
@@ -401,7 +402,8 @@ class MMails extends CI_Model {
 		$para = $username;
 
 		// título
-		$título = 'COMS: Por favor haga click en el botón para cambiar su contraseña';
+		$tile_app = $this->lang->line('name_app');
+		$título = $tile_app.': Por favor haga click en el botón para cambiar su contraseña';
 
 		// mensaje
 		$mensaje = '
@@ -489,11 +491,11 @@ class MMails extends CI_Model {
 					  <tr>
 						<td class="wrapper" style="font-family:sans-serif;font-size:14px;vertical-align:top;box-sizing:border-box;padding:20px;">
 						  <table border="0" cellpadding="0" cellspacing="0" style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;width:100%;">
-							<tr>
+							<!--<tr>
 							  <td>
 								<img src="'.assets_url().'img/logos/logotipo_320x130.png" alt="No se pudo mostrar" width="80px;" height="50px;">
 							  </td>
-							</tr>
+							</tr>-->
 							<tr>
 							  <td style="font-family:sans-serif;font-size:14px;vertical-align:top;">
 								<p style="font-family:sans-serif;font-size:14px;font-weight:normal;margin:0;Margin-bottom:15px;">Hola,</p>
@@ -514,7 +516,7 @@ class MMails extends CI_Model {
 								  </tbody>
 								</table>
 								<p style="font-family:sans-serif;font-size:14px;font-weight:normal;margin:0;Margin-bottom:15px;">Si ha recibido este correo electrónico por error, basta con eliminarlo. No se suscribirá si no hace clic en el botón de confirmación de arriba.</p>
-								<p style="font-family:sans-serif;font-size:14px;font-weight:normal;margin:0;Margin-bottom:15px;">Para más información puede contactar a: contacto@lubricardelivery.com.</p>
+								<p style="font-family:sans-serif;font-size:14px;font-weight:normal;margin:0;Margin-bottom:15px;">Para más información puede contactar a: jesusgerard2008@gmail.com.</p>
 							  </td>
 							</tr>
 						  </table>
@@ -527,7 +529,7 @@ class MMails extends CI_Model {
 					  <table border="0" cellpadding="0" cellspacing="0" style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;width:100%;">
 						<tr>
 						  <td class="content-block" style="font-family:sans-serif;font-size:14px;vertical-align:top;color:#999999;font-size:12px;text-align:center;">
-							<span class="apple-link" style="color:#999999;font-size:12px;text-align:center;">Lubricar Delibery, 3 Abbey Road, San Francisco CA 94102</span>
+							<!--<span class="apple-link" style="color:#999999;font-size:12px;text-align:center;">Lubricar Delibery, 3 Abbey Road, San Francisco CA 94102</span>-->
 							<br>
 							 <!--Don\'t like these emails? <a href="http://i.imgur.com/CScmqnj.gif" style="color:#3498db;text-decoration:underline;color:#999999;font-size:12px;text-align:center;">Unsubscribe</a>.-->
 						  </td>
@@ -573,7 +575,8 @@ class MMails extends CI_Model {
 		$para = $datos_reg['username'];
 
 		// título
-		$título = 'COMS: Contraseña actualizada';
+		$tile_app = $this->lang->line('name_app');
+		$título = $tile_app.': Contraseña actualizada';
 
 		// mensaje
 		$mensaje = '
@@ -661,11 +664,11 @@ class MMails extends CI_Model {
 					  <tr>
 						<td class="wrapper" style="font-family:sans-serif;font-size:14px;vertical-align:top;box-sizing:border-box;padding:20px;">
 						  <table border="0" cellpadding="0" cellspacing="0" style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;width:100%;">
-							<tr>
+							<!--<tr>
 							  <td>
 								<img src="'.assets_url().'img/logos/logotipo_320x130.png" alt="No se pudo mostrar" width="80px;" height="50px;">
 							  </td>
-							</tr>
+							</tr>-->
 							<tr>
 							  <td style="font-family:sans-serif;font-size:14px;vertical-align:top;">
 								<h2 style="font-size:15px;line-height:28px;margin:0 0 12px 0">Su contraseña ha sido actualizada.</h2>
@@ -693,7 +696,7 @@ class MMails extends CI_Model {
 					  <table border="0" cellpadding="0" cellspacing="0" style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;width:100%;">
 						<tr>
 						  <td class="content-block" style="font-family:sans-serif;font-size:14px;vertical-align:top;color:#999999;font-size:12px;text-align:center;">
-							<span class="apple-link" style="color:#999999;font-size:12px;text-align:center;">Lubricar Delibery, 3 Abbey Road, San Francisco CA 94102</span>
+							<!--<span class="apple-link" style="color:#999999;font-size:12px;text-align:center;">Lubricar Delibery, 3 Abbey Road, San Francisco CA 94102</span>-->
 							<br>
 							 <!--Don\'t like these emails? <a href="http://i.imgur.com/CScmqnj.gif" style="color:#3498db;text-decoration:underline;color:#999999;font-size:12px;text-align:center;">Unsubscribe</a>.-->
 						  </td>
@@ -735,7 +738,8 @@ class MMails extends CI_Model {
 		$para = $datos_reg['username'];
 
 		// título
-		$título = 'COMS: Inscripción a evento';
+		$tile_app = $this->lang->line('name_app');
+		$título = $tile_app.': Inscripción a evento';
 
 		// mensaje
 		$mensaje = '
@@ -823,11 +827,11 @@ class MMails extends CI_Model {
 					  <tr>
 						<td class="wrapper" style="font-family:sans-serif;font-size:14px;vertical-align:top;box-sizing:border-box;padding:20px;">
 						  <table border="0" cellpadding="0" cellspacing="0" style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;width:100%;">
-							<tr>
+							<!--<tr>
 							  <td>
 								<img src="'.assets_url().'img/logos/logotipo_320x130.png" alt="No se pudo mostrar" width="80px;" height="50px;">
 							  </td>
-							</tr>
+							</tr>-->
 							<tr>
 							  <td style="font-family:sans-serif;font-size:14px;vertical-align:top;">
 								<h2 style="font-size:15px;line-height:28px;margin:0 0 12px 0">Su inscripción se ha llevado a cabo de forma exitosa.</h2>
@@ -871,7 +875,7 @@ class MMails extends CI_Model {
 					  <table border="0" cellpadding="0" cellspacing="0" style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;width:100%;">
 						<tr>
 						  <td class="content-block" style="font-family:sans-serif;font-size:14px;vertical-align:top;color:#999999;font-size:12px;text-align:center;">
-							<span class="apple-link" style="color:#999999;font-size:12px;text-align:center;">Lubricar Delibery, 3 Abbey Road, San Francisco CA 94102</span>
+							<!--<span class="apple-link" style="color:#999999;font-size:12px;text-align:center;">Lubricar Delibery, 3 Abbey Road, San Francisco CA 94102</span>-->
 							<br>
 							 <!--Don\'t like these emails? <a href="http://i.imgur.com/CScmqnj.gif" style="color:#3498db;text-decoration:underline;color:#999999;font-size:12px;text-align:center;">Unsubscribe</a>.-->
 						  </td>
@@ -913,7 +917,8 @@ class MMails extends CI_Model {
 		$para = $datos_reg['username'];
 
 		// título
-		$título = 'COMS: Pago de inscripción a evento';
+		$tile_app = $this->lang->line('name_app');
+		$título = $tile_app.': Pago de inscripción a evento';
 
 		// mensaje
 		$mensaje = '
@@ -1001,11 +1006,11 @@ class MMails extends CI_Model {
 					  <tr>
 						<td class="wrapper" style="font-family:sans-serif;font-size:14px;vertical-align:top;box-sizing:border-box;padding:20px;">
 						  <table border="0" cellpadding="0" cellspacing="0" style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;width:100%;">
-							<tr>
+							<!--<tr>
 							  <td>
 								<img src="'.assets_url().'img/logos/logotipo_320x130.png" alt="No se pudo mostrar" width="80px;" height="50px;">
 							  </td>
-							</tr>
+							</tr>-->
 							<tr>
 							  <td style="font-family:sans-serif;font-size:14px;vertical-align:top;">
 								<h2 style="font-size:15px;line-height:28px;margin:0 0 12px 0">Su pago ha sido validado de forma exitosa.</h2>
@@ -1041,7 +1046,7 @@ class MMails extends CI_Model {
 					  <table border="0" cellpadding="0" cellspacing="0" style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;width:100%;">
 						<tr>
 						  <td class="content-block" style="font-family:sans-serif;font-size:14px;vertical-align:top;color:#999999;font-size:12px;text-align:center;">
-							<span class="apple-link" style="color:#999999;font-size:12px;text-align:center;">Lubricar Delibery, 3 Abbey Road, San Francisco CA 94102</span>
+							<!--<span class="apple-link" style="color:#999999;font-size:12px;text-align:center;">Lubricar Delibery, 3 Abbey Road, San Francisco CA 94102</span>-->
 							<br>
 							 <!--Don\'t like these emails? <a href="http://i.imgur.com/CScmqnj.gif" style="color:#3498db;text-decoration:underline;color:#999999;font-size:12px;text-align:center;">Unsubscribe</a>.-->
 						  </td>
