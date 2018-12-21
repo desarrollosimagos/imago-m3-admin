@@ -1,5 +1,5 @@
 <?php
-$lang['name_app'] = 'COMS';
+$lang['name_app'] = 'OCTOPUS';
 $lang['top_bar_login'] = 'Log in';
 $lang['top_bar_logout'] = 'Log out';
 $lang['nav_static_home'] = 'Home';
