@@ -8,7 +8,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Imago M3</title>
+    <title><?php echo $this->lang->line('title'); ?></title>
 	<!-- CSS Files -->
     <link href="<?php echo assets_url('css/bootstrap.min.css');?>" rel="stylesheet">
     <link href="<?php echo assets_url('font-awesome/css/font-awesome.css');?>" rel="stylesheet">
@@ -85,9 +85,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 				<ul class="nav metismenu" id="side-menu">
 					<li class="nav-header">
 						<div class="dropdown profile-element">
-							<!--<span>
-								<img alt="image" class="img-circle" src="<?php echo assets_url('img/profile_small.jpg'); ?>" />
-							</span>-->
+							<span>
+								<img alt="image" class="img-circle" src="<?php echo assets_url('img/octopus-2-02.png'); ?>" />
+							</span>
 							<a data-toggle="dropdown" class="dropdown-toggle" href="#">
 								<span class="clear">
 									<span class="block m-t-xs">
