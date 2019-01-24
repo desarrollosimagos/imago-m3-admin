@@ -140,6 +140,47 @@
 </div>
 <!-- Cierre Modal para selección de tienda virtual -->
 
+<!-- Modal para selección de tienda virtual Sincronizacion -->
+<div class="modal fade" id="modal_tiendav">
+   <div class="modal-dialog">
+	  <div class="modal-content">
+		 <div class="modal-header" style="background-color:#1ab394">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			<h4 class="modal-title" style="color:#ffffff">
+			   <center>
+				<span class="glyphicon glyphicon-search"></span>
+				&nbsp;Seleccione la tienda virtual
+			   </center>
+			</h4>
+		 </div>
+		 <div class="modal-body">
+			<form id="f_preciom" name="f_preciom" action="" method="post">
+				<input type="hidden" id="producto_id" class="form-control">
+			   <div class="form-group">
+					<div class="col-sm-12" align="right">
+						<span class="input-btn">
+							<select id="tiendav_id" name="tiendav_id" class="form-control" style="width: 100% !important; ">
+								<option value="0">Seleccione</option>
+							</select>
+						</span>
+					</div>
+					</br></br>
+					<div class="col-sm-12" align="right">
+						<span class="input-btn">
+							<button class="btn btn-primary" type="button" id="sincronizar">
+								Sincronizar&nbsp;<span class="glyphicon glyphicon-share-alt"></span>
+							</button>
+						</span>
+					</div>
+			   </div>
+			</form>
+		 </div>
+		 
+	  </div>
+   </div>
+</div>
+<!-- Cierre Modal para selección de tienda virtual -->
+
 
  <!-- Page-Level Scripts -->
 <script src="<?php echo assets_url(); ?>script/products.js"></script>

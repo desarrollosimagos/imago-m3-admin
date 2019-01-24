@@ -583,6 +583,7 @@ $(document).ready(function(){
 		function(isConfirm){
 			
 			if (isConfirm) {
+
 				
 				$("#modal_tiendav").modal('show');
 				$("#producto_id").val(id_producto);
@@ -618,11 +619,12 @@ $(document).ready(function(){
 		
         var id_tiendav = $("#tiendav_id").val();
         
-        if($("#tiendav_id").val() == "0"){
+        if($("#tiendav_id").val() == 0){
 			swal("Disculpe,", "para continuar debe seleccionar la tienda virtual");
 			$('#tiendav_id').parent('div').addClass('has-error');
 		}else{		
-			window.location.href = base_url+'mercado/update_singles/?producto_id='+$("#producto_id").val()+'&tiendav_id='+id_tiendav;
+			url = base_url+'mercado/update_singles/?producto_id='+$("#producto_id").val()+'&tiendav_id='+id_tiendav;
+			alert(url);
 		}
 		
 	});
