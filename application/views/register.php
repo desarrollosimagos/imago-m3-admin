@@ -15,6 +15,7 @@
 
     <link href="<?php echo base_url()?>assets/css/animate.css" rel="stylesheet">
     <link href="<?php echo base_url()?>assets/css/style.css" rel="stylesheet">
+    <link href="<?php echo base_url()?>assets/css/custom.css" rel="stylesheet">
     <style type="text/css">
         .logo-name {
             color: #e6e6e6;
