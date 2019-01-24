@@ -14,6 +14,7 @@
 
     <link href="<?php echo base_url()?>assets/css/animate.css" rel="stylesheet">
     <link href="<?php echo base_url()?>assets/css/style.css" rel="stylesheet">
+    <link href="<?php echo base_url()?>assets/css/custom.css" rel="stylesheet">
     <style type="text/css">
         .logo-name {
             color: #e6e6e6;
@@ -32,10 +33,7 @@
         <div>
             <div>
 
-                <!--<h3 class="logo-name">Invision</h3>-->
-                <!-- <img src="<?php echo assets_url('img/logos/'.$this->config->item('logo_login')); ?>"> -->
-                
-
+                <img src="<?php echo assets_url('img/logos/'.$this->lang->line('logo_login')); ?>" style="width: 50%;"/>
             </div>
             <h3><?php echo $this->lang->line('user_login'); ?></h3>
             
