@@ -8,6 +8,7 @@ Class CApis extends CI_Controller {
 
 // Load database
         $this->load->model('MTiendasVirtuales');
+        $this->load->model('MColas');
         $this->load->model('MProductos');
         $this->load->model('MAplicaciones');
         $this->load->model('MApis');
@@ -19,8 +20,23 @@ Class CApis extends CI_Controller {
 		// Fecha
 		$fecha = date('Y-m-d H-i-s');
 		
-		// Consultamos los datos de la tienda
-		$id = $this->input->get('id');
+		$id;
+		
+		// Capturamos el id de la tienda virtual. Si viene el id de la tienda directamente en la url lo tomamos por defecto.
+		if(isset($_GET['id'])){
+			
+			$id = $this->input->get('id');
+			
+		}
+		
+		// Si por el contrario viene el id de una cola procedemos a buscar el id de la tienda virtual asociada a dicha cola.
+		if(isset($_GET['cola_id'])){
+			
+			$datosb_cola = $this->MColas->obtenerCola($this->input->get('cola_id'));  // Datos básicos de la cola
+			
+			$id = $datosb_cola[0]->tiendav_id;
+			
+		}
 		
 		$datosb_tienda = $this->MTiendasVirtuales->obtenerTiendas($id);  // Datos básicos de la tienda
 		
@@ -45,11 +61,12 @@ Class CApis extends CI_Controller {
 			);
 			
 			$result = $this->MApis->update_cola($data);
-						
-			//~ echo count($productos);
-			//~ echo " (Para actualizar)";
+			echo "Prueba 1</br>";
+			echo count($productos);
+			echo " (Para actualizar)";
 			
 		}else{
+			echo "Prueba 2</br>";
 			
 			// Primero buscamos si hay cola en proceso (status=2)
 			$en_proceso = $this->MApis->obtenerByTiendavEstatus($id, 2);
@@ -101,16 +118,23 @@ Class CApis extends CI_Controller {
 				$productos = $this->MApis->obtenerDetalles($id_cola);  // Lista de productos asociados a la cola de sincronización
 				
 			}
-			
-			//~ echo count($productos);
-			//~ echo " (Para registrar)";
+			echo "Prueba 3</br>";
+			echo count($productos);
+			echo " (Para registrar)</br>";
 			
 		}
 		
-		// Si hay productos asociados
+		// Si hay productos asociados y expiran la hora, se procede a reescribir los datos de los productos
 		if(count($productos) > 0){
+			echo "Prueba 4</br>";
+			echo $datosb_tienda[0]->expires_in + time() + 1 ."< ".time()."</br>";
+			echo "TOKEN = >".$datosb_tienda[0]->tokens."</br>";
+			echo "ID => ".$datosb_tienda[0]->app_id."</br>";
+			echo "Secret key =>".$datosb_tienda[0]->secret_api."</br>";
+			
 			$meli = new Meli($datosb_tienda[0]->app_id, $datosb_tienda[0]->secret_api);
 			if($datosb_tienda[0]->expires_in + time() + 1 < time()){
+				echo "Prueba 5</br>";
 				$params = array('access_token' => $datosb_tienda[0]->tokens);
 				
 				// Generamos un archivo con la lista de productos
@@ -165,11 +189,13 @@ Class CApis extends CI_Controller {
 						$body = array('title' => $nombre_producto, 'price' => round($result, 2), 'available_quantity' => $producto->cantidad, 'pictures' => $lista_fotos);
 					}
 					$response = $meli->put('/items/'.$producto->referencia, $body, $params);
-					// print_r($response);
-					// echo $response['httpCode'];
+					echo "Prueba 4</br>";
+					print_r($response);
+					echo $response['httpCode'];
 					if(isset($response['body']->error)){
 						$errores++;
-						//~ print_r($response['body']);
+						echo "Prueba 5</br>";
+						print_r($response['body']);
 						if($response['body']->error == 'not_found'){
 							// Procedemos a registrar el nuevo producto en la tienda virtual de mercado libre
 							
@@ -178,7 +204,7 @@ Class CApis extends CI_Controller {
 								"title" => $nombre_producto,
 								"category_id" => $categoria_referencia,
 								"price" => round($result, 2),
-								"currency_id" => "VEF",
+								"currency_id" => "VES",
 								"available_quantity" => $producto->cantidad,
 								"buying_mode" => "buy_it_now",
 								"listing_type_id" => "bronze",
@@ -193,7 +219,7 @@ Class CApis extends CI_Controller {
 							if($response_reg['httpCode'] == '201'){
 								$num_reg++;
 								// Registro de incidencia
-								$captura_eventos[] = "[".date("r")."] Producto: ".$producto->producto_id.", Num Referencia: ".$response_reg['body']->id.", Evento: Registrado..., Usuario: ".$this->session->userdata['logged_in']['id']."\r\n";
+								$captura_eventos[] = "[".date("r")."] Producto: ".$producto->producto_id.", Num Referencia: ".$response_reg['body']->id.", Evento: Registrado..., Usuario: ".$this->session->userdata['logged_in']['id']."\r</br>";
 								// Actualizamos el código de referencia en la tabla de asociaciones de productos con tiendas virtuales 'productos_tiendav'
 								$cod_ref = $response_reg['body']->id;
 								$data_referencia = array(
@@ -218,20 +244,21 @@ Class CApis extends CI_Controller {
 								);
 								$update_detalle = $this->MApis->update_detalle_cola($data_up);
 								
-								//~ echo $response_reg['httpCode'];
-								//~ echo " - ";
-								//~ print_r($response_reg['body']->error);
-								//~ echo "<br>";
-								//~ print_r($response_reg['body']);
-								//~ echo "<br>";
-								//~ echo "Producto: ".$producto->producto_id;
-								//~ echo "<br>";
-								//~ echo "Precio: ".$result;
-								//~ echo "<br>";
+								echo "Prueba 6</br>";
+								echo $response_reg['httpCode'];
+								echo " - ";
+								print_r($response_reg['body']->error);
+								echo "<br>";
+								print_r($response_reg['body']);
+								echo "<br>";
+								echo "Producto: ".$producto->producto_id;
+								echo "<br>";
+								echo "Precio: ".$result;
+								echo "<br>";
 							}
 						}else if(strpos($response['body']->message, 'status:closed') !== false){
 							// Registro de incidencia
-							$captura_eventos[] = "[".date("r")."] Producto: ".$producto->producto_id.", Num Referencia: ".$producto->referencia.", Evento: ".$response['body']->error."1, Usuario: ".$this->session->userdata['logged_in']['id']."\r\n";
+							$captura_eventos[] = "[".date("r")."] Producto: ".$producto->producto_id.", Num Referencia: ".$producto->referencia.", Evento: ".$response['body']->error."1, Usuario: ".$this->session->userdata['logged_in']['id']."\r</br>";
 							// Actualizamos el estatus del detalle a 1 y registramos el detalle del error
 							$data_up = array(
 								'id' => $producto->id,
@@ -241,7 +268,7 @@ Class CApis extends CI_Controller {
 							$update_detalle = $this->MApis->update_detalle_cola($data_up);							
 						}else{
 							// Registro de incidencia
-							$captura_eventos[] = "[".date("r")."] Producto: ".$producto->producto_id.", Num Referencia: ".$producto->referencia.", Evento: ".$response['body']->error."2, Usuario: ".$this->session->userdata['logged_in']['id']."\r\n";
+							$captura_eventos[] = "[".date("r")."] Producto: ".$producto->producto_id.", Num Referencia: ".$producto->referencia.", Evento: ".$response['body']->error."2, Usuario: ".$this->session->userdata['logged_in']['id']."\r</br>";
 							// Registramos el detalle del error
 							$data_up = array(
 								'id' => $producto->id,
@@ -254,6 +281,7 @@ Class CApis extends CI_Controller {
 						$body = array('text' => $producto->descripcion);
 						$response_desc = $meli->put('/items/'.$producto->referencia.'/description', $body, $params);
 						if(isset($response_desc['body']->error)){
+							echo "Prueba 7</br>";
 							print_r($response_desc);
 							// Registramos el detalle del error
 							$data_up = array(
@@ -264,9 +292,10 @@ Class CApis extends CI_Controller {
 						}
 					}
 					if($response['httpCode'] == '200'){
+						echo "Prueba 8</br>";
 						$num_act++;
 						// Registro de incidencia
-						$captura_eventos[] = "[".date("r")."] Producto: ".$producto->producto_id.", Num Referencia: ".$response['body']->id.", Evento: Actualizado..., Usuario: ".$this->session->userdata['logged_in']['id']."\r\n";
+						$captura_eventos[] = "[".date("r")."] Producto: ".$producto->producto_id.", Num Referencia: ".$response['body']->id.", Evento: Actualizado..., Usuario: ".$this->session->userdata['logged_in']['id']."\r</br>";
 						
 						// Actualizamos el estatus del detalle a 1 (Procesado)
 						$data_up = array(
@@ -304,12 +333,17 @@ Class CApis extends CI_Controller {
 				$this->load->view('price_update', $data);
 				$this->load->view('footer');
 			}else{
+				echo "Prueba 9</br>";
+				echo $_GET['code']."</br>";
 				if(isset($_GET['code'])) {
+					echo "Prueba 9</br>";
 					// If the code was in get parameter we authorize
 					$user = $meli->authorize($_GET['code'], base_url().'mercado/update?id='.$id);
+				
 					 
 					// Now we create the sessions with the authenticated user
 					if(isset($user['body']->access_token)){
+						echo "Prueba 10</br>";
 						$_SESSION['access_token'] = $user['body']->access_token;
 						$_SESSION['expires_in'] = $user['body']->expires_in;
 						
@@ -326,9 +360,11 @@ Class CApis extends CI_Controller {
 						// We can check if the access token in invalid checking the time
 						if($_SESSION['expires_in'] + time() + 1 < time()) {
 							try {
+								echo "Prueba 11</br>";
 								print_r($meli->refreshAccessToken());
 							} catch (Exception $e) {
-								echo "Exception: ",  $e->getMessage(), "\n";
+								echo "Prueba 12</br>";
+								echo "Exception: ",  $e->getMessage(), "</br>";
 							}
 						}
 						
@@ -387,12 +423,15 @@ Class CApis extends CI_Controller {
 							}
 
 							$response = $meli->put('/items/'.$producto->referencia, $body, $params);
-							// print_r($response);
-							// echo $response['httpCode'];
+							echo "Prueba 12</br>";
+							print_r($response);
+							echo $response['httpCode'];
 							if(isset($response['body']->error)){
+								echo "Prueba 13</br>";
 								$errores++;
 								//~ print_r($response['body']);
 								if($response['body']->error == 'not_found'){
+									echo "Prueba 14</br>";
 									// Procedemos a registrar el nuevo producto en la tienda virtual de mercado libre
 									
 									// Constriumos el item a enviar
@@ -400,7 +439,7 @@ Class CApis extends CI_Controller {
 										"title" => $nombre_producto,
 										"category_id" => $categoria_referencia,
 										"price" => round($result, 2),
-										"currency_id" => "VEF",
+										"currency_id" => "VES",
 										"available_quantity" => $producto->cantidad,
 										"buying_mode" => "buy_it_now",
 										"listing_type_id" => "bronze",
@@ -413,9 +452,10 @@ Class CApis extends CI_Controller {
 									$response_reg = $meli->post('/items', $item, $params);
 									// Aumentamos el contador de registros si el ítem fue registrado correctamente
 									if($response_reg['httpCode'] == '201'){
+										echo "Prueba 15</br>";
 										$num_reg++;
 										// Registro de incidencia
-										$captura_eventos[] = "[".date("r")."] Producto: ".$producto->producto_id.", Num Referencia: ".$response_reg['body']->id.", Evento: Registrado..., Usuario: ".$this->session->userdata['logged_in']['id']."\r\n";
+										$captura_eventos[] = "[".date("r")."] Producto: ".$producto->producto_id.", Num Referencia: ".$response_reg['body']->id.", Evento: Registrado..., Usuario: ".$this->session->userdata['logged_in']['id']."\r</br>";
 										// print_r($response_reg);
 										// Actualizamos el código de referencia en la tabla de asociaciones de productos con tiendas virtuales 'productos_tiendav'
 										$cod_ref = $response_reg['body']->id;
@@ -434,6 +474,7 @@ Class CApis extends CI_Controller {
 										);
 										$update_detalle = $this->MApis->update_detalle_cola($data_up);
 									}else{
+										echo "Prueba 16</br>";
 										// Actualizamos el campo 'detalles' del detalle con la información devuelta por la API
 										$data_up = array(
 											'id' => $producto->id,
@@ -441,20 +482,22 @@ Class CApis extends CI_Controller {
 										);
 										$update_detalle = $this->MApis->update_detalle_cola($data_up);
 										
-										//~ echo $response_reg['httpCode'];
-										//~ echo " - ";
-										//~ print_r($response_reg['body']->error);
-										//~ echo "<br>";
-										//~ print_r($response_reg['body']);
-										//~ echo "<br>";
-										//~ echo "Producto: ".$producto->producto_id;
-										//~ echo "<br>";
-										//~ echo "Precio: ".$result;
-										//~ echo "<br>";
+										echo $response_reg['httpCode'];
+										echo " - ";
+										print_r($response_reg['body']->error);
+										echo "<br>";
+										exit();
+										print_r($response_reg['body']);
+										echo "<br>";
+										echo "Producto: ".$producto->producto_id;
+										echo "<br>";
+										echo "Precio: ".$result;
+										echo "<br>";
 									}
 								}else if(strpos($response['body']->message, 'status:closed') !== false){
+									echo "Prueba 17</br>";
 									// Registro de incidencia
-									$captura_eventos[] = "[".date("r")."] Producto: ".$producto->producto_id.", Num Referencia: ".$producto->referencia.", Evento: ".$response['body']->error."1, Usuario: ".$this->session->userdata['logged_in']['id']."\r\n";
+									$captura_eventos[] = "[".date("r")."] Producto: ".$producto->producto_id.", Num Referencia: ".$producto->referencia.", Evento: ".$response['body']->error."1, Usuario: ".$this->session->userdata['logged_in']['id']."\r</br>";
 									// Actualizamos el estatus del detalle a 1 y registramos el detalle del error
 									$data_up = array(
 										'id' => $producto->id,
@@ -463,9 +506,10 @@ Class CApis extends CI_Controller {
 									);
 									$update_detalle = $this->MApis->update_detalle_cola($data_up);
 								}else{
-									//~ print_r($response['body']);
+									echo "Prueba 18</br>";
+									print_r($response['body']);
 									// Registro de incidencia
-									$captura_eventos[] = "[".date("r")."] Producto: ".$producto->producto_id.", Num Referencia: ".$producto->referencia.", Evento: ".$response['body']->error."2, Usuario: ".$this->session->userdata['logged_in']['id']."\r\n";
+									$captura_eventos[] = "[".date("r")."] Producto: ".$producto->producto_id.", Num Referencia: ".$producto->referencia.", Evento: ".$response['body']->error."2, Usuario: ".$this->session->userdata['logged_in']['id']."\r</br>";
 									// Registramos el detalle del error
 									$data_up = array(
 										'id' => $producto->id,
@@ -475,9 +519,11 @@ Class CApis extends CI_Controller {
 								}
 							}else{
 								// Si no hubo errores en el envío del precio y la cantidad, entonces enviamos la descripción
+								echo "Prueba 19</br>";
 								$body = array('text' => $producto->descripcion);
 								$response_desc = $meli->put('/items/'.$producto->referencia.'/description', $body, $params);
 								if(isset($response_desc['body']->error)){
+									echo "Prueba 20</br>";
 									print_r($response_desc);
 									// Registramos el detalle del error
 									$data_up = array(
@@ -488,9 +534,10 @@ Class CApis extends CI_Controller {
 								}
 							}
 							if($response['httpCode'] == '200'){
+								echo "Prueba 21</br>";
 								$num_act++;
 								// Registro de incidencia
-								$captura_eventos[] = "[".date("r")."] Producto: ".$producto->producto_id.", Num Referencia: ".$response['body']->id.", Evento: Actualizado..., Usuario: ".$this->session->userdata['logged_in']['id']."\r\n";
+								$captura_eventos[] = "[".date("r")."] Producto: ".$producto->producto_id.", Num Referencia: ".$response['body']->id.", Evento: Actualizado..., Usuario: ".$this->session->userdata['logged_in']['id']."\r</br>";
 								
 								// Actualizamos el estatus del detalle a 1 (Procesado)
 								$data_up = array(
@@ -507,6 +554,7 @@ Class CApis extends CI_Controller {
 						$detalles_pendientes = $this->MApis->obtenerDetallesEstatus($id_cola, 2);
 						$st = 1;
 						if(count($detalles_pendientes) > 0){
+							echo "Prueba 22</br>";
 							$st = 3;
 						}
 						// Armamos los datos a actualizar
@@ -528,15 +576,17 @@ Class CApis extends CI_Controller {
 						$this->load->view('price_update', $data);
 						$this->load->view('footer');
 					}else{
+
 						$redirect = $meli->getAuthUrl(base_url().'mercado/update?id='.$id, Meli::$AUTH_URL['MLV']);
-						redirect($redirect);
+						#redirect($redirect);
 					}
 				} else {
 					$redirect = $meli->getAuthUrl(base_url().'mercado/update?id='.$id, Meli::$AUTH_URL['MLV']);
-					redirect($redirect);
+					#redirect($redirect);
 				}
 			}
 		}else{
+			echo "Prueba 23</br>";
 			// Proceso de actualización final de la cola; si quedan detalles pendientes el estatus de la cola pasa a 3, 
 			// si no, pasa a 1
 			$detalles_pendientes = $this->MApis->obtenerDetallesEstatus($id_cola, 2);
@@ -642,7 +692,7 @@ Class CApis extends CI_Controller {
 							"title" => $nombre_producto,
 							"category_id" => $categoria_referencia,
 							"price" => round($result, 2),
-							"currency_id" => "VEF",
+							"currency_id" => "VES",
 							"available_quantity" => $producto_tiendav[0]->cantidad,
 							"buying_mode" => "buy_it_now",
 							"listing_type_id" => "bronze",
@@ -657,7 +707,7 @@ Class CApis extends CI_Controller {
 						if($response_reg['httpCode'] == '201'){
 							$num_reg++;
 							// Registro de incidencia
-							$captura_eventos[] = "[".date("r")."] Producto: ".$producto[0]->id.", Num Referencia: ".$response_reg['body']->id.", Evento: Registrado..., Usuario: ".$this->session->userdata['logged_in']['id']."\r\n";
+							$captura_eventos[] = "[".date("r")."] Producto: ".$producto[0]->id.", Num Referencia: ".$response_reg['body']->id.", Evento: Registrado..., Usuario: ".$this->session->userdata['logged_in']['id']."\r</br>";
 							// Actualizamos el código de referencia en la tabla de asociaciones de productos con tiendas virtuales 'productos_tiendav'
 							$cod_ref = $response_reg['body']->id;
 							$data_referencia = array(
@@ -677,11 +727,11 @@ Class CApis extends CI_Controller {
 						}
 					}else if(strpos($response['body']->message, 'status:closed') !== false){
 						// Registro de incidencia
-						$captura_eventos[] = "[".date("r")."] Producto: ".$producto_tiendav[0]->producto_id.", Num Referencia: ".$producto_tiendav[0]->referencia.", Evento: ".$response['body']->error."1, Usuario: ".$this->session->userdata['logged_in']['id']."\r\n";
+						$captura_eventos[] = "[".date("r")."] Producto: ".$producto_tiendav[0]->producto_id.", Num Referencia: ".$producto_tiendav[0]->referencia.", Evento: ".$response['body']->error."1, Usuario: ".$this->session->userdata['logged_in']['id']."\r</br>";
 						
 					}else{
 						// Registro de incidencia
-						$captura_eventos[] = "[".date("r")."] Producto: ".$producto_tiendav[0]->producto_id.", Num Referencia: ".$producto_tiendav[0]->referencia.", Evento: ".$response['body']->error."2, Usuario: ".$this->session->userdata['logged_in']['id']."\r\n";
+						$captura_eventos[] = "[".date("r")."] Producto: ".$producto_tiendav[0]->producto_id.", Num Referencia: ".$producto_tiendav[0]->referencia.", Evento: ".$response['body']->error."2, Usuario: ".$this->session->userdata['logged_in']['id']."\r</br>";
 					}
 				}else{
 					// Si no hubo errores en el envío del precio y la cantidad, entonces enviamos la descripción
@@ -694,7 +744,7 @@ Class CApis extends CI_Controller {
 				if($response['httpCode'] == '200'){
 					$num_act++;
 					// Registro de incidencia
-					$captura_eventos[] = "[".date("r")."] Producto: ".$producto_tiendav[0]->producto_id.", Num Referencia: ".$response['body']->id.", Evento: Actualizado..., Usuario: ".$this->session->userdata['logged_in']['id']."\r\n";
+					$captura_eventos[] = "[".date("r")."] Producto: ".$producto_tiendav[0]->producto_id.", Num Referencia: ".$response['body']->id.", Evento: Actualizado..., Usuario: ".$this->session->userdata['logged_in']['id']."\r</br>";
 					
 				}
 				$i++;
@@ -734,7 +784,7 @@ Class CApis extends CI_Controller {
 							try {
 								print_r($meli->refreshAccessToken());
 							} catch (Exception $e) {
-								echo "Exception: ",  $e->getMessage(), "\n";
+								echo "Exception: ",  $e->getMessage(), "</br>";
 							}
 						}
 						
@@ -798,7 +848,7 @@ Class CApis extends CI_Controller {
 									"title" => $nombre_producto,
 									"category_id" => $categoria_referencia,
 									"price" => round($result, 2),
-									"currency_id" => "VEF",
+									"currency_id" => "VES",
 									"available_quantity" => $producto_tiendav[0]->cantidad,
 									"buying_mode" => "buy_it_now",
 									"listing_type_id" => "bronze",
@@ -813,7 +863,7 @@ Class CApis extends CI_Controller {
 								if($response_reg['httpCode'] == '201'){
 									$num_reg++;
 									// Registro de incidencia
-									$captura_eventos[] = "[".date("r")."] Producto: ".$producto_tiendav[0]->producto_id.", Num Referencia: ".$response_reg['body']->id.", Evento: Registrado..., Usuario: ".$this->session->userdata['logged_in']['id']."\r\n";
+									$captura_eventos[] = "[".date("r")."] Producto: ".$producto_tiendav[0]->producto_id.", Num Referencia: ".$response_reg['body']->id.", Evento: Registrado..., Usuario: ".$this->session->userdata['logged_in']['id']."\r</br>";
 									// print_r($response_reg);
 									// Actualizamos el código de referencia en la tabla de asociaciones de productos con tiendas virtuales 'productos_tiendav'
 									$cod_ref = $response_reg['body']->id;
@@ -834,11 +884,11 @@ Class CApis extends CI_Controller {
 								}
 							}else if(strpos($response['body']->message, 'status:closed') !== false){
 								// Registro de incidencia
-								$captura_eventos[] = "[".date("r")."] Producto: ".$producto_tiendav[0]->producto_id.", Num Referencia: ".$producto_tiendav[0]->referencia.", Evento: ".$response['body']->error."1, Usuario: ".$this->session->userdata['logged_in']['id']."\r\n";
+								$captura_eventos[] = "[".date("r")."] Producto: ".$producto_tiendav[0]->producto_id.", Num Referencia: ".$producto_tiendav[0]->referencia.", Evento: ".$response['body']->error."1, Usuario: ".$this->session->userdata['logged_in']['id']."\r</br>";
 								
 							}else{
 								// Registro de incidencia
-								$captura_eventos[] = "[".date("r")."] Producto: ".$producto_tiendav[0]->producto_id.", Num Referencia: ".$producto_tiendav[0]->referencia.", Evento: ".$response['body']->error."2, Usuario: ".$this->session->userdata['logged_in']['id']."\r\n";
+								$captura_eventos[] = "[".date("r")."] Producto: ".$producto_tiendav[0]->producto_id.", Num Referencia: ".$producto_tiendav[0]->referencia.", Evento: ".$response['body']->error."2, Usuario: ".$this->session->userdata['logged_in']['id']."\r</br>";
 							}
 						}else{
 							// Si no hubo errores en el envío del precio y la cantidad, entonces enviamos la descripción
@@ -851,7 +901,7 @@ Class CApis extends CI_Controller {
 						if($response['httpCode'] == '200'){
 							$num_act++;
 							// Registro de incidencia
-							$captura_eventos[] = "[".date("r")."] Producto: ".$producto_tiendav[0]->producto_id.", Num Referencia: ".$response['body']->id.", Evento: Actualizado..., Usuario: ".$this->session->userdata['logged_in']['id']."\r\n";
+							$captura_eventos[] = "[".date("r")."] Producto: ".$producto_tiendav[0]->producto_id.", Num Referencia: ".$response['body']->id.", Evento: Actualizado..., Usuario: ".$this->session->userdata['logged_in']['id']."\r</br>";
 							
 						}
 						$i++;
@@ -1199,7 +1249,7 @@ Class CApis extends CI_Controller {
         $ddf = fopen($ruta.'/application/logs/list_items_'.$fecha.'.log','a');
 		
 		foreach($list_items as $producto){
-			fwrite($ddf,"Producto id: ".$producto->producto_id.", Tienda id: ".$producto->tiendav_id.", Num Referencia: ".$producto->referencia.", Precio: ".$producto->precio.", Cantidad: ".$producto->cantidad."\r\n");
+			fwrite($ddf,"Producto id: ".$producto->producto_id.", Tienda id: ".$producto->tiendav_id.", Num Referencia: ".$producto->referencia.", Precio: ".$producto->precio.", Cantidad: ".$producto->cantidad."\r</br>");
 		}
 		
 		fclose($ddf);
