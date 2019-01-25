@@ -623,8 +623,8 @@ $(document).ready(function(){
 			swal("Disculpe,", "para continuar debe seleccionar la tienda virtual");
 			$('#tiendav_id').parent('div').addClass('has-error');
 		}else{		
-			url = base_url+'mercado/update_singles/?producto_id='+$("#producto_id").val()+'&tiendav_id='+id_tiendav;
-			alert(url);
+			window.location.href = base_url+'mercado/update_singles/?producto_id='+$("#producto_id").val()+'&tiendav_id='+id_tiendav;
+			//alert(url);
 		}
 		
 	});

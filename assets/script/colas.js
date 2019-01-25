@@ -1,7 +1,7 @@
 $(document).ready(function(){
-	// Ruta base del proyecto
-	base_url = $("#base_url").val();
-	
+    // Ruta base del proyecto
+    base_url = $("#base_url").val();
+    
     $('#tab_colas').DataTable({
         "paging": true,
         "lengthChange": false,
@@ -28,22 +28,22 @@ $(document).ready(function(){
     });
             
     // Función para cambiar el status de una cola según la opción seleccionada en su respectivo combo
-	$("table#tab_colas").on('change', 'select.cambiar', function (e) {
-		
-		e.preventDefault();
-		
-		var id = this.getAttribute('id');
-		id = id.split(";");
-		id = id[0];  // Id de la cola
-		var estatus_actual = this.getAttribute('id');
-		estatus_actual = estatus_actual.split(";");
-		estatus_actual = estatus_actual[1];  // Estatus actual de la cola
-		var select_actual = $(this);  // Combo actualmente seleccionado
-		var new_status = $(this).val();  // Estatus nuevo para la cola
-		
-		//~ alert("Id: "+id+" | Nuevo Estatus: "+new_status);
-		
-		swal({
+    $("table#tab_colas").on('change', 'select.cambiar', function (e) {
+        
+        e.preventDefault();
+        
+        var id = this.getAttribute('id');
+        id = id.split(";");
+        id = id[0];  // Id de la cola
+        var estatus_actual = this.getAttribute('id');
+        estatus_actual = estatus_actual.split(";");
+        estatus_actual = estatus_actual[1];  // Estatus actual de la cola
+        var select_actual = $(this);  // Combo actualmente seleccionado
+        var new_status = $(this).val();  // Estatus nuevo para la cola
+        
+        //~ alert("Id: "+id+" | Nuevo Estatus: "+new_status);
+        
+        swal({
             title: "Cambiar estatus",
             text: "¿Está seguro de cambiar el estatus de la cola?",
             type: "warning",
@@ -65,10 +65,10 @@ $(document).ready(function(){
                            title: "Disculpe,",
                             text: "La cola aún tiene detalles pendientes",
                              type: "warning" 
-						   },
-						   function(){
+                           },
+                           function(){
                              // Si hay detalles pendientes, fijamos el select al estatus inicial
-							 select_actual.select2('val', estatus_actual);
+                             select_actual.select2('val', estatus_actual);
                          });
                     }else{
                          swal({ 
@@ -83,48 +83,48 @@ $(document).ready(function(){
                 }, 'json');
                 
             }else{
-				
-				// Si cancelamos el cambio de estatus, fijamos el select al estatus inicial
-				select_actual.select2('val', estatus_actual);
-			
-			} 
+                
+                // Si cancelamos el cambio de estatus, fijamos el select al estatus inicial
+                select_actual.select2('val', estatus_actual);
+            
+            } 
         });
-		
-	});
-	
-	
-	// Validacion para procesar la cola sincronizando los detalles de la misma con la tienda virtual
+        
+    });
+    
+    
+    // Validacion para procesar la cola sincronizando los detalles de la misma con la tienda virtual
     $("table#tab_colas").on('click', 'a.actualizar', function (e) {
         e.preventDefault();
         var id = this.getAttribute('id');
-		var ruta = id.split(";");
-		ruta = ruta[0];
-		var status = id.split(";");
-		status = status[2];
-		id = id.split(";");
-		id = id[1];
-		
-		/* Primero verificamos el estatus de la cola.
-		 * Si está pendiente hacemos la sincronización, si no, indicamos que la cola sea colocada en ese estatus.
-		 * */
-		if(status == '2'){
-			
-			swal({ 
-			   title: "Disculpe",
-				text: "Debe pasar la cola al estatus pendiente antes de procesarla...",
-				 type: "warning" 
-			},
-			function(){
-				 
-			});
-			
-		}else{
-			
-			// Sincronizamos con la tienda virtual
-			window.location.href = base_url+ruta+'?id='+id;
-			
-		}
+        var ruta = id.split(";");
+        ruta = ruta[0];
+        var status = id.split(";");
+        status = status[2];
+        id = id.split(";");
+        id = id[1];
+        
+        /* Primero verificamos el estatus de la cola.
+         * Si está pendiente hacemos la sincronización, si no, indicamos que la cola sea colocada en ese estatus.
+         * */
+        if(status == '2'){
+            
+            swal({ 
+               title: "Disculpe",
+                text: "Debe pasar la cola al estatus pendiente antes de procesarla...",
+                 type: "warning" 
+            },
+            function(){
+                 
+            });
+            
+        }else{
+            
+            // Sincronizamos con la tienda virtual
+            window.location.href = base_url+ruta+'?cola_id='+id;
+            
+        }
         
     });
-	
+    
 });
