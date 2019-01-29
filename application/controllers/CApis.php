@@ -333,13 +333,10 @@ Class CApis extends CI_Controller {
 				$this->load->view('price_update', $data);
 				$this->load->view('footer');
 			}else{
-				echo "Prueba 9</br>";
-				echo $_GET['code']."</br>";
 				if(isset($_GET['code'])) {
 					echo "Prueba 9</br>";
 					// If the code was in get parameter we authorize
 					$user = $meli->authorize($_GET['code'], base_url().'mercado/update?id='.$id);
-				
 					 
 					// Now we create the sessions with the authenticated user
 					if(isset($user['body']->access_token)){
@@ -1033,6 +1030,8 @@ Class CApis extends CI_Controller {
 		
 		// Si hay productos asociados
 		if(count($productos) > 0){
+
+			#echo "Actualizamos los precios de los productos resultantes en la tienda de m3 Uniformes";
 			
 			// Constantes de conexión al web service de prestashop
 			define('DEBUG', false);
@@ -1053,6 +1052,8 @@ Class CApis extends CI_Controller {
 						
 						$opt = array('resource' => 'products');
 						$opt['id']=$producto->referencia;
+						$opt['name']=$producto->nombre;
+						$opt['description']=$producto->descripcion;
 						$xml = $webService->get($opt);
 						//~ echo "Successfully recived data.";
 							 /* Lista de nodos que no pueden modificarse.
