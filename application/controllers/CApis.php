@@ -1052,9 +1052,8 @@ Class CApis extends CI_Controller {
 						
 						$opt = array('resource' => 'products');
 						$opt['id']=$producto->referencia;
-						$opt['name']=$producto->nombre;
-						$opt['description']=$producto->descripcion;
 						$xml = $webService->get($opt);
+						#print_r($xml); exit;
 						//~ echo "Successfully recived data.";
 							 /* Lista de nodos que no pueden modificarse.
 							 *
@@ -1067,7 +1066,9 @@ Class CApis extends CI_Controller {
 							unset($xml->children()->children()->position_in_category);
 							unset($xml->children()->children()->quantity);
 							unset($xml->children()->children()->type);
-						   $xml->children()->children()->price = $producto->precio; // <-- nuevo precio!
+						   $xml->children()->children()->price = $producto->precio; // <-- Asignacion de precio!
+						   $xml->children()->children()->name = $producto->nombre; // <-- Asignacion de nombre!
+						   $xml->children()->children()->description = $producto->descripcion; // <-- Asignacion de descripcion!
 						// Cargar nuevos datos al generador de consultas.
 						$opt['putXml']=$xml->asXML();
 						$xml = $webService->edit($opt);
