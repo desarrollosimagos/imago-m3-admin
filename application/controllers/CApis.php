@@ -1045,9 +1045,9 @@ Class CApis extends CI_Controller {
 				
 				$num_act = 0;
 				$errores = 0;
-				
+
 				foreach($productos as $producto){
-					
+
 					try {
 						
 						$opt = array('resource' => 'products');
@@ -1066,10 +1066,22 @@ Class CApis extends CI_Controller {
 							unset($xml->children()->children()->position_in_category);
 							unset($xml->children()->children()->quantity);
 							unset($xml->children()->children()->type);
-						   $xml->children()->children()->price = $producto->precio; // <-- Asignacion de precio!
-						   $xml->children()->children()->name = $producto->nombre; // <-- Asignacion de nombre!
-						   $xml->children()->children()->reference = $producto->referencia; // <-- Asignacion de referencia!
-						   $xml->children()->children()->description = $producto->descripcion; // <-- Asignacion de descripcion!
+
+							// Formula para efectuar el margen de ganancia sobre el producto
+
+							if($datosb_tienda[0]->formula !=""){
+								// Asignacion de formula
+								$formula      = $datosb_tienda[0]->formula;
+								// Asignacion de precio venta
+								$precio_venta = ($producto->precio) / (100 - $formula) * 100;
+							}else{
+								$precio_venta = $producto->precio;
+							}
+
+						   	$xml->children()->children()->price = $precio_venta; // <-- Asignacion de precio!
+						   	$xml->children()->children()->name = $producto->nombre; // <-- Asignacion de nombre!
+						   	$xml->children()->children()->reference = $producto->referencia; // <-- Asignacion de referencia!
+						   	$xml->children()->children()->description = $producto->descripcion; // <-- Asignacion de descripcion!
 						// Cargar nuevos datos al generador de consultas.
 						$opt['putXml']=$xml->asXML();
 						$xml = $webService->edit($opt);
