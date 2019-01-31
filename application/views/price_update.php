@@ -76,7 +76,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		?>
 		<p>Productos actualizados: <?php echo $num_act; ?></p>
 
-		<p>Productos sin actualizar: <?php echo $errores; ?></p>
+		<p>Productos sin actualizar: <?php echo $errores; ?>  <?php echo substr($detalles_errores, 0, -1); ?></p>
 		
 		<p>Productos registrados: <?php echo $registros; ?></p>
 		<?php
