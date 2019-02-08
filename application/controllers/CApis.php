@@ -826,7 +826,7 @@ Class CApis extends CI_Controller {
 						
 						// Si la tienda virtual tiene fórmula especificada le añadimos el cálculo de élla como comisión al precio del producto
 						if($datosb_tienda[0]->formula == ""){
-							$result = $producto[0]->precio;
+							$result = $producto[0]->costo_bolivar;
 							$body = array('title' => $nombre_producto, 'price' => round($result, 2), 'available_quantity' => $producto_tiendav[0]->cantidad, 'pictures' => $lista_fotos);
 						}else{
 							$precio = $datosb_tienda[0]->formula;
