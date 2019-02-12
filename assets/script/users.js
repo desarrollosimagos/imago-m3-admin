@@ -114,7 +114,12 @@ $(document).ready(function() {
         window.location = url;
     });
 
-	$("#profile").select2('val', $("#id_profile").val());
+    if($("#id_profile").val() == undefined){
+    	$("#profile").select2('val', '0');
+    }else{
+    	$("#profile").select2('val', $("#id_profile").val());
+    }
+
     $("#status").select2('val', $("#id_status").val());
 
 	
