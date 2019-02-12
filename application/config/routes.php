@@ -84,6 +84,7 @@ $route['users/send_mail_change'] = 'CUserPublic/send_mail_change';
 $route['users/change_password'] = 'CUserPublic/change_password';
 $route['confirm_mail_public'] = 'CUserPublic/validar_mail';
 $route['update_password'] = 'CUserPublic/update_password';
+$route['users_register'] = 'CUser/register';
 $route['users_edit/(:num)'] = 'CUser/edit/$1';
 /*   Franchises */
 $route['franchises'] = 'CFranchises';
