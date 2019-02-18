@@ -308,7 +308,7 @@ $(document).ready(function(){
 			// Recorremos la tabla para verificar que campos están editables y proceder a referenciarles el monto
 			$("#tab_productos tbody tr").each(function () {
 				// Captura del costo del material en dólares teniendo en cuenta si está en un input o es texto plano
-				if($(this).find('span').eq(0).find('input').val().trim() == undefined){
+				if(typeof $(this).find('input').val().trim() === "undefined"){
 					var costo_mat_dolar = $(this).find('span').eq(0).text();
 				}else{
 					var costo_mat_dolar = $(this).find('span').eq(0).find('input').val();
