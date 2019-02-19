@@ -100,7 +100,7 @@ class CProductos extends CI_Controller {
 			$sub_array[] = "<span id='checkbox_".$row->id."_column'>".$row->costo_bolivar."</span>";
 			$sub_array[] = $row->name;
 			$sub_array[] = $row->modificado;
-			$sub_array[] = $row->descripcion;
+			$sub_array[] = substr($row->descripcion, 0, 140);
 			$sub_array[] = $lista_tiendasv;
 			$sub_array[] = $num_fotos;
 			$c_compra; $c_vende; $c_fabrica;
