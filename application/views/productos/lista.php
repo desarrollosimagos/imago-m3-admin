@@ -2,6 +2,13 @@
 .select2-container {
 	z-index: 99999;
 }
+table.dataTable tr.child ul li {
+    border-bottom: 1px solid #efefef;
+    padding: 0.5em 0;
+        padding-top: 0.5em;
+    white-space: nowrap;
+    width: 850% !important;
+}
 </style>
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-10">
@@ -46,8 +53,8 @@
                         <table id="tab_productos" class="table table-striped table-bordered dt-responsive table-hover dataTables-example" >
                             <thead>
                                 <tr>
-                                    <th><input type="checkbox" id="check_all"></th>
-                                    <!--<th>#</th>-->
+                                    <th>ID<input type="checkbox" id="check_all"></th>
+                                    <th>Validar</th>
                                     <th>Nombre</th>
                                     <th>Referencia</th>
                                     <th>Costo en Dólares</th>

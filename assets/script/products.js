@@ -7,7 +7,7 @@ $(document).ready(function(){
         //~ "lengthChange": false,
         "autoWidth": false,
         //~ "searching": true,
-        //~ "ordering": true,
+        "ordering": true,
         //~ "info": true,
         "processing": true,
         "serverSide": true,
@@ -41,7 +41,8 @@ $(document).ready(function(){
         //~ ],
         "aoColumns": [
             {"sWidth": "3%", "bSortable": false, "sClass": "center sorting_false", "bSearchable": false},
-            {"sClass": "registro center", "sWidth": "20%"},
+            {"sClass": "registro center", "sWidth": "3%"},
+            {"sClass": "registro center", "sWidth": "5%"},
             {"sClass": "registro center", "sWidth": "10%"},
             {"sClass": "registro center", "sWidth": "10%"},
             {"sClass": "registro center", "sWidth": "10%"},
@@ -275,7 +276,7 @@ $(document).ready(function(){
 		// Recorremos la tabla para verificar que campos están editables y proceder a mostrar la ventana modal
 		$("#tab_productos tbody tr").each(function () {
 			var checkbox;
-			checkbox = $(this).find('td').eq(0).find('input');
+			checkbox = $(this).find('td').eq(1).find('input');
 			
 			if (checkbox.is(':checked')) {
 				num_checked += 1;
@@ -308,7 +309,7 @@ $(document).ready(function(){
 			// Recorremos la tabla para verificar que campos están editables y proceder a referenciarles el monto
 			$("#tab_productos tbody tr").each(function () {
 				// Captura del costo del material en dólares teniendo en cuenta si está en un input o es texto plano
-				if(typeof $(this).find('input').val().trim() === "undefined"){
+				if(typeof $(this).find('input').val() === "undefined"){
 					var costo_mat_dolar = $(this).find('span').eq(0).text();
 				}else{
 					var costo_mat_dolar = $(this).find('span').eq(0).find('input').val();
