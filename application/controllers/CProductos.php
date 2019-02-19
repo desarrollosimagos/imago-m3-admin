@@ -75,6 +75,7 @@ class CProductos extends CI_Controller {
 		//~ echo $consulta_ejecutada;
 		//~ echo count($fetch_data);
 		$data = array();
+		$item = 1;
 		foreach($fetch_data as $row){
 			$sub_array = array();
 			// Proceso de busqueda de fotos asociadas al producto
@@ -91,6 +92,7 @@ class CProductos extends CI_Controller {
 				$lista_tiendasv = substr($lista_tiendasv, 0, -2);
 			}
 						
+			$sub_array[] = "<i class='fa fa-plus fa-2x' title='Desplegar'></i>";
 			$sub_array[] = "<input type='checkbox' id='checkbox_".$row->id."' class='check'>";
 			$sub_array[] = $row->nombre;
 			$sub_array[] = $row->referencia;
@@ -113,6 +115,7 @@ class CProductos extends CI_Controller {
 			$sub_array[] = "<a class='actualizar' id='".$row->id."' style='color: #1ab394' title='Actualizar precio'><i class='fa fa-refresh fa-2x'></i></a>";
 			
 			$data[] = $sub_array;
+			$item++; # Incrementamos el contador de registros
 		}
 		
 		$output = array(
