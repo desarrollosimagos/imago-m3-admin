@@ -365,7 +365,7 @@ $(document).ready(function(){
 		// Recorremos la tabla para contar los registros con los campos de precios editables
 		$("#tab_productos tbody tr").each(function () {
 			var checkbox;
-			checkbox = $(this).find('td').eq(0).find('input');
+			checkbox = $(this).find('td').eq(1).find('input');
 			
 			if (checkbox.is(':checked')) {
 				num_checked += 1;
