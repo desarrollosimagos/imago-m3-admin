@@ -397,15 +397,15 @@ $(document).ready(function(){
 					// Recorremos la tabla para verificar qué campos están editables y proceder a incluirlos en el arreglo
 					$("#tab_productos tbody tr").each(function () {
 						var checkbox;
-						checkbox = $(this).find('td').eq(0).find('input');
+						checkbox = $(this).find('td').eq(1).find('input');
 						
 						if (checkbox.is(':checked')) {
 							var id = $(this).find('a').eq(1).attr('id');
-							//~ alert(id);
-							var nombre = $(this).find('td').eq(1).text().trim();
-							var referencia = $(this).find('td').eq(2).text().trim();
+							var nombre = $(this).find('td').eq(2).text().trim();
+							var referencia = $(this).find('td').eq(3).text().trim();
 							var costo_dolar = $(this).find('span').eq(0).find('input').val().trim();
 							var costo_bolivar = $(this).find('span').eq(1).find('input').val().trim();
+							//alert(costo_bolivar);
 							//~ var tienda_id = $(this).find('td').eq(6).attr('id');
 							//~ tienda_id = tienda_id.split('_');
 							//~ tienda_id = tienda_id[1];
