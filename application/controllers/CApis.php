@@ -1085,7 +1085,7 @@ Class CApis extends CI_Controller {
 
 						   	$xml->children()->children()->price = $precio_venta; // <-- Asignacion de precio!
 						   	$xml->children()->children()->name = $producto->nombre; // <-- Asignacion de nombre!
-						   	$xml->children()->children()->reference = $producto->referencia; // <-- Asignacion de referencia!
+						   	//$xml->children()->children()->reference = $producto->referencia; // <-- Asignacion de referencia!
 						   	$xml->children()->children()->description = $producto->descripcion; // <-- Asignacion de descripcion!
 						// Cargar nuevos datos al generador de consultas.
 						$opt['putXml']=$xml->asXML();
