@@ -101,6 +101,7 @@ $route['product'] = 'CProduct';
 $route['product/register'] = 'CProduct/register';
 $route['product/edit/(:num)'] = 'CProduct/edit/$1';
 $route['product/delete/(:num)'] = 'CProduct/delete/$1';
+$route['product/category_register'] = 'CProduct/category_register';
 /*   Order */
 $route['order'] = 'COrder';
 $route['order/register'] = 'COrder/register';

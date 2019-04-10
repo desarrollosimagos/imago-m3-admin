@@ -72,6 +72,15 @@ class CProduct extends CI_Controller {
         $result = $this->MProduct->obtener();
         echo json_encode($result);
     }
+
+
+    public function category_register()
+	{
+		$this->load->view('base');
+		//$data['listar'] = $this->MProduct->obtener();
+		$this->load->view('product/category_register');
+		$this->load->view('footer');
+	}
 	
 	
 }
