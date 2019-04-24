@@ -1054,42 +1054,53 @@ Class CApis extends CI_Controller {
 				foreach($productos as $producto){
 
 					try {
+						$tiendav_id = $id;
+
+						$get_referencia = $this->MTiendasVirtuales->obtenerProductosTienda2($producto->producto_id, $tiendav_id);
+						#echo "<pre>";
+						#echo count($get_referencia);
+
+						foreach ($get_referencia as $key => $value) {
+							# code...
 						
-						$opt = array('resource' => 'products');
-						$opt['id']=$producto->referencia;
-						$xml = $webService->get($opt);
-						#print_r($xml); exit;
-						//~ echo "Successfully recived data.";
-							 /* Lista de nodos que no pueden modificarse.
-							 *
-							 *  - "manufacturer_name"
-							 *  - "position_in_category"
-							 *  - "quantity"
-							 *  - "type"
-							 */
-							unset($xml->children()->children()->manufacturer_name);
-							unset($xml->children()->children()->position_in_category);
-							unset($xml->children()->children()->quantity);
-							unset($xml->children()->children()->type);
+							$opt = array('resource' => 'products');
+							#$opt['id']=$producto->referencia;
+							$opt['id']= $value->referencia;
+							$xml = $webService->get($opt);
+							#print_r($xml); exit;
+							//~ echo "Successfully recived data.";
+								 /* Lista de nodos que no pueden modificarse.
+								 *
+								 *  - "manufacturer_name"
+								 *  - "position_in_category"
+								 *  - "quantity"
+								 *  - "type"
+								 */
+								unset($xml->children()->children()->manufacturer_name);
+								unset($xml->children()->children()->position_in_category);
+								unset($xml->children()->children()->quantity);
+								unset($xml->children()->children()->type);
 
-							// Formula para efectuar el margen de ganancia sobre el producto
+								// Formula para efectuar el margen de ganancia sobre el producto
 
-							if($datosb_tienda[0]->formula !=""){
-								// Asignacion de formula
-								$formula      = $datosb_tienda[0]->formula;
-								// Asignacion de precio venta
-								$precio_venta = ($producto->precio) / (100 - $formula) * 100;
-							}else{
-								$precio_venta = $producto->precio;
-							}
+								if($datosb_tienda[0]->formula !=""){
+									// Asignacion de formula
+									$formula      = $datosb_tienda[0]->formula;
+									// Asignacion de precio venta
+									$precio_venta = ($producto->precio) / (100 - $formula) * 100;
+								}else{
+									$precio_venta = $producto->precio;
+								}
 
-						   	$xml->children()->children()->price = $precio_venta; // <-- Asignacion de precio!
-						   	$xml->children()->children()->name = $producto->nombre; // <-- Asignacion de nombre!
-						   	//$xml->children()->children()->reference = $producto->referencia; // <-- Asignacion de referencia!
-						   	$xml->children()->children()->description = $producto->descripcion; // <-- Asignacion de descripcion!
-						// Cargar nuevos datos al generador de consultas.
-						$opt['putXml']=$xml->asXML();
-						$xml = $webService->edit($opt);
+							   	$xml->children()->children()->price = $precio_venta; // <-- Asignacion de precio!
+							   	$xml->children()->children()->name = $producto->nombre; // <-- Asignacion de nombre!
+							   	$xml->children()->children()->reference = $producto->referencia; // <-- Asignacion de referencia!
+							   	$xml->children()->children()->description = $producto->descripcion; // <-- Asignacion de descripcion!
+							// Cargar nuevos datos al generador de consultas.
+							$opt['putXml']=$xml->asXML();
+							$xml = $webService->edit($opt);
+
+						}
 						
 						$num_act += 1;
 						
