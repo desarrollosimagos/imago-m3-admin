@@ -23,7 +23,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
+<<<<<<< HEAD
 $config['base_url'] = 'https://d1.eittech.net/octopus/develop1/octopus/';
+=======
+$config['base_url'] = 'https://octopus.eittech.net/';
+>>>>>>> 550f297c057eb86a1533e75c0cb2c85c760b8714
 
 /*
 |--------------------------------------------------------------------------

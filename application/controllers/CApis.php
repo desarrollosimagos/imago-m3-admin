@@ -1060,6 +1060,7 @@ Class CApis extends CI_Controller {
 				foreach($productos as $producto){
 					
 					try {
+<<<<<<< HEAD
                                                
 						$tiendav_id = $id;
                                                 
@@ -1081,6 +1082,23 @@ Class CApis extends CI_Controller {
                                                         #print_r($xml);
 							
 						//~ echo "Successfully recived data.";
+=======
+						$tiendav_id = $id;
+
+						$get_referencia = $this->MTiendasVirtuales->obtenerProductosTienda2($producto->producto_id, $tiendav_id);
+						#echo "<pre>";
+						#echo count($get_referencia);
+
+						foreach ($get_referencia as $key => $value) {
+							# code...
+						
+							$opt = array('resource' => 'products');
+							#$opt['id']=$producto->referencia;
+							$opt['id']= $value->referencia;
+							$xml = $webService->get($opt);
+							#print_r($xml); exit;
+							//~ echo "Successfully recived data.";
+>>>>>>> 550f297c057eb86a1533e75c0cb2c85c760b8714
 								 /* Lista de nodos que no pueden modificarse.
 								 *
 								 *  - "manufacturer_name"
@@ -1103,6 +1121,7 @@ Class CApis extends CI_Controller {
 								}else{
 									$precio_venta = $producto->precio;
 								}
+<<<<<<< HEAD
 
 							   	$xml->children()->children()->price = $precio_venta; // <-- Asignacion de precio!
 							   	$xml->children()->children()->name = $producto->nombre; // <-- Asignacion de nombre!
@@ -1112,6 +1131,17 @@ Class CApis extends CI_Controller {
 							$opt['putXml']=$xml->asXML();
 							$xml = $webService->edit($opt);
 
+=======
+
+							   	$xml->children()->children()->price = $precio_venta; // <-- Asignacion de precio!
+							   	$xml->children()->children()->name = $producto->nombre; // <-- Asignacion de nombre!
+							   	$xml->children()->children()->reference = $producto->referencia; // <-- Asignacion de referencia!
+							   	$xml->children()->children()->description = $producto->descripcion; // <-- Asignacion de descripcion!
+							// Cargar nuevos datos al generador de consultas.
+							$opt['putXml']=$xml->asXML();
+							$xml = $webService->edit($opt);
+
+>>>>>>> 550f297c057eb86a1533e75c0cb2c85c760b8714
 						}
 						
 						$num_act += 1;

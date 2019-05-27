@@ -8,8 +8,13 @@ class MMails extends CI_Model {
 	//configuración para gmail
 	protected $configGmail = array(
 		'protocol' => 'smtp',
+<<<<<<< HEAD
 		'smtp_host' => 'smtp.gmail.com',
 		'smtp_port' => 587,
+=======
+		'smtp_host' => 'ssl://smtp.gmail.com',
+		'smtp_port' => 465,
+>>>>>>> 550f297c057eb86a1533e75c0cb2c85c760b8714
 		'smtp_user' => 'noreply@eittech.net',
 		'smtp_pass' => 'NR3pl1',
 		'mailtype' => 'html',
@@ -177,7 +182,7 @@ class MMails extends CI_Model {
 								  </tbody>
 								</table>
 								<p style="font-family:sans-serif;font-size:14px;font-weight:normal;margin:0;Margin-bottom:15px;">Si ha recibido este correo electrónico por error, basta con eliminarlo. No se suscribirá si no hace clic en el botón de confirmación de arriba.</p>
-								<p style="font-family:sans-serif;font-size:14px;font-weight:normal;margin:0;Margin-bottom:15px;">Para más información puede contactar a: jesusgerard2008@gmail.com.</p>
+								<p style="font-family:sans-serif;font-size:14px;font-weight:normal;margin:0;Margin-bottom:15px;">Para más información puede contactar a: noreply@eittech.net.</p>
 							  </td>
 							</tr>
 						  </table>
@@ -236,7 +241,7 @@ class MMails extends CI_Model {
 		$para = $datos_reg['username'];
 
 		// título
-		$título = 'COMS: Correo confirmado';
+		$título = 'OCTOPUS: Correo confirmado';
 
 		// mensaje
 		$mensaje = '
@@ -386,7 +391,7 @@ class MMails extends CI_Model {
 		//cargamos la configuración para enviar con mailtrap (config), gamil (configGmail) o yahoo (configYahoo)
 		$this->email->initialize($this->configGmail);
 
-		$this->email->from('contacto@coms.imago.web.ve');
+		$this->email->from('noreply@eittech.net');
 		$this->email->to($para);
 		$this->email->subject($título);
 		$this->email->message($mensaje);
@@ -516,7 +521,7 @@ class MMails extends CI_Model {
 								  </tbody>
 								</table>
 								<p style="font-family:sans-serif;font-size:14px;font-weight:normal;margin:0;Margin-bottom:15px;">Si ha recibido este correo electrónico por error, basta con eliminarlo. No se suscribirá si no hace clic en el botón de confirmación de arriba.</p>
-								<p style="font-family:sans-serif;font-size:14px;font-weight:normal;margin:0;Margin-bottom:15px;">Para más información puede contactar a: jesusgerard2008@gmail.com.</p>
+								<p style="font-family:sans-serif;font-size:14px;font-weight:normal;margin:0;Margin-bottom:15px;">Para más información puede contactar a: noreply@eittech.net.</p>
 							  </td>
 							</tr>
 						  </table>
@@ -555,7 +560,7 @@ class MMails extends CI_Model {
 		//cargamos la configuración para enviar con mailtrap (config), gamil (configGmail) o yahoo (configYahoo)
 		$this->email->initialize($this->configGmail);
 
-		$this->email->from('contacto@coms.imago.web.ve');
+		$this->email->from('noreply@eittech.net');
 		$this->email->to($para);
 		$this->email->subject($título);
 		$this->email->message($mensaje);
@@ -722,7 +727,7 @@ class MMails extends CI_Model {
 		//cargamos la configuración para enviar con mailtrap (config), gamil (configGmail) o yahoo (configYahoo)
 		$this->email->initialize($this->configGmail);
 
-		$this->email->from('contacto@coms.imago.web.ve');
+		$this->email->from('noreply@eittech.net');
 		$this->email->to($para);
 		$this->email->subject($título);
 		$this->email->message($mensaje);
@@ -901,7 +906,7 @@ class MMails extends CI_Model {
 		//cargamos la configuración para enviar con mailtrap (config), gamil (configGmail) o yahoo (configYahoo)
 		$this->email->initialize($this->configGmail);
 
-		$this->email->from('contacto@coms.imago.web.ve');
+		$this->email->from('noreply@eittech.net');
 		$this->email->to($para);
 		$this->email->subject($título);
 		$this->email->message($mensaje);
@@ -1072,7 +1077,7 @@ class MMails extends CI_Model {
 		//cargamos la configuración para enviar con mailtrap (config), gamil (configGmail) o yahoo (configYahoo)
 		$this->email->initialize($this->configGmail);
 
-		$this->email->from('contacto@coms.imago.web.ve');
+		$this->email->from('noreply@eittech.net');
 		$this->email->to($para);
 		$this->email->subject($título);
 		$this->email->message($mensaje);

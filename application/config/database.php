@@ -76,9 +76,16 @@ $query_builder = TRUE;
 $db['default'] = array(
 	'dsn'	=> '',
 	'hostname' => 'localhost',
+<<<<<<< HEAD
 	'username' => 'root',
 	'password' => 'admin',
 	'database' => 'octopus_develop1_octopus',
+=======
+	'username' => 'eittech_admin',
+	'password' => '6CQMkda5FT',
+	//~ 'database' => 'imago_m3',
+	'database' => 'eittech_octupus',
+>>>>>>> 550f297c057eb86a1533e75c0cb2c85c760b8714
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
 	'pconnect' => FALSE,
