@@ -111,7 +111,7 @@ class PrestaShopWebservice
 			CURLOPT_HTTPAUTH => CURLAUTH_BASIC,
 			CURLOPT_USERPWD => $this->key.':',
 			CURLOPT_HTTPHEADER => array( 'Expect:' )
-		);
+                        );
 
 		$session = curl_init($url);
 

@@ -8,10 +8,10 @@ class MMails extends CI_Model {
 	//configuración para gmail
 	protected $configGmail = array(
 		'protocol' => 'smtp',
-		'smtp_host' => 'ssl://smtp.gmail.com',
-		'smtp_port' => 465,
-		'smtp_user' => 'jesusgerard2008@gmail.com',
-		'smtp_pass' => 'macumbasyara',
+		'smtp_host' => 'smtp.gmail.com',
+		'smtp_port' => 587,
+		'smtp_user' => 'noreply@eittech.net',
+		'smtp_pass' => 'NR3pl1',
 		'mailtype' => 'html',
 		'crlf' => "\r\n",
 		'charset' => 'utf-8',
@@ -216,17 +216,17 @@ class MMails extends CI_Model {
 		//cargamos la configuración para enviar con mailtrap (config), gamil (configGmail) o yahoo (configYahoo)
 		$this->email->initialize($this->configGmail);
 
-		$this->email->from('contacto@coms.imago.web.ve');
+		$this->email->from('noreply@eittech.net');
 		$this->email->to($para);
 		$this->email->subject($título);
 		$this->email->message($mensaje);
 		if($this->email->send()){
-			//~ echo "Email enviado";
+		echo "Email enviado";
 		}else{
 			echo $this->email->print_debugger();
 		}
 		// con esto podemos ver el resultado
-		//~ var_dump($this->email->print_debugger());
+		//var_dump($this->email->print_debugger());
 	}
 	
 	// Public method to send a email of confirmation

@@ -1039,57 +1039,80 @@ Class CApis extends CI_Controller {
 			#echo "Actualizamos los precios de los productos resultantes en la tienda de m3 Uniformes";
 			
 			// Constantes de conexión al web service de prestashop
-			define('DEBUG', false);
+			define('DEBUG', true);
 			define('PS_SHOP_PATH', $datosb_tienda[0]->url);
 			define('PS_WS_AUTH_KEY', $datosb_tienda[0]->secret_api);
+                        
 			
 			// Actualizamos los precios de los productos resultantes en la tienda de m3 Uniformes
 			try {
 			
 				$webService = new PrestaShopWebservice(PS_SHOP_PATH, PS_WS_AUTH_KEY, DEBUG);
+                                #echo "<pre>";
+                                #print_r($webService); exit;
+                                
 				
 				$num_act = 0;
 				$errores = 0;
 
+                               #print_r($productos); exit;
+
 				foreach($productos as $producto){
-
+					
 					try {
+                                               
+						$tiendav_id = $id;
+                                                
+
+						$get_referencia = $this->MTiendasVirtuales->obtenerProductosTienda2($producto->producto_id, $tiendav_id);
+						#echo "<pre>";
+						#echo print_r($get_referencia); exit;
+
+						foreach ($get_referencia as $key => $value) {
+							# code...
+                                                        
 						
-						$opt = array('resource' => 'products');
-						$opt['id']=$producto->referencia;
-						$xml = $webService->get($opt);
-						#print_r($xml); exit;
+							$opt = array('resource' => 'products');
+                                                        #print_r($opt); exit;
+							#$opt['id']=$producto->referencia;
+							$opt['id']= $value->referencia;
+                                                        #print_r($opt['id']); exit;
+							$xml = $webService->get($opt);
+                                                        #print_r($xml);
+							
 						//~ echo "Successfully recived data.";
-							 /* Lista de nodos que no pueden modificarse.
-							 *
-							 *  - "manufacturer_name"
-							 *  - "position_in_category"
-							 *  - "quantity"
-							 *  - "type"
-							 */
-							unset($xml->children()->children()->manufacturer_name);
-							unset($xml->children()->children()->position_in_category);
-							unset($xml->children()->children()->quantity);
-							unset($xml->children()->children()->type);
+								 /* Lista de nodos que no pueden modificarse.
+								 *
+								 *  - "manufacturer_name"
+								 *  - "position_in_category"
+								 *  - "quantity"
+								 *  - "type"
+								 */
+								unset($xml->children()->children()->manufacturer_name);
+								unset($xml->children()->children()->position_in_category);
+								unset($xml->children()->children()->quantity);
+								unset($xml->children()->children()->type);
 
-							// Formula para efectuar el margen de ganancia sobre el producto
+								// Formula para efectuar el margen de ganancia sobre el producto
 
-							if($datosb_tienda[0]->formula !=""){
-								// Asignacion de formula
-								$formula      = $datosb_tienda[0]->formula;
-								// Asignacion de precio venta
-								$precio_venta = ($producto->precio) / (100 - $formula) * 100;
-							}else{
-								$precio_venta = $producto->precio;
-							}
+								if($datosb_tienda[0]->formula !=""){
+									// Asignacion de formula
+									$formula      = $datosb_tienda[0]->formula;
+									// Asignacion de precio venta
+									$precio_venta = ($producto->precio) / (100 - $formula) * 100;
+								}else{
+									$precio_venta = $producto->precio;
+								}
 
-						   	$xml->children()->children()->price = $precio_venta; // <-- Asignacion de precio!
-						   	$xml->children()->children()->name = $producto->nombre; // <-- Asignacion de nombre!
-						   	//$xml->children()->children()->reference = $producto->referencia; // <-- Asignacion de referencia!
-						   	$xml->children()->children()->description = $producto->descripcion; // <-- Asignacion de descripcion!
-						// Cargar nuevos datos al generador de consultas.
-						$opt['putXml']=$xml->asXML();
-						$xml = $webService->edit($opt);
+							   	$xml->children()->children()->price = $precio_venta; // <-- Asignacion de precio!
+							   	$xml->children()->children()->name = $producto->nombre; // <-- Asignacion de nombre!
+							   	$xml->children()->children()->reference = $producto->referencia; // <-- Asignacion de referencia!
+							   	$xml->children()->children()->description = $producto->descripcion; // <-- Asignacion de descripcion!
+							// Cargar nuevos datos al generador de consultas.
+							$opt['putXml']=$xml->asXML();
+							$xml = $webService->edit($opt);
+
+						}
 						
 						$num_act += 1;
 						
@@ -1102,9 +1125,11 @@ Class CApis extends CI_Controller {
 						
 						$update_detalle = $this->MApis->update_detalle_cola($data_up);
 						
-					}catch (Exception $ex) {
+					}catch (PrestaShopWebserviceException $ex) {
 					
 						$errores += 1;
+                                                #echo "<pre>";
+                                                #var_dump($ex->getTrace()); exit;
 						
 						// Registramos la incidencia
 						$data_up = array(
