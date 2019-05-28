@@ -14,8 +14,3 @@ application/logs/*
 !application/logs/index.html
 !application/logs/.htaccess
 /vendor/
-
-#
-assets/img/productos/*
-application/config/database.php
-application/config/config.php
