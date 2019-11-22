@@ -470,6 +470,9 @@ Class CApis extends CI_Controller {
 										$update_detalle = $this->MApis->update_detalle_cola($data_up);
 									}else{
 										// Actualizamos el campo 'detalles' del detalle con la información devuelta por la API
+										echo "<pre>";
+										$response['body'];
+										exit();
 										$detalles_errores .= $response['body']->cause[0]->message."-";
 										//~ print_r($response_reg['body']->cause);
 										//~ exit();
