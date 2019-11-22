@@ -470,11 +470,13 @@ Class CApis extends CI_Controller {
 										$update_detalle = $this->MApis->update_detalle_cola($data_up);
 									}else{
 										// Actualizamos el campo 'detalles' del detalle con la información devuelta por la API
-										echo "<pre>";
-										print_r($response['body']);
-										echo count($response['body']->cause);
-										exit();
-										$detalles_errores .= $response['body']->cause[0]->message."-";
+										//~ echo "<pre>";
+										//~ print_r($response['body']);
+										if(count($response['body']->cause) > 0){
+											$detalles_errores .= $response['body']->cause[0]->message."-";
+										}else{
+											$detalles_errores .= $response['body']->message."-";
+										}
 										//~ print_r($response_reg['body']->cause);
 										//~ exit();
 										$data_up = array(
@@ -507,7 +509,11 @@ Class CApis extends CI_Controller {
 									$update_detalle = $this->MApis->update_detalle_cola($data_up);
 								}else{
 									//~ print_r($response['body']);
-									$detalles_errores .= $response['body']->cause[0]->message."-";
+									if(count($response['body']->cause) > 0){
+										$detalles_errores .= $response['body']->cause[0]->message."-";
+									}else{
+										$detalles_errores .= $response['body']->message."-";
+									}
 									//~ echo $detalles_errores;
 									//~ print_r($response['body']->cause);
 									//~ exit();
