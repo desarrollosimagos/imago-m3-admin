@@ -421,8 +421,8 @@ Class CApis extends CI_Controller {
 								$body = array('title' => $nombre_producto, 'price' => round($result, 2), 'available_quantity' => $producto->cantidad, 'pictures' => $lista_fotos);
 							}
 							
-							echo $producto->referencia;
-							exit();
+							//~ echo $producto->referencia;
+							//~ exit();
 
 							$response = $meli->put('/items/'.$producto->referencia, $body, $params);
 							// print_r($response);
