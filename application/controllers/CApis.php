@@ -153,7 +153,7 @@ Class CApis extends CI_Controller {
 							
 					// Consultamos los datos de la categoría del producto si ésta es diferente de 0 (cero)
 					$categoria_id = 0;
-					$categoria_referencia = "MLV1953";
+					$categoria_referencia = "MLV1227";
 					if($producto->categoria_id != 0){
 						$data_categoria = $this->MApis->obtenerCategoria($producto->categoria_id);
 						$categoria_id = $data_categoria[0]->id;
@@ -387,7 +387,7 @@ Class CApis extends CI_Controller {
 							
 							// Consultamos los datos de la categoría del producto si ésta es diferente de 0 (cero)
 							$categoria_id = 0;
-							$categoria_referencia = "MLV1953";
+							$categoria_referencia = "MLV1227";
 							if($producto->categoria_id != 0){
 								$data_categoria = $this->MApis->obtenerCategoria($producto->categoria_id);
 								$categoria_id = $data_categoria[0]->id;
@@ -420,6 +420,9 @@ Class CApis extends CI_Controller {
 								eval("\$result = $f_precio;");
 								$body = array('title' => $nombre_producto, 'price' => round($result, 2), 'available_quantity' => $producto->cantidad, 'pictures' => $lista_fotos);
 							}
+							
+							echo $producto->referencia;
+							exit();
 
 							$response = $meli->put('/items/'.$producto->referencia, $body, $params);
 							// print_r($response);
@@ -661,7 +664,7 @@ Class CApis extends CI_Controller {
 						
 				// Consultamos los datos de la categoría del producto si ésta es diferente de 0 (cero)
 				$categoria_id = 0;
-				$categoria_referencia = "MLV1953";
+				$categoria_referencia = "MLV1227";
 				if($producto_tiendav[0]->categoria_id != 0){
 					$data_categoria = $this->MApis->obtenerCategoria($producto_tiendav[0]->categoria_id);
 					$categoria_id = $data_categoria[0]->id;
@@ -820,7 +823,7 @@ Class CApis extends CI_Controller {
 						
 						// Consultamos los datos de la categoría del producto si ésta es diferente de 0 (cero)
 						$categoria_id = 0;
-						$categoria_referencia = "MLV1953";
+						$categoria_referencia = "MLV1227";
 						if($producto_tiendav[0]->categoria_id != 0){
 							$data_categoria = $this->MApis->obtenerCategoria($producto_tiendav[0]->categoria_id);
 							$categoria_id = $data_categoria[0]->id;
