@@ -471,7 +471,7 @@ Class CApis extends CI_Controller {
 									}else{
 										// Actualizamos el campo 'detalles' del detalle con la información devuelta por la API
 										echo "<pre>";
-										$response['body'];
+										print_r($response['body']);
 										exit();
 										$detalles_errores .= $response['body']->cause[0]->message."-";
 										//~ print_r($response_reg['body']->cause);
