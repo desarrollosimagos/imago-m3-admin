@@ -152,7 +152,8 @@ class CProductos extends CI_Controller {
 				$lista_tiendasv = substr($lista_tiendasv, 0, -2);
 			}
 			
-			if($num_fotos == 0){			
+			if($num_fotos == 0){
+				$sub_array[] = "<i class='fa fa-plus fa-2x' title='Desplegar'></i>";			
 				$sub_array[] = "<input type='checkbox' id='checkbox_".$row->id."' class='check'>";
 				$sub_array[] = $row->nombre;
 				$sub_array[] = $row->referencia;
@@ -204,7 +205,8 @@ class CProductos extends CI_Controller {
 			// Proceso de busqueda de tiendas virtuales asociadas al producto
 			$tiendasv = $this->MProductos->obtenerTiendas($row->id);
 			
-			if(count($tiendasv) == 0){		
+			if(count($tiendasv) == 0){
+				$sub_array[] = "<i class='fa fa-plus fa-2x' title='Desplegar'></i>";
 				$sub_array[] = "<input type='checkbox' id='checkbox_".$row->id."' class='check'>";
 				$sub_array[] = $row->nombre;
 				$sub_array[] = $row->referencia;
@@ -255,7 +257,8 @@ class CProductos extends CI_Controller {
 			// Proceso de busqueda de tiendas virtuales asociadas al producto
 			$tiendasv = $this->MProductos->obtenerTiendas($row->id);
 			
-			if(count($tiendasv) == 0 || $num_fotos == 0){		
+			if(count($tiendasv) == 0 || $num_fotos == 0){
+				$sub_array[] = "<i class='fa fa-plus fa-2x' title='Desplegar'></i>";
 				$sub_array[] = "<input type='checkbox' id='checkbox_".$row->id."' class='check'>";
 				$sub_array[] = $row->nombre;
 				$sub_array[] = $row->referencia;
